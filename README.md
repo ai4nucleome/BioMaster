@@ -36,9 +36,17 @@ pip install -r requirements.txt
 
 3. download data and move to `data/`:
 
+Baidu Netdisk
+
 ```sh
 通过网盘分享的文件：Biomaster
 链接: https://pan.baidu.com/s/1t9I63lucrjdWjSK09NVxwQ?pwd=ai4s 提取码: ai4s 
+```
+
+or Google Drive
+
+```
+https://drive.google.com/drive/folders/1vA3WIAVXVo4RZSqXKsItEZHVaBgIIv_E?usp=drive_link
 ```
 
 ---
@@ -98,10 +106,10 @@ python run.py
 
 # License
 
-This project is licensed under the following terms:
+This project is licensed under:
 
-- **Code**: Licensed under the MIT License. See LICENSE for details.
-- **Data and Documentation**: Licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
+- Apache License 2.0 for code
+- Creative Commons Attribution-NonCommercial 4.0 International for non-code materials
 
 ---
 
