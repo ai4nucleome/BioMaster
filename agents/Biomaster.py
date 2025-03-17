@@ -17,7 +17,6 @@ from langchain_chroma import Chroma  # 使用 langchain_chroma 包中的 Chroma
 from langchain_community.tools import ShellTool
 
 from .prompts import PLAN_PROMPT, PLAN_EXAMPLES, TASK_PROMPT, TASK_EXAMPLES, DEBUG_EXAMPLES, DEBUG_PROMPT
-from .utils import normalize_keys, load_tool_links
 from .ToolAgent import Json_Format_Agent
 from .CheckAgent import CheckAgent  # Add this import at the top
 
@@ -33,7 +32,6 @@ class Biomaster:
         Model: str = "o3-mini-2025-01-31",
         excutor: bool = False,
         Repeat: int = 5,
-        tools_dir: str = "tools",
         output_dir: str = './output',
         id: str = '001',
         chroma_db_dir: str = './chroma_db'  # Chroma持久化目录
@@ -44,7 +42,6 @@ class Biomaster:
         self.api_key = api_key
         self.base_url = base_url
         self.model = Model
-        self.tools_dir = tools_dir
         self.doc_dir = "doc"
         self.excutor = excutor
         self.repeat = Repeat
@@ -57,7 +54,8 @@ class Biomaster:
             self.id = id
             self._load_existing_files()
 
-        tools_info, self.tool_names = self._load_tools_from_files()
+        self.tool_names = self.load_tool_links()
+        print(self.tool_names)
 
         self.PLAN_prompt = PLAN_PROMPT.format(tool_names=self.tool_names)
         self.TASK_prompt = TASK_PROMPT.format(tool_names=self.tool_names)
@@ -95,7 +93,30 @@ class Biomaster:
 
         # Initialize the CheckAgent
         self.check_agent = CheckAgent(api_key=api_key, base_url=base_url, model=Model)
-
+    def normalize_keys(self,input_dict):
+        """ Recursively convert all dictionary keys to lowercase."""
+        if isinstance(input_dict, dict):
+            return {k.lower(): self.normalize_keys(v) for k, v in input_dict.items()}
+        elif isinstance(input_dict, list):
+            return [self.normalize_keys(item) for item in input_dict]
+        else:
+            return input_dict
+    def load_tool_links(self):
+        """读取Task_Knowledge.json并返回metadata下source的列表"""
+        json_file_path = os.path.join(self.doc_dir, "Task_Knowledge.json")
+        print(json_file_path)
+        if os.path.exists(json_file_path):
+            with open(json_file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
+            
+            sources = []
+            for item in data:
+                if "metadata" in item and "source" in item["metadata"]:
+                    sources.append(item["metadata"]["source"])
+            
+            return sources
+        return []
+    
     def _generate_new_id(self):
         existing_ids = []
         for file_name in os.listdir(self.output_dir):
@@ -123,21 +144,6 @@ class Biomaster:
 
     def stop(self):
         self.stop_flag = True
-
-    def _load_tools_from_files(self):
-        tool_files = [f for f in os.listdir(self.tools_dir) if f.endswith(".config")]
-        tool_strings = []
-        tool_names = []
-
-        for file in tool_files:
-            tool_name = file.split(".")[0]
-            tool_names.append(tool_name)
-
-            with open(os.path.join(self.tools_dir, file), "r", encoding='utf-8') as f:
-                tool_description = f.read().strip()
-                tool_strings.append(f"    {tool_name}: {tool_description}")
-
-        return "\n".join(tool_strings), ", ".join(tool_names)
 
     def add_documents_if_not_exists(self, documents, collection, collection_name):
         """
@@ -199,7 +205,7 @@ class Biomaster:
         从 JSON 文件中加载知识条目，并存储到 Chroma 向量数据库。
         每个 JSON 条目作为一个独立单元进行存储和检索。
         """
-        json_file_path = os.path.join(self.doc_dir, "Task_Konwledge.json")
+        json_file_path = os.path.join(self.doc_dir, "Task_Knowledge.json")
 
         if not os.path.exists(json_file_path):
             raise FileNotFoundError(f"JSON 文件未找到：{json_file_path}")
@@ -335,7 +341,7 @@ class Biomaster:
         PLAN_results = Json_Format_Agent(PLAN_results, self.api_key, self.base_url)
         
         try:
-            PLAN_results_dict = normalize_keys(json.loads(PLAN_results.strip().strip('"')))
+            PLAN_results_dict = self.normalize_keys(json.loads(PLAN_results.strip().strip('"')))
         except json.JSONDecodeError as e:
             logging.error(f"Failed to parse PLAN_results: {e}")
             return {}
@@ -370,7 +376,7 @@ class Biomaster:
 
     def execute_TASK(self, datalist):
         PLAN_results_dict = self.load_progress(self.output_dir, f"PLAN.json")
-        PLAN_results_dict = normalize_keys(PLAN_results_dict)
+        PLAN_results_dict = self.normalize_keys(PLAN_results_dict)
         TASK_agent = self.TASK_agent
         step_datalist = datalist
         if self.excutor:

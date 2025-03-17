@@ -1,2 +1,0 @@
-https://docs.tinybio.cloud/docs/bwa-mem-tutorial
-https://hbctraining.github.io/In-depth-NGS-Data-Analysis-Course/sessionVI/lessons/01_alignment.html

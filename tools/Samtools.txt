@@ -1,5 +1,0 @@
-https://www.htslib.org/doc/samtools.html
-https://arq5x.github.io/tutorials/samtools/samtools.html
-https://www.htslib.org/workflow/fastq.html
-https://www.htslib.org/workflow/wgs-call.html
-https://www.htslib.org/workflow/cram.html

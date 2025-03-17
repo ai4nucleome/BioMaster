@@ -1,3 +1,0 @@
-https://gatk.broadinstitute.org/hc/en-us/articles/360036194592-Getting-started-with-GATK4
-https://github.com/broadinstitute/gatk
-

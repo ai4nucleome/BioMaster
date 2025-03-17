@@ -1,3 +1,0 @@
-https://speciationgenomics.github.io/Treemix/
-https://ipyrad.readthedocs.io/en/latest/API-analysis/cookbook-treemix.html
-https://github.com/epsalazarf/PopGenGuides/blob/master/TreeMix.md

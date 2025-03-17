@@ -5,7 +5,7 @@ import json
 if __name__ == "__main__":
 
     config = {"configurable": {"thread_id": "abc124"}}
-    api_key = 'sk----------------'
+    api_key = 'sk-BMBEq7cFiq8LClul845cB42f9aCf429dB04a0bF6Ad542e2b'
     base_url = 'https://one-api.bltcy.top/v1'
     # you can choose other base url
     manager = Biomaster(api_key, base_url,excutor=True, tools_dir="tools",id='002')
