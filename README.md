@@ -14,6 +14,13 @@
 - **Extensible**: BioMaster is designed to be easily extendable, with support for custom bioinformatics tools and workflows.
 
 ---
+## Paper
+**BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow**
+
+**Authors:** Houcheng Su, Weicai Long, Yanlin Zhang^*  
+**DOI:** [10.1101/2025.01.23.634608](https://doi.org/10.1101/2025.01.23.634608)  
+
+> [Read the Abstract on bioRxiv](https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract)
 
 ## Installation
 
