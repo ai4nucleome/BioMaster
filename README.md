@@ -15,12 +15,11 @@
 
 ---
 ## Paper
-**BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow**
+[**BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow**](https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract)
 
-**Authors:** Houcheng Su, Weicai Long, Yanlin Zhang^*  
+**Authors:** Houcheng Su, Weicai Long, [Yanlin Zhang](https://zhyanlin.github.io/) 
 **DOI:** [10.1101/2025.01.23.634608](https://doi.org/10.1101/2025.01.23.634608)  
 
-> [Read the Abstract on bioRxiv](https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract)
 
 ## Installation
 
