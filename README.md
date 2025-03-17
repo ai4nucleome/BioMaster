@@ -30,10 +30,10 @@ Hong Kong University of Science and Technology (Guangzhou)
 You can install BioMaster using the following steps:
 
 1. Clone the repository:
-
+```sh
 git clone https://github.com/yourusername/BioMaster.git
 cd BioMaster
-
+```
 2. Install the required dependencies:
 
 ```sh
