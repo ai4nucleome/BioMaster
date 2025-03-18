@@ -14,16 +14,6 @@
 - **Extensible**: BioMaster is designed to be easily extendable, with support for custom bioinformatics tools and workflows.
 
 ---
-## Paper
-[**BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow**](https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract)
-
-**Authors:** Houcheng Su, Weicai Long, [Yanlin Zhang](https://zhyanlin.github.io/) 
-
-Hong Kong University of Science and Technology (Guangzhou)
-
-
-**DOI:** [10.1101/2025.01.23.634608](https://doi.org/10.1101/2025.01.23.634608)  
-
 
 ## Installation
 
@@ -122,8 +112,13 @@ This project is licensed under:
 - Creative Commons Attribution-NonCommercial 4.0 International for non-code materials
 
 ---
+Please cite our paper if you use biomaster.
+## Paper
+[**BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow**](https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract)
 
-## Acknowledgments
+**Authors:** Houcheng Su, Weicai Long, Yanlin Zhang
 
-- This project uses the [langchain](https://github.com/hwchase17/langchain) library for integration with OpenAI and other tools.
-- Thanks to all contributors and the open-source community for making BioMaster possible!
+Hong Kong University of Science and Technology (Guangzhou)
+
+
+**DOI:** [10.1101/2025.01.23.634608](https://doi.org/10.1101/2025.01.23.634608)  
