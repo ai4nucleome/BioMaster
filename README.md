@@ -36,14 +36,7 @@ pip install -r requirements.txt
 
 3. download data and move to `data/`:
 
-Baidu Netdisk
-
-```sh
-通过网盘分享的文件：Biomaster
-链接: https://pan.baidu.com/s/1t9I63lucrjdWjSK09NVxwQ?pwd=ai4s 提取码: ai4s 
-```
-
-or Google Drive
+Google Drive
 
 ```
 https://drive.google.com/drive/folders/1vA3WIAVXVo4RZSqXKsItEZHVaBgIIv_E?usp=drive_link
