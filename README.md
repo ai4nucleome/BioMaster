@@ -115,6 +115,7 @@ This project is licensed under:
 
 ## Paper
 Please cite our paper if you use biomaster.
+
 [**BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow**](https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract)
 
 **Authors:** Houcheng Su, Weicai Long, Yanlin Zhang
