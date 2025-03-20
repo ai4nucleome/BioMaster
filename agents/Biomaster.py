@@ -401,8 +401,6 @@ class Biomaster:
                     print(f"Step {i} already completed. Continuing.")
                     step_datalist = DEBUG_output_dict['output_filename'] + step_datalist
                     continue
-            tool_name = step['tools']
-            tool_links = load_tool_links(tool_name, self.tools_dir)
 
             related_docs = self.vectorstore_tool.similarity_search(step['description'], k=1)
 
@@ -474,15 +472,18 @@ class Biomaster:
                 self.check_stop()
                 if self.stop_flag:
                     break
-                result = subprocess.run(["bash", shell_script_path], capture_output=True, text=True)
+                result = subprocess.run(["bash", shell_script_path], capture_output=True)#, text=True
 
+                stdout_str = result.stdout.decode("utf-8", errors="replace")
+                stderr_str = result.stderr.decode("utf-8", errors="replace")
                 self.check_stop()
                 if self.stop_flag:
                     break
                 max_output_length = 5000  # 设置最大输出字符数
 
-                result_stdout = result.stdout[:max_output_length] if len(result.stdout) > max_output_length else result.stdout
-                result_stderr = result.stderr[:max_output_length] if len(result.stderr) > max_output_length else result.stderr
+                result_stdout = stdout_str[:max_output_length] if len(stdout_str) > max_output_length else stdout_str
+                result_stderr = stderr_str[:max_output_length] if len(stderr_str) > max_output_length else stderr_str
+
 
                 DEBUG_input = {
                     "input": json.dumps({
