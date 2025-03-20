@@ -259,7 +259,7 @@ class Biomaster:
             'conda config --set show_channel_urls false',
             'conda config --add channels conda-forge',
             'conda config --add channels bioconda',
-            'mkdir -p ./output/'+str({self.id})
+            'mkdir -p ./output/'+str(self.id)
         ]
 
         with open(shell_script_path, "w", encoding="utf-8") as file:
