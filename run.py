@@ -5,7 +5,7 @@ import json
 if __name__ == "__main__":
 
     config = {"configurable": {"thread_id": "abc124"}}
-    api_key = 'sk-BMBEq7cFiq8LClul845cB42f9aCf429dB04a0bF6Ad542e2b'
+    api_key = 'sk-'
     base_url = 'https://one-api.bltcy.top/v1'
     # base_url = 'https://api.siliconflow.cn/v1'
     # you can choose other base url
