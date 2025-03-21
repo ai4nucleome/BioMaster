@@ -1,3 +1,0 @@
-https://github.com/stschiff/msmc-tools/blob/master/msmc-tutorial/guide.md
-https://github.com/stschiff/msmc
-https://compvar-workshop.readthedocs.io/en/latest/contents/04_msmc/msmc.html

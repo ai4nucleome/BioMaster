@@ -1,2 +1,0 @@
-https://samtools.github.io/bcftools/bcftools.html
-https://github.com/samtools/bcftools/releases/

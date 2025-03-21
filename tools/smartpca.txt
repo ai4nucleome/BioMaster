@@ -1,3 +1,0 @@
-https://christianhuber.github.io/smartsnp/reference/smart_pca.html
-https://gaworkshop.readthedocs.io/en/latest/contents/05_pca/pca.html#
-https://evomics.org/learning/population-and-speciation-genomics/2016-population-and-speciation-genomics/pca-exercise/
