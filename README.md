@@ -1,6 +1,6 @@
 # BioMaster: Automating Complex Bioinformatics Workflows
 
-**BioMaster** is a multi-agent framework designed to streamline and automate complex bioinformatics workflows. By leveraging large language models (LLMs) and dynamic knowledge retrieval, BioMaster addresses key limitations in automation, improving accuracy, efficiency, and scalability across a wide range of bioinformatics tasks, such as RNA-seq, ChIP-seq, and Hi-C data processing.
+**BioMaster** is a multi-agent framework designed to streamline and automate complex bioinformatics workflows. By leveraging large language models (LLMs) and knowledge retrieval, BioMaster addresses key limitations in automation, improving accuracy, efficiency, and scalability across a wide range of bioinformatics tasks, such as RNA-seq, ChIP-seq, and Hi-C data processing.
 
 ---
 
