@@ -5,8 +5,8 @@ import json
 if __name__ == "__main__":
 
     config = {"configurable": {"thread_id": "abc124"}}
-    api_key = ''
-    base_url = ''
+    api_key = 'sk-YCGdylUyNQjXPRB246CbEb78BcA24578B821728f2d8358Ba'
+    base_url = 'https://api.bltcy.ai/v1'
     # you can choose other base url
     manager = Biomaster(api_key, base_url,excutor=True,id='010')
     

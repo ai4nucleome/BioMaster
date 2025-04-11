@@ -29,7 +29,7 @@ class Biomaster:
         self,
         api_key: str,
         base_url: str,
-        Model: str = "gpt-4o",
+        Model: str = "o3-mini",
         excutor: bool = False,
         Repeat: int = 5,
         output_dir: str = './output',
@@ -474,7 +474,7 @@ class Biomaster:
                         })
                     }
                     TASK_results = TASK_agent.invoke(TASK_input)
-                    PLAN_results = Json_Format_Agent(PLAN_results, self.api_key, self.base_url)
+                    TASK_results = Json_Format_Agent(TASK_results,  self.api_key, self.base_url)
 
 
                     PRE_DEBUG_output = []
