@@ -490,7 +490,7 @@ You can also join Biomaster community:
 2. wechat:
 
 <div  align="center">    
- <img src="./source/wechat.jpg" width = "400" height = "400" alt="BioMaster" align=center />
+ <img src="./source/wechat.jpg" width = "400"  alt="BioMaster" align=center />
 </div>
 
 ## License
