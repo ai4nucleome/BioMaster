@@ -481,6 +481,18 @@ if you use BioMaster in your work, please cite the following paper:
 }
 ```
 
+You can also join Biomaster community:
+
+1. Discord:
+
+[Discord](https://discord.gg/WYVyRAA6yn)
+
+2. wechat:
+
+<div  align="center">    
+ <img src="./source/wechat.jpg" width = "400" height = "400" alt="BioMaster" align=center />
+</div>
+
 ## License
 
 This project is licensed under the following terms:
