@@ -488,7 +488,11 @@ You can also join Biomaster community:
 [Discord](https://discord.gg/WYVyRAA6yn)
 
 2. wechat:
+Add wechat: saltfish920
 
+Note :Biomaster
+
+or add:
 <div  align="center">    
  <img src="./source/wechat.jpg" width = "400"  alt="BioMaster" align=center />
 </div>
