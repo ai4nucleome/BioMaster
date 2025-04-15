@@ -25,11 +25,11 @@ class CheckAgent:
             ("system", """
             You are a bioinformatics file analysis expert. Based on the step information and file list,
             determine which files are likely valid outputs. Return JSON with:
-            {
+            {{
                 "analysis": "Detailed analysis of why files are valid or invalid",
                 "output_filename": ["file1: description", "file2: description", ...],
                 "stats": true/false (whether files are valid outputs)
-            }
+            }}
             """),
             ("human", """
             Step details:
