@@ -135,7 +135,7 @@ https://drive.google.com/drive/folders/1vA3WIAVXVo4RZSqXKsItEZHVaBgIIv_E?usp=sha
 
 ---
 
-PS: liunx has been tested to install directly, but windwos or mac have not been tested, so there is no way to determine if there might be a problem.
+PS: Linux has been tested to install directly, but Windows or Mac have not been tested, so there is no way to determine if there might be a problem.
 
 ## Usage
 
