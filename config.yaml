@@ -26,10 +26,10 @@
     # https://sg.uiuiapi.com/v1
 api:
   main:
-    key: 'sk-fbrbrqtcmiurlfjhxdpykolghiflxbwqjeadaiitxdqazibs'
+    key: '-'
     base_url: 'https://api.siliconflow.cn/v1/'
   embedding:
-    key: 'sk-fbrbrqtcmiurlfjhxdpykolghiflxbwqjeadaiitxdqazibs'
+    key: '-'
     base_url: 'https://api.siliconflow.cn/v1/'
 
 # 模型配置
