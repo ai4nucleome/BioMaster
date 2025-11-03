@@ -27,34 +27,68 @@
 api:
   main:
     key: ''
-    base_url: 'https://api.siliconflow.cn/v1/'
+    base_url: 'https://api.bltcy.ai/v1'
   embedding:
     key: ''
-    base_url: 'https://api.siliconflow.cn/v1/'
+    base_url: 'https://api.bltcy.ai/v1'
   # Ollama settings
   ollama:
-    enabled: true
+    enabled: false
     base_url: 'http://localhost:11434'
 
 
 # model settings
 models:
-  main: "deepseek-ai/DeepSeek-V3"
-  tool: "deepseek-ai/DeepSeek-V3"
-  embedding: "BAAI/bge-m3"
+  main: "qwen3-max"
+  tool: "qwen3-max"
+  embedding: "text-embedding-3-large"
 
 
 # Biomaster settings
 biomaster:
   executor: true
-  id: '005'
+  id: 'sc7'
   generate_plan: true
-  use_ollama: true   
+  use_ollama: false   
+# RAG settings
+rag:
+  type: 'graph'  # Options: 'vector', 'graph', 'hybrid'
+  # Retrieval parameters
+  retrieval:
+    plan_k: 1  # Number of documents to retrieve for PLAN phase (1-5, default: 1)
+    task_k: 2  # Number of documents to retrieve for TASK phase (1-10, default: 2)
+    plan_search_type: 'similarity'  # Search strategy for PLAN phase
+    task_search_type: 'mmr'  # Search strategy for TASK phase
+    # Available search types:
+    # - 'similarity': Standard cosine similarity search (fastest, most focused)
+    # - 'mmr': Maximum Marginal Relevance (balances relevance & diversity)
+    # - 'similarity_score_threshold': Filter by minimum similarity score
+    # - 'diverse': Fetch more results and select diverse subset (comprehensive)
+    # - 'rerank': Retrieve more and rerank by relevance (highest quality)
+    
+    # Additional parameters for specific search types
+    score_threshold: 0.7  # Minimum similarity score for 'similarity_score_threshold' (0-1)
+    mmr_diversity_score: 0.3  # MMR diversity vs relevance (0=relevance only, 1=diversity only)
+    diverse_multiplier: 3  # For 'diverse': fetch k*multiplier, return k most diverse
+    rerank_multiplier: 2  # For 'rerank': fetch k*multiplier, rerank and return top k
+  
+  vector:
+    chroma_db_dir: './chroma_db'
+  graph:
+    persist_directory: './graph_db'
+    similarity_threshold: 0.75  # Minimum similarity to create edges (0-1)
+    max_neighbors: 2  # Maximum neighbors to retrieve per node
+  hybrid:
+    persist_directory: './hybrid_db'
+    vector_weight: 0.6  # Weight for vector similarity (0-1)
+    graph_weight: 0.4  # Weight for graph context (0-1)
+    similarity_threshold: 0.75
+    max_neighbors: 2
+    enable_reranking: true  # Re-rank results using hybrid scoring
 
 # datalist and goal
 data:
   files:
-    - './data/rnaseq_1.fastq.gz: RNA-Seq read 1 data (left read)'
-    - './data/rnaseq_2.fastq.gz: RNA-Seq read 2 data (right read)'
-    - './data/minigenome.fa: small genome sequence consisting of ~750 genes.'
-  goal: 'please do WGS/WES data analysis Somatic SNV+indel calling.'  
+    - './data/singlecellexpress.h5ad: h5ad file'
+  goal: 'please help me do clustering and visulize the results with python by scanpy,squidpy.' 
+

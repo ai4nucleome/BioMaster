@@ -48,6 +48,38 @@ if __name__ == "__main__":
     ids = config['biomaster']['id']
     generate_plan = config['biomaster'].get('generate_plan', True)  # Default to True
     
+    # Get RAG settings from configuration
+    rag_config = config.get('rag', {})
+    rag_type = rag_config.get('type', 'vector')
+    
+    # Retrieval settings
+    retrieval_config = rag_config.get('retrieval', {})
+    plan_k = retrieval_config.get('plan_k', 1)
+    task_k = retrieval_config.get('task_k', 2)
+    plan_search_type = retrieval_config.get('plan_search_type', 'similarity')
+    task_search_type = retrieval_config.get('task_search_type', 'similarity')
+    score_threshold = retrieval_config.get('score_threshold', 0.7)
+    mmr_diversity_score = retrieval_config.get('mmr_diversity_score', 0.3)
+    diverse_multiplier = retrieval_config.get('diverse_multiplier', 3)
+    rerank_multiplier = retrieval_config.get('rerank_multiplier', 2)
+    
+    # Vector RAG settings
+    vector_config = rag_config.get('vector', {})
+    chroma_db_dir = vector_config.get('chroma_db_dir', './chroma_db')
+    
+    # Graph RAG settings
+    graph_config = rag_config.get('graph', {})
+    graph_db_dir = graph_config.get('persist_directory', './graph_db')
+    graph_similarity_threshold = graph_config.get('similarity_threshold', 0.75)
+    graph_max_neighbors = graph_config.get('max_neighbors', 2)
+    
+    # Hybrid RAG settings
+    hybrid_config = rag_config.get('hybrid', {})
+    hybrid_db_dir = hybrid_config.get('persist_directory', './hybrid_db')
+    hybrid_vector_weight = hybrid_config.get('vector_weight', 0.6)
+    hybrid_graph_weight = hybrid_config.get('graph_weight', 0.4)
+    hybrid_enable_reranking = hybrid_config.get('enable_reranking', True)
+    
     # Get data and goal from configuration
     datalist = config['data']['files']
     goal = config['data']['goal']
@@ -56,6 +88,7 @@ if __name__ == "__main__":
     print(f"Ollama base URL: {ollama_base_url}")
     print(f"Model: {Model}")
     print(f"Embedding model: {embedding_model}")
+    print(f"RAG type: {rag_type}")
 
     # Initialize Biomaster instance
     manager = Biomaster(
@@ -69,7 +102,24 @@ if __name__ == "__main__":
         embedding_base_url=embedding_base_url,
         embedding_api_key=embedding_api_key,
         use_ollama=use_ollama,
-        ollama_base_url=ollama_base_url
+        ollama_base_url=ollama_base_url,
+        rag_type=rag_type,
+        chroma_db_dir=chroma_db_dir,
+        graph_db_dir=graph_db_dir,
+        graph_similarity_threshold=graph_similarity_threshold,
+        graph_max_neighbors=graph_max_neighbors,
+        hybrid_db_dir=hybrid_db_dir,
+        hybrid_vector_weight=hybrid_vector_weight,
+        hybrid_graph_weight=hybrid_graph_weight,
+        hybrid_enable_reranking=hybrid_enable_reranking,
+        plan_k=plan_k,
+        task_k=task_k,
+        plan_search_type=plan_search_type,
+        task_search_type=task_search_type,
+        score_threshold=score_threshold,
+        mmr_diversity_score=mmr_diversity_score,
+        diverse_multiplier=diverse_multiplier,
+        rerank_multiplier=rerank_multiplier
     )
     
     # If using ollama, test connection

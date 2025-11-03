@@ -141,423 +141,504 @@ https://drive.google.com/drive/folders/1vA3WIAVXVo4RZSqXKsItEZHVaBgIIv_E?usp=sha
 
 PS: Linux has been tested for direct installation, but Windows and Mac have not been tested, so it is uncertain whether any issues might arise.
 
-## Usage
+## 📖 Usage Guide
 
-### RAG Update
+### 1. Quick Start
 
-Biomaster uses two types of Retrieval-Augmented Generation (RAG) systems:
-- **PLAN RAG**: Used during the planning phase.
-- **EXECUTE RAG**: Used during the execution phase.
+BioMaster can be used in two ways: **Terminal Mode** or **Web UI Mode**.
 
 ---
 
-### PLAN RAG
+#### Option A: Terminal Mode
 
-If you want to add a **new analysis workflow**, you need to update the **PLAN RAG**.
+##### Step 1: Configure `config.yaml`
 
-#### Steps:
+BioMaster uses `config.yaml` as the primary configuration file. Here's a breakdown of each section:
 
-1. **Collect the analysis workflow**, e.g.:
-   [ChIP-seq data analysis](https://nf-co.re/chipseq/2.1.0/)
+**API Configuration** - Set your API keys and base URLs
 
-2. **Write the workflow** based on the following format:
-
-   - You can use LLMs (e.g., ChatGPT) to help you draft the workflow content.
-   - If new scripts, tools, or functions are required, they can also be referenced in PLAN RAG.
-   - PLAN RAG focuses on the **steps**, **required input**, and **expected output**, not detailed usage.
-   - When describing input/output, it's strongly recommended to mention **data formats**, especially if the workflow is custom, uncommon, or newly developed. For example:
-     ```
-     Input Required: sample1.fastq.gz, sample2.fastq.gz  
-     Expected Output: sample.sam
-     ```
-
-#### Example:
-
-```
-Fully ChIP-seq Peak Calling with IgG Control Workflow:  
-
-Step 1: Quality Control – Conduct quality checks on raw sequencing data to assess data quality.  
-Input Required: Raw FASTQ files.  
-Expected Output: Cleaned and quality-checked FASTQ files.  
-Tools Used: FastQC, Trimmomatic, Cutadapt.  
-
-Step 2: Alignment – Align reads to the reference genome.  
-Input Required: Cleaned FASTQ files and the reference genome.  
-Expected Output: Sorted BAM file.  
-Tools Used: BWA-MEM, Bowtie2, STAR.  
-
-Step 3: SAM/BAM Conversion & Processing – Convert SAM to BAM, sort, and remove PCR duplicates.  
-Input Required: SAM file.  
-Expected Output: De-duplicated BAM file.  
-Tools Used: SAMtools, Picard.  
-
-Step 4: Signal Track Generation – Generate BigWig files for visualization.  
-Input Required: De-duplicated BAM file.  
-Expected Output: BigWig signal track file.  
-Tools Used: deeptools, bedGraphToBigWig.  
-
-Step 5: Peak Calling – Identify enriched genomic regions using IgG as a control.  
-Input Required: De-duplicated BAM file and IgG control BAM file.  
-Expected Output: NarrowPeak file.  
-Tools Used: MACS3
-```
-
-3. **Add to PLAN RAG**:
-   - Edit `./doc/Plan_Knowledge.json`
-   - Use the following JSON format:
-     ```json
-     {
-       "content": "Fully ChIP-seq Peak Calling with IgG Control Workflow: Step 1: Quality Control – Conduct quality checks on raw sequencing data to assess data quality. Input Required: Raw FASTQ files. Expected Output: Cleaned and quality-checked FASTQ files. Tools Used: FastQC, Trimmomatic, Cutadapt. Step 2: Alignment – Align reads to the reference genome. Input Required: Cleaned FASTQ files and the reference genome. Expected Output: Sorted BAM file. Tools Used: BWA-MEM, Bowtie2, STAR. Step 3: SAM/BAM Conversion & Processing – Convert SAM to BAM, sort, and remove PCR duplicates. Input Required: SAM file. Expected Output: De-duplicated BAM file. Tools Used: SAMtools, Picard. Step 4: Signal Track Generation – Generate BigWig files for visualization. Input Required: De-duplicated BAM file. Expected Output: BigWig signal track file. Tools Used: deeptools, bedGraphToBigWig. Step 5: Peak Calling – Identify enriched genomic regions using IgG as a control. Input Required: De-duplicated BAM file and IgG control BAM file. Expected Output: NarrowPeak file. Tools Used: MACS3.",
-       "metadata": {
-         "source": "workflow",
-         "page": 16
-       }
-     }
-     ```
-#### EXECUTE RAG
-
-1. **Collect the tools, scripts, functions, etc.**
-   - **Scripts**: It is recommended to store all scripts in `./scripts/`.
-   - **Tools**: If a tool is newly introduced, please install it in advance and ensure it's accessible.
-   - **Functions**: Suggest placing them in `./scripts/functions.py`.
-
-2. **Document the usage of these tools, scripts, and functions**
-   - Focus on organizing usage examples, such as:
-     ```bash
-     samtools view -S -b ./output/001/aligned_reads.sam > ./output/001/aligned_reads.bam
-     ```
-     Provide example commands and parameter explanations. The more detailed, the better.
-   - If a tool is already installed and difficult to set up, note in the knowledge base that no additional installation is required.
-   - If it's a script or function, specify where it is stored and how to call it. For instance, to use `run-cooler.sh` in a Hi-C task, write:
-     ```bash
-     bash ./scripts/run-cooler.sh ...
-     ```
-   - You can use an LLM to help you write and organize content for the EXECUTE RAG.
-
-3. **Knowledge entry recommendations**
-   - Add the tool name in the `source` field to help the PLAN AGENT locate the correct tool.
-   - If a script or function is specific to one workflow, append a note like: `run-sort-bam.sh only used in hic workflow`.
-
-4. **Add entries to the EXECUTE RAG in `./doc/Task_Knowledge.json`**
-   - Example format:
-```json
- {
-        "content": "2. run-sort-bam.sh:\nData-type-independent, generic bam sorting module\nInput : any unsorted bam file (.bam)\nOutput : a bam file sorted by coordinate (.sorted.bam) and its index (.sorted.bam.bai).\nUsage\nRun the following in the container.\nrun-sort-bam.sh <input_bam> <output_prefix>\n# input_bam : any bam file to be sorted\n# output_prefix : prefix of the output bam file.\n\nSet parameters according to the example: Suppose the input file is: ./output/GM12878_bwa_1.bam and ./output/GM12878_bwa_2.bam, the target is./output/GM12878_bwa_sorted.bam and ./output/GM12878_bwa_sorted, Generate the following sample script:\nbash ./scripts/run-sort-bam.sh ./output/GM12878_bwa_1.bam ./output/GM12878_bwa_sorted \n\nbash ./scripts/run-sort-bam.sh ./output/GM12878_bwa_2.bam ./output/GM12878_bwa_sorted\n\nYou can install the tool, but do not do any additional operations.You can install the tool, but do not do any additional operations.Please follow the example to generate rather than copy and paste completely, especially for folder names, file names, etc.",
-        "metadata": {
-            "source": "run-sort-bam.sh",
-            "page": 6
-        }
-    },
-```
-Notes:
-
-- To delete or update existing knowledge, please modify the corresponding entries in 
-  `./doc/Task_Knowledge.json` and `./doc/Plan_Knowledge.json`. After that, delete the 
-  `./chroma_db` folder, which stores the embedding vector database of the current knowledge.
-  
-- If you notice that certain knowledge is not being utilized in the PLAN or EXECUTE phase, 
-  consider refining or expanding the knowledge or goals. You can achieve this by either:
-  - Adding relevant information to the knowledge files, or
-  - Making the task goal more specific.
-
-- Do not use all available knowledge by default. It’s recommended to selectively use only the 
-  knowledge relevant to your task to ensure efficiency and relevance.
-
-- Keep the knowledge concise and high quality. Biomaster is designed to handle most tasks 
-  out-of-the-box, and does not require additional installation steps 
-  (e.g., installing R packages via `sudo`).
-
-### Use Biomaster in Terminal
-
-#### How to Run the Example
-
-The example code is located in the `./examples/` folder.
-
-1. **Add your API key and base URL**  
-   - Open `run.py` or `examples/file.py` and insert your OpenAI API key and base URL.
-
-2. **Move the example script**  
-   - Move `examples/file.py` into the root directory of Biomaster:
-     ```bash
-     mv examples/file.py ./BioMaster/
-     ```
-
-3. **Download the data**  
-   - Download the required dataset using the Google Drive link provided in `README.md`, and place the data in the `./data/` directory.
-
-4. **Set the task ID**  
-   - In `run.py` or `file.py`, set a unique `id` for your task.  
-     - This `id` can be any string, but **must not be duplicated**.
-
-5. **Run the example**  
-   - Use the following command to execute:
-     ```bash
-     conda activate agent
-     bash run.sh
-     ```
-
-
-```python
-# BioMaster settings
-    # support main model:
-    # o3-mini, o1, gpt-4o, o3-mini-2025-01-31, o1-2024-12-17
-    # claude-3-7-sonnet-thinking, claude-3-7-sonnet-20250219, claude-3-5-sonnet-20241022
-    # DeepSeek-V3, Deepseek-R1
-    # Qwen/QWQ-32B 
-    # LLAMA3-70B
-    # All other models can be tried, but it is suggested that if the main model chooses a better model, 
-    # the best model tested at present is o3-mini-2025-01-31
-
-    # support tool model:
-    # All LLMS can be tried, and you can choose some small models here.
-
-    # support emmbedding model
-    # text-embedding-004,
-    # text-embedding-3-large, text-embedding-3-small,
-    # text-embedding-ada-002
-    # BAAI/bge-m3
-
-    # suggest base url:
-    # https://api.bltcy.ai/v1
-    # https://gpt-api.hkust-gz.edu.cn/v1
-    # https://dashscope.aliyuncs.com/compatible-mode/v1
-    # https://api.openai.com/v1
-    # https://api.siliconflow.cn/v1
-    # https://sg.uiuiapi.com/v1
+```yaml
 api:
   main:
-    key: ''
+    key: 'sk-your-api-key-here'
     base_url: 'https://api.siliconflow.cn/v1/'
   embedding:
-    key: ''
+    key: 'sk-your-embedding-api-key-here'
     base_url: 'https://api.siliconflow.cn/v1/'
-  # Ollama settings
-  ollama:
-    enabled: true
-    base_url: 'http://localhost:11434'
+```
 
+**Model Configuration** - Select models to use
 
-# model settings
+```yaml
 models:
-  main: "deepseek-ai/DeepSeek-V3"
-  tool: "deepseek-ai/DeepSeek-V3"
-  embedding: "BAAI/bge-m3"
+  main: "deepseek-ai/DeepSeek-V3"           # Main reasoning model
+  tool: "deepseek-ai/DeepSeek-V3"           # Tool execution model
+  embedding: "BAAI/bge-m3"                  # Embedding model for RAG
+```
 
+<details>
+<summary>📋 Supported Models</summary>
 
-# Biomaster settings
+**Main Models:**
+- `o3-mini`, `o1`, `gpt-4o`, `o3-mini-2025-01-31`, `o1-2024-12-17`
+- `claude-3-7-sonnet-thinking`, `claude-3-7-sonnet-20250219`, `claude-3-5-sonnet-20241022`
+- `DeepSeek-V3`, `Deepseek-R1`
+- `Qwen/QWQ-32B`
+- `LLAMA3-70B`
+- **Recommended**: `o3-mini-2025-01-31`
+
+**Tool Models:**
+- Any LLM can be tried. You can choose smaller models here to reduce costs.
+
+**Embedding Models:**
+- `text-embedding-004`
+- `text-embedding-3-large`, `text-embedding-3-small`
+- `text-embedding-ada-002`
+- `BAAI/bge-m3`
+
+**Recommended API Base URLs:**
+- `https://api.siliconflow.cn/v1`
+- `https://api.bltcy.ai/v1`
+- `https://gpt-api.hkust-gz.edu.cn/v1`
+- `https://dashscope.aliyuncs.com/compatible-mode/v1`
+- `https://api.openai.com/v1`
+- `https://sg.uiuiapi.com/v1`
+
+</details>
+
+**Task Configuration** - Set task parameters
+
+```yaml
 biomaster:
-  executor: true
-  id: '005'
-  generate_plan: true
-  use_ollama: false  
+  executor: true              # Whether to execute tasks
+  id: '001'                   # Task ID (must be unique)
+  generate_plan: true         # Whether to generate a new plan
+  use_ollama: false           # Whether to use local Ollama model
+```
 
-# datalist and goal
+**Data and Goal** - Specify input data and analysis objective
+
+```yaml
 data:
   files:
     - './data/rnaseq_1.fastq.gz: RNA-Seq read 1 data (left read)'
     - './data/rnaseq_2.fastq.gz: RNA-Seq read 2 data (right read)'
     - './data/minigenome.fa: small genome sequence consisting of ~750 genes.'
-  goal: 'please do WGS/WES data analysis Somatic SNV+indel calling.'  
+  goal: 'Please perform RNA-seq differential expression analysis.'
 ```
-### How to Use Local LLM
-1. start ollama server:
-```bash
-ollama Serve
-```
-2. Download the model:
-```bash
-ollama run llama3:70b
-```
-3. If you want to use local LLM, you can set the following settings in `config.yaml`:
-```python
-ollama:
-    enabled: true
-    base_url: 'http://localhost:11434'
 
-# model settings
-models:
-  main: "llama3:70b"
-  tool: "llama3:70b"
-  embedding: "bge-m3"
+**Example Configuration for Different Tasks:**
 
+<details>
+<summary>Example 1: ChIP-seq Peak Calling</summary>
 
-# Biomaster settings
+```yaml
 biomaster:
-  executor: true
-  id: '005'
+  id: '002'
   generate_plan: true
-  use_ollama: true 
-```
-Note: If you want to use local LLM, suggest you choose the model which more than 30B.
 
-#### How to Read the Output
-
-Biomaster stores all output files in the `./output/` directory.
-
-- `./output/{id}_PLAN.json`  
-  Contains the full execution plan. Biomaster will follow this step-by-step.
-
-- `./output/{id}_Step_{step_number}.sh`  
-  The shell script generated for a specific step.  
-  Example: `001_Step_1.sh` is the script for the first step of task `id="001"`.
-
-- `./output/{id}_DEBUG_Input_{step_number}.json`  
-  Internal input for script execution. Can usually be ignored.
-
-- `./output/{id}_DEBUG_Output_{step_number}.json`  
-  Contains execution output and status for a specific step:
-  - `"shell"`: If the step succeeded, this is usually empty.  
-    If the step failed, this contains a new shell command generated by the Debug Agent to fix the issue.
-  - `"analyze"`: Analysis summary of the step’s output.
-  - `"output_filename"`: Name of the output file produced in this step.
-  - `"stats"`: Indicates whether the step succeeded (`true`) or failed (`false`).  
-    If `false`, the Debug Agent will attempt to fix the error and regenerate the command.
-
-- `./output/{id}/`  
-  All generated output files for this task will be stored in this folder.
-
----
-
-#### How to Modify the Plan
-
-1. **Stop the running task**.
-
-2. Comment out the following line in `config.yaml`:
-   ```python
-   generate_plan: true->false
-   ```
-   This will prevent Biomaster from generating a new plan.
-
-3. Manually edit the plan in:
-   ```text
-   ./output/{id}_PLAN.json
-   ```
-
-4. Run the script again:
-   ```bash
-   python run.py
-   ```
-
----
-
-#### How to Modify the Execute Script
-
-1. **Stop the running task**.
-
-2. If you want to **roll back previous steps (Step 1–N)**:
-   - Either set `"stats": false` in the corresponding `DEBUG_Output` file:
-     ```
-     ./output/{id}_DEBUG_Output_{step_number}.json
-     ```
-   - Or simply delete the `DEBUG_Output` file to re-trigger execution.
-
-3. If you want to **modify the current step**:
-   - Edit the corresponding shell script:
-     ```text
-     ./output/{id}_Step_{step_number}.sh
-     ```
-   - **Do not delete** the related `DEBUG_Output` JSON file — Biomaster will reuse it and execute the updated script.
-
-4. Run the script again:
-   ```bash
-   python run.py
-   ```
-#### How to use current result start a new task
-example:
-
-If you use task `001` to generate a result:
-current result:
-```sh
-./output/001/example.h5ad
-```
-you want use this result to visualize:
-
-1. **Stop the running task**.
-
-2. **Modify the goal** in `config.yaml`:
-   ```python
-   goal:'I want to visualize the result, this result is ./output/001/example.h5ad, which is a h5ad file, single cell data which is after normalization and quality control.'
-   ```
-
-3. **Modify the input data** in `config.yaml`:
-
-```python
 data:
-  files: 
-    - './output/001/example.h5ad: a h5ad file, single cell data which is after normalization and quality control.'
+  files:
+    - './data/chip_sample.fastq.gz: ChIP-seq sample data'
+    - './data/chip_control.fastq.gz: ChIP-seq IgG control data'
+    - './data/hg38.fa: Human reference genome'
+  goal: 'Perform ChIP-seq peak calling with IgG control and identify enriched regions.'
 ```
-4. **Modify the task id** in `config.yaml`:
-   ```python
-   ids='002'
-   ```
+</details>
 
-3. **Run the script again**:
-   ```bash
-   python run.py
-   ```
-   
-### Use Biomaster in UI Mode
+<details>
+<summary>Example 2: Single-cell RNA-seq Analysis</summary>
 
-#### 1. Start the UI
+```yaml
+biomaster:
+  id: '003'
+  generate_plan: true
 
-Run the following command to launch the Biomaster UI:
+data:
+  files:
+    - './data/sc_matrix.h5ad: Single-cell gene expression matrix'
+  goal: 'Perform quality control, normalization, clustering, and identify marker genes for each cluster.'
+```
+</details>
+
+##### Step 2: Run the Analysis
+
+```bash
+conda activate agent
+python run.py
+```
+
+Or simply use:
+
+```bash
+bash run.sh
+```
+
+---
+
+#### Option B: Web UI Mode
+
+##### Step 1: Launch the UI
 
 ```bash
 conda activate agent
 python runv.py
 ```
 
-#### 2. Open the UI in your browser
+##### Step 2: Access the Interface
 
-Once started, open the following URL in your browser:
-
-```text
-http://127.0.0.1:7860/
-```
-
-The UI interface looks like this:
+Open your browser and navigate to: `http://127.0.0.1:7860/`
 
 ![UI](./source/UI.png)
 
----
+##### Step 3: Workflow
 
-#### 3. Add Knowledge to PLAN RAG and EXECUTE RAG  
-Make sure your analysis workflows and tools are already added to the corresponding RAGs.
-
----
-
-#### 4. Configure API Access  
-Set your **Base URL** and **API Key** in the designated fields in the UI.
-
----
-
-#### 5. Define the Task  
-Provide the following inputs:
-- **Task ID**: A unique identifier for this task.
-- **Input Data Path**: Path to your data.
-- **Goal**: A description of the analysis you want Biomaster to perform.
+1. **Configure API**: Enter your Base URL and API Key in the UI
+2. **Define Task**: Input Task ID, data paths, and analysis goal
+3. **Generate Plan**: Click "Generate Plan" button
+4. **Execute Plan**: Click "Execute Plan" button to start the automated analysis
+5. **View Results**: Click "Load and Show" button to display outputs
+6. **Stop Task**: Click "Stop Plan" button if you need to interrupt execution
 
 ---
 
-#### 6. Generate the Plan  
-Click the **"Generate Plan"** button to allow Biomaster to generate a task execution plan.
+### 2. Using Local LLM (Ollama)
+
+If you prefer to use locally deployed LLM models:
+
+##### Step 1: Start Ollama Service
+
+```bash
+ollama serve
+```
+
+##### Step 2: Download a Model
+
+```bash
+ollama run llama3:70b
+```
+
+##### Step 3: Update `config.yaml`
+
+```yaml
+api:
+  ollama:
+    enabled: true
+    base_url: 'http://localhost:11434'
+
+models:
+  main: "llama3:70b"
+  tool: "llama3:70b"
+  embedding: "bge-m3"
+
+biomaster:
+  use_ollama: true
+```
+
+> **Note**: It's recommended to use models with more than 30B parameters for optimal performance.
 
 ---
 
-#### 7. Execute the Plan  
-After the plan is ready, click the **"Execute Plan"** button to start the automated execution process.
+### 3. Understanding Output Files
+
+BioMaster stores all output files in the `./output/` directory:
+
+| File | Description |
+|------|-------------|
+| `{id}_PLAN.json` | Complete execution plan that BioMaster follows step-by-step |
+| `{id}_Step_{n}.sh` | Shell script generated for step n |
+| `{id}_DEBUG_Input_{n}.json` | Internal input for step n (usually can be ignored) |
+| `{id}_DEBUG_Output_{n}.json` | Execution output and status for step n |
+| `{id}/` | All generated data files for this task |
+
+**`DEBUG_Output` File Fields:**
+- `"shell"`: Usually empty if step succeeded. Contains Debug Agent's fix command if failed.
+- `"analyze"`: Analysis summary of the step's output
+- `"output_filename"`: Name of the output file produced in this step
+- `"stats"`: Whether the step succeeded (`true`) or failed (`false`)
+
+**Example Output Structure:**
+
+```
+./output/
+├── 001_PLAN.json
+├── 001_Step_1.sh
+├── 001_Step_2.sh
+├── 001_DEBUG_Output_1.json
+├── 001_DEBUG_Output_2.json
+└── 001/
+    ├── trimmed_reads_1.fq.gz
+    ├── trimmed_reads_2.fq.gz
+    ├── aligned.bam
+    └── counts.txt
+```
 
 ---
 
-#### 8. Stop the Task  
-If you need to interrupt execution, click the **"Stop PLAN"** button.
+### 4. Advanced Operations
+
+#### 4.1 Modifying the Execution Plan
+
+If you want to adjust the analysis workflow:
+
+1. Stop the running task
+2. Set `generate_plan: false` in `config.yaml`
+3. Manually edit `./output/{id}_PLAN.json`
+4. Rerun: `python run.py`
+
+**Example: Editing PLAN.json**
+
+```json
+{
+  "steps": [
+    {
+      "step": 1,
+      "description": "Quality control on raw FASTQ files",
+      "tools": ["FastQC", "MultiQC"]
+    },
+    {
+      "step": 2,
+      "description": "Trim adapters and low-quality bases",
+      "tools": ["Trimmomatic"]
+    }
+  ]
+}
+```
+
+#### 4.2 Modifying Execution Scripts
+
+If a step fails or you want to adjust the command:
+
+1. Stop the running task
+2. **To rollback previous steps**: 
+   - Set `"stats": false` in `./output/{id}_DEBUG_Output_{n}.json`
+   - Or simply delete the `DEBUG_Output` file
+3. **To modify the current step**:
+   - Edit `./output/{id}_Step_{n}.sh`
+   - Keep the corresponding `DEBUG_Output` file
+4. Rerun: `python run.py`
+
+**Example: Editing Step Script**
+
+```bash
+# Original ./output/001_Step_2.sh
+fastqc -o ./output/001/ ./data/rnaseq_1.fastq.gz
+
+# Modified to add more threads
+fastqc -t 8 -o ./output/001/ ./data/rnaseq_1.fastq.gz
+```
+
+#### 4.3 Chaining Tasks (Using Previous Results)
+
+Use the output from one task as input for the next task.
+
+**Example Scenario:** Task `001` generates `./output/001/normalized.h5ad`, and you want to visualize it.
+
+1. Stop the running task (if any)
+2. Update `config.yaml`:
+
+```yaml
+biomaster:
+  id: '002'  # New unique task ID
+
+data:
+  files:
+    - './output/001/normalized.h5ad: Single-cell data after normalization and QC'
+  goal: 'Create UMAP and t-SNE visualizations, and generate cell type composition plots.'
+```
+
+3. Run: `python run.py`
+
+**Another Example: Multi-stage RNA-seq Analysis**
+
+```yaml
+# Stage 1: Alignment and quantification (task 001)
+biomaster:
+  id: '001'
+data:
+  files:
+    - './data/sample1_R1.fq.gz: RNA-seq forward reads'
+    - './data/sample1_R2.fq.gz: RNA-seq reverse reads'
+    - './data/genome.fa: Reference genome'
+  goal: 'Align reads and quantify gene expression.'
+
+# Stage 2: Differential expression analysis (task 002)
+biomaster:
+  id: '002'
+data:
+  files:
+    - './output/001/counts_matrix.txt: Gene expression count matrix'
+    - './data/sample_info.csv: Sample metadata with conditions'
+  goal: 'Perform differential expression analysis between treatment and control groups.'
+```
 
 ---
 
-#### 9. Load and View Results  
-Click the **"Load and Show"** button to:
-- Load and review results of a previous task, or
-- Display outputs from the current task.
+### 5. Knowledge Base Management
+
+BioMaster uses two RAG (Retrieval-Augmented Generation) systems:
+- **PLAN RAG**: Used during the planning phase; stores analysis workflows
+- **EXECUTE RAG**: Used during execution phase; stores tool/script usage documentation
+
+#### 5.1 Adding New Analysis Workflows (PLAN RAG)
+
+##### Step 1: Write Workflow Description
+
+Your workflow should include:
+- Step-by-step descriptions
+- Required inputs (with data formats)
+- Expected outputs (with data formats)
+- Tools to be used
+
+**Example Workflow:**
+
+```
+Fully ChIP-seq Peak Calling with IgG Control Workflow:
+
+Step 1: Quality Control
+Input Required: Raw FASTQ files (sample.fastq.gz)
+Expected Output: Cleaned FASTQ files (sample_trimmed.fastq.gz)
+Tools Used: FastQC, Trimmomatic, Cutadapt
+
+Step 2: Alignment
+Input Required: Cleaned FASTQ files and reference genome (hg38.fa)
+Expected Output: Sorted BAM file (sample_sorted.bam)
+Tools Used: BWA-MEM, Bowtie2, STAR
+
+Step 3: SAM/BAM Conversion & Processing
+Input Required: SAM file (sample.sam)
+Expected Output: De-duplicated BAM file (sample_dedup.bam)
+Tools Used: SAMtools, Picard
+
+Step 4: Signal Track Generation
+Input Required: De-duplicated BAM file
+Expected Output: BigWig signal track file (sample.bw)
+Tools Used: deepTools, bedGraphToBigWig
+
+Step 5: Peak Calling
+Input Required: De-duplicated BAM file and IgG control BAM file
+Expected Output: NarrowPeak file (sample_peaks.narrowPeak)
+Tools Used: MACS3
+```
+
+##### Step 2: Add to Knowledge Base
+
+Edit `./doc/Plan_Knowledge.json` and add an entry in this format:
+
+```json
+{
+  "content": "Fully ChIP-seq Peak Calling with IgG Control Workflow: Step 1: Quality Control – Conduct quality checks on raw sequencing data to assess data quality. Input Required: Raw FASTQ files (sample.fastq.gz). Expected Output: Cleaned and quality-checked FASTQ files (sample_trimmed.fastq.gz). Tools Used: FastQC, Trimmomatic, Cutadapt. Step 2: Alignment – Align reads to the reference genome. Input Required: Cleaned FASTQ files and the reference genome (hg38.fa). Expected Output: Sorted BAM file (sample_sorted.bam). Tools Used: BWA-MEM, Bowtie2, STAR. Step 3: SAM/BAM Conversion & Processing – Convert SAM to BAM, sort, and remove PCR duplicates. Input Required: SAM file (sample.sam). Expected Output: De-duplicated BAM file (sample_dedup.bam). Tools Used: SAMtools, Picard. Step 4: Signal Track Generation – Generate BigWig files for visualization. Input Required: De-duplicated BAM file. Expected Output: BigWig signal track file (sample.bw). Tools Used: deepTools, bedGraphToBigWig. Step 5: Peak Calling – Identify enriched genomic regions using IgG as a control. Input Required: De-duplicated BAM file and IgG control BAM file. Expected Output: NarrowPeak file (sample_peaks.narrowPeak). Tools Used: MACS3.",
+  "metadata": {
+    "source": "chipseq_workflow",
+    "page": 1
+  }
+}
+```
+
+#### 5.2 Adding Tool/Script Documentation (EXECUTE RAG)
+
+##### Step 1: Prepare Tools/Scripts
+
+- **Scripts**: Store in `./scripts/` directory
+- **Tools**: Install beforehand and ensure accessibility
+- **Functions**: Place in `./scripts/functions.py`
+
+##### Step 2: Write Usage Documentation
+
+Focus on providing usage examples with parameter explanations.
+
+**Example Documentation:**
+
+```
+Tool: samtools view
+Description: Convert SAM to BAM format
+Usage: samtools view -S -b input.sam > output.bam
+Parameters:
+  -S: Input is SAM format
+  -b: Output in BAM format
+Example: samtools view -S -b ./output/001/aligned.sam > ./output/001/aligned.bam
+```
+
+##### Step 3: Add to Knowledge Base
+
+Edit `./doc/Task_Knowledge.json`:
+
+```json
+{
+  "content": "samtools view - Convert between SAM and BAM formats. Usage: samtools view [options] <in.sam>|<in.bam>. Common options: -S (input is SAM), -b (output BAM format), -h (include header). Example: To convert SAM to BAM: samtools view -S -b ./output/001/aligned.sam > ./output/001/aligned.bam. To filter by quality: samtools view -q 30 -b input.bam > filtered.bam",
+  "metadata": {
+    "source": "samtools",
+    "page": 1
+  }
+}
+```
+
+**Example for Custom Script:**
+
+```json
+{
+  "content": "run-sort-bam.sh - Generic BAM sorting module. Input: any unsorted BAM file (.bam). Output: coordinate-sorted BAM file (.sorted.bam) and its index (.sorted.bam.bai). Usage: bash ./scripts/run-sort-bam.sh <input_bam> <output_prefix>. Example: bash ./scripts/run-sort-bam.sh ./output/001/aligned.bam ./output/001/aligned_sorted. This will generate ./output/001/aligned_sorted.bam and ./output/001/aligned_sorted.bam.bai. Note: run-sort-bam.sh is commonly used in Hi-C workflows.",
+  "metadata": {
+    "source": "run-sort-bam.sh",
+    "page": 1
+  }
+}
+```
+
+#### 5.3 Knowledge Base Management Best Practices
+
+- **After modifying knowledge**, delete the `./chroma_db` folder to rebuild the vector database
+- **If knowledge isn't being utilized**, consider:
+  - Refining the knowledge description
+  - Making the task goal more specific
+- **Keep knowledge concise and high-quality**
+- **Avoid installation steps** requiring sudo permissions
+- **Add source metadata** to help agents locate the right tools
+
+---
+
+### 6. Running Examples
+
+The `./examples/` folder contains example scripts.
+
+##### Quick Example Run:
+
+1. **Download data**: Get data from the Google Drive link in README, place in `./data/` directory
+2. **Configure**: Edit `config.yaml` with your API keys and task parameters
+3. **Run**:
+```bash
+conda activate agent
+bash run.sh
+```
+
+**Example 1: RNA-seq Analysis**
+
+```yaml
+biomaster:
+  id: 'rnaseq_example'
+  
+data:
+  files:
+    - './data/control_1.fastq.gz: Control replicate 1'
+    - './data/control_2.fastq.gz: Control replicate 2'
+    - './data/treated_1.fastq.gz: Treatment replicate 1'
+    - './data/treated_2.fastq.gz: Treatment replicate 2'
+    - './data/genome.fa: Reference genome'
+    - './data/genes.gtf: Gene annotation file'
+  goal: 'Perform complete RNA-seq analysis including QC, alignment, quantification, and differential expression analysis.'
+```
+
+**Example 2: Single-cell Clustering**
+
+```yaml
+biomaster:
+  id: 'scrna_clustering'
+  
+data:
+  files:
+    - './data/pbmc_10k.h5ad: 10k PBMC single-cell dataset'
+  goal: 'Perform clustering analysis, identify cell types, and find marker genes for each cluster.'
+```
 
 
 ## 📚 File Structure

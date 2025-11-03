@@ -25,6 +25,8 @@ from .prompts import PLAN_PROMPT, PLAN_EXAMPLES, TASK_PROMPT, TASK_EXAMPLES, DEB
 from .ToolAgent import Json_Format_Agent
 from .CheckAgent import CheckAgent  # Add this import at the top
 from .ollama import OllamaEmbeddings
+# Lazy import for GraphRAG and HybridRAG to avoid NetworkX compatibility issues
+# They will be imported only when actually needed
 
 
 # Configure logging
@@ -48,7 +50,23 @@ class Biomaster:
         chroma_db_dir: str = './chroma_db',  # Chroma persistence directory
         token_log_path: str = './token.txt',  # Add token log path parameter
         use_ollama: bool = False,  # Whether to use ollama
-        ollama_base_url: str = "http://localhost:11434"  # Ollama API address
+        ollama_base_url: str = "http://localhost:11434",  # Ollama API address
+        rag_type: str = 'vector',  # RAG type: 'vector', 'graph', or 'hybrid'
+        graph_db_dir: str = './graph_db',  # GraphRAG persistence directory
+        graph_similarity_threshold: float = 0.75,  # Similarity threshold for GraphRAG
+        graph_max_neighbors: int = 2,  # Max neighbors for GraphRAG
+        hybrid_db_dir: str = './hybrid_db',  # HybridRAG persistence directory
+        hybrid_vector_weight: float = 0.6,  # Vector weight for HybridRAG
+        hybrid_graph_weight: float = 0.4,  # Graph weight for HybridRAG
+        hybrid_enable_reranking: bool = True,  # Enable reranking for HybridRAG
+        plan_k: int = 1,  # Number of documents to retrieve for PLAN phase
+        task_k: int = 2,  # Number of documents to retrieve for TASK phase
+        plan_search_type: str = 'similarity',  # Search strategy for PLAN phase
+        task_search_type: str = 'similarity',  # Search strategy for TASK phase
+        score_threshold: float = 0.7,  # Minimum similarity score threshold
+        mmr_diversity_score: float = 0.3,  # MMR diversity score (0-1)
+        diverse_multiplier: int = 3,  # Multiplier for diverse search
+        rerank_multiplier: int = 2  # Multiplier for rerank search
     ):
         # Set USER_AGENT environment variable to eliminate warnings
         os.environ['USER_AGENT'] = 'Biomaster/1.0'
@@ -63,6 +81,27 @@ class Biomaster:
         self.stop_flag = False  # Flag
         self.token_log_path = token_log_path
         self.tool_model = tool_model
+        
+        # RAG settings
+        self.rag_type = rag_type.lower()
+        self.chroma_db_dir = chroma_db_dir
+        self.graph_db_dir = graph_db_dir
+        self.graph_similarity_threshold = graph_similarity_threshold
+        self.graph_max_neighbors = graph_max_neighbors
+        self.hybrid_db_dir = hybrid_db_dir
+        self.hybrid_vector_weight = hybrid_vector_weight
+        self.hybrid_graph_weight = hybrid_graph_weight
+        self.hybrid_enable_reranking = hybrid_enable_reranking
+        
+        # Retrieval parameters
+        self.plan_k = plan_k
+        self.task_k = task_k
+        self.plan_search_type = plan_search_type.lower()
+        self.task_search_type = task_search_type.lower()
+        self.score_threshold = score_threshold
+        self.mmr_diversity_score = mmr_diversity_score
+        self.diverse_multiplier = diverse_multiplier
+        self.rerank_multiplier = rerank_multiplier
         
         # Ollama settings
         self.use_ollama = use_ollama
@@ -126,21 +165,100 @@ class Biomaster:
         self.collection1_name = "popgen_collection1"
         self.collection2_name = "popgen_collection2"
 
-        # Initialize Chroma vector storage, specify persistence directory
-        self.vectorstore = Chroma(
-            collection_name=self.collection1_name,
-            embedding_function=self.embeddings,
-            persist_directory=os.path.join(chroma_db_dir, "collection1")  # Separate storage for different collections
-        )
-        self.vectorstore_tool = Chroma(
-            collection_name=self.collection2_name,
-            embedding_function=self.embeddings,
-            persist_directory=os.path.join(chroma_db_dir, "collection2")  # Separate storage for different collections
-        )
+        # Initialize vector storage based on RAG type
+        if self.rag_type == 'graph':
+            logging.info("Initializing GraphRAG knowledge base...")
+            try:
+                from .GraphRAG import GraphRAG
+                self.vectorstore = GraphRAG(
+                    collection_name=self.collection1_name,
+                    embedding_function=self.embeddings,
+                    persist_directory=os.path.join(self.graph_db_dir, "collection1"),
+                    similarity_threshold=self.graph_similarity_threshold,
+                    max_neighbors=self.graph_max_neighbors
+                )
+                self.vectorstore_tool = GraphRAG(
+                    collection_name=self.collection2_name,
+                    embedding_function=self.embeddings,
+                    persist_directory=os.path.join(self.graph_db_dir, "collection2"),
+                    similarity_threshold=self.graph_similarity_threshold,
+                    max_neighbors=self.graph_max_neighbors
+                )
+                logging.info("GraphRAG initialized successfully")
+            except ImportError as e:
+                logging.error(f"Failed to import GraphRAG: {e}")
+                logging.error("Please install networkx: pip install 'networkx>=3.0,<4.0'")
+                logging.info("Falling back to Vector RAG (Chroma)")
+                self.rag_type = 'vector'
+            except Exception as e:
+                logging.error(f"Failed to initialize GraphRAG: {e}")
+                logging.info("Falling back to Vector RAG (Chroma)")
+                self.rag_type = 'vector'
+        
+        if self.rag_type == 'hybrid':
+            logging.info("Initializing HybridRAG knowledge base...")
+            try:
+                from .HybridRAG import HybridRAG
+                self.vectorstore = HybridRAG(
+                    collection_name=self.collection1_name,
+                    embedding_function=self.embeddings,
+                    persist_directory=os.path.join(self.hybrid_db_dir, "collection1"),
+                    vector_weight=self.hybrid_vector_weight,
+                    graph_weight=self.hybrid_graph_weight,
+                    similarity_threshold=self.graph_similarity_threshold,
+                    max_neighbors=self.graph_max_neighbors,
+                    enable_reranking=self.hybrid_enable_reranking
+                )
+                self.vectorstore_tool = HybridRAG(
+                    collection_name=self.collection2_name,
+                    embedding_function=self.embeddings,
+                    persist_directory=os.path.join(self.hybrid_db_dir, "collection2"),
+                    vector_weight=self.hybrid_vector_weight,
+                    graph_weight=self.hybrid_graph_weight,
+                    similarity_threshold=self.graph_similarity_threshold,
+                    max_neighbors=self.graph_max_neighbors,
+                    enable_reranking=self.hybrid_enable_reranking
+                )
+                logging.info("HybridRAG initialized successfully")
+            except ImportError as e:
+                logging.error(f"Failed to import HybridRAG: {e}")
+                logging.error("Please install networkx: pip install 'networkx>=3.0,<4.0'")
+                logging.info("Falling back to Vector RAG (Chroma)")
+                self.rag_type = 'vector'
+            except Exception as e:
+                logging.error(f"Failed to initialize HybridRAG: {e}")
+                logging.info("Falling back to Vector RAG (Chroma)")
+                self.rag_type = 'vector'
+        
+        if self.rag_type == 'vector':  # Default to vector (Chroma)
+            logging.info("Initializing Vector (Chroma) knowledge base...")
+            self.vectorstore = Chroma(
+                collection_name=self.collection1_name,
+                embedding_function=self.embeddings,
+                persist_directory=os.path.join(self.chroma_db_dir, "collection1")
+            )
+            self.vectorstore_tool = Chroma(
+                collection_name=self.collection2_name,
+                embedding_function=self.embeddings,
+                persist_directory=os.path.join(self.chroma_db_dir, "collection2")
+            )
+            logging.info("Vector RAG (Chroma) initialized successfully")
 
         # Load knowledge data (only add new data)
         self.Load_PLAN_RAG()
         self.Load_Tool_RAG()
+        
+        # Log statistics based on RAG type
+        if self.rag_type == 'graph':
+            plan_stats = self.vectorstore.get_graph_stats()
+            tool_stats = self.vectorstore_tool.get_graph_stats()
+            logging.info(f"PLAN GraphRAG stats: {plan_stats}")
+            logging.info(f"TOOL GraphRAG stats: {tool_stats}")
+        elif self.rag_type == 'hybrid':
+            plan_stats = self.vectorstore.get_stats()
+            tool_stats = self.vectorstore_tool.get_stats()
+            logging.info(f"PLAN HybridRAG stats: {plan_stats}")
+            logging.info(f"TOOL HybridRAG stats: {tool_stats}")
 
         # Initialize the CheckAgent
         if self.use_ollama:
@@ -366,6 +484,104 @@ class Biomaster:
         # Output to console as well
         logging.info(f"Token usage: {log_entry.strip()}")
 
+    def _perform_search(self, vectorstore, query: str, k: int, search_type: str):
+        """
+        Perform document retrieval using specified search strategy.
+        
+        Args:
+            vectorstore: The vector store to search
+            query: Search query string
+            k: Number of documents to retrieve
+            search_type: Type of search ('similarity', 'mmr', 'similarity_score_threshold', 'diverse', 'rerank')
+        
+        Returns:
+            List of retrieved documents
+        """
+        search_type = search_type.lower()
+        
+        try:
+            if search_type == 'similarity':
+                # Standard cosine similarity search (default)
+                docs = vectorstore.similarity_search(query, k=k)
+                logging.info(f"Search type: similarity, retrieved {len(docs)} documents")
+                
+            elif search_type == 'mmr':
+                # Maximum Marginal Relevance - balances relevance and diversity
+                docs = vectorstore.max_marginal_relevance_search(
+                    query, 
+                    k=k,
+                    fetch_k=k*3,  # Fetch more candidates for better diversity
+                    lambda_mult=1.0 - self.mmr_diversity_score  # Convert diversity to MMR's lambda
+                )
+                logging.info(f"Search type: MMR (diversity={self.mmr_diversity_score}), retrieved {len(docs)} documents")
+                
+            elif search_type == 'similarity_score_threshold':
+                # Filter results by minimum similarity score
+                docs_with_scores = vectorstore.similarity_search_with_score(query, k=k*2)
+                docs = [doc for doc, score in docs_with_scores if score >= self.score_threshold][:k]
+                if len(docs) == 0:
+                    logging.warning(f"No documents meet score threshold {self.score_threshold}, falling back to top {k}")
+                    docs = vectorstore.similarity_search(query, k=k)
+                logging.info(f"Search type: score_threshold ({self.score_threshold}), retrieved {len(docs)} documents")
+                
+            elif search_type == 'diverse':
+                # Fetch more results and select diverse subset
+                fetch_count = k * self.diverse_multiplier
+                all_docs = vectorstore.similarity_search(query, k=fetch_count)
+                
+                # Simple diversity selection: pick documents that are dissimilar to each other
+                if len(all_docs) <= k:
+                    docs = all_docs
+                else:
+                    docs = [all_docs[0]]  # Start with most relevant
+                    for doc in all_docs[1:]:
+                        # Check if this doc is sufficiently different from selected docs
+                        if len(docs) >= k:
+                            break
+                        # Simple diversity check: content length and unique keywords
+                        is_diverse = True
+                        for selected_doc in docs:
+                            # If too similar in content, skip
+                            if len(set(doc.page_content.split()) & set(selected_doc.page_content.split())) > len(doc.page_content.split()) * 0.7:
+                                is_diverse = False
+                                break
+                        if is_diverse:
+                            docs.append(doc)
+                    
+                    # Fill remaining slots if needed
+                    while len(docs) < k and len(all_docs) > len(docs):
+                        for doc in all_docs:
+                            if doc not in docs:
+                                docs.append(doc)
+                                break
+                                
+                logging.info(f"Search type: diverse (multiplier={self.diverse_multiplier}), retrieved {len(docs)} from {len(all_docs)} candidates")
+                
+            elif search_type == 'rerank':
+                # Retrieve more documents and rerank by relevance
+                fetch_count = k * self.rerank_multiplier
+                docs_with_scores = vectorstore.similarity_search_with_score(query, k=fetch_count)
+                
+                # Sort by score (lower is better in most vector DBs, but check your setup)
+                # For Chroma with L2 distance, lower scores are better
+                # For cosine similarity, higher scores are better
+                # Let's assume we're getting relevance scores where higher is better after normalization
+                docs_with_scores_sorted = sorted(docs_with_scores, key=lambda x: x[1], reverse=False)  # Lower L2 distance is better
+                docs = [doc for doc, score in docs_with_scores_sorted[:k]]
+                
+                logging.info(f"Search type: rerank (multiplier={self.rerank_multiplier}), retrieved {len(docs)} from {len(docs_with_scores)} candidates")
+                
+            else:
+                # Fallback to similarity search
+                logging.warning(f"Unknown search type '{search_type}', falling back to similarity search")
+                docs = vectorstore.similarity_search(query, k=k)
+                
+        except Exception as e:
+            logging.error(f"Error in search type '{search_type}': {e}, falling back to similarity search")
+            docs = vectorstore.similarity_search(query, k=k)
+            
+        return docs
+
     def _create_agent(self, prompt_template, examples):
         model = ChatOpenAI(model=self.model, base_url=self.base_url)
 
@@ -462,7 +678,7 @@ class Biomaster:
         # Generate new PLAN
         logging.info("Generating a new PLAN.")
 
-        related_docs = self.vectorstore.similarity_search(goal, k=1)
+        related_docs = self._perform_search(self.vectorstore, goal, k=self.plan_k, search_type=self.plan_search_type)
         related_docs_content = "\n\n".join([doc.page_content for doc in related_docs])
         logging.info(f"Related documents content: {related_docs_content}")
         # Build reference content: Use related document content as reference
@@ -553,7 +769,7 @@ class Biomaster:
                     step_datalist = DEBUG_output_dict['output_filename'] + step_datalist
                     continue
 
-            related_docs = self.vectorstore_tool.similarity_search(step['description'], k=2)
+            related_docs = self._perform_search(self.vectorstore_tool, step['description'], k=self.task_k, search_type=self.task_search_type)
 
             # Concatenate full content as string, ensure not truncated
             related_docs_content = "\n\n".join([doc.page_content for doc in related_docs])

@@ -72,6 +72,7 @@ msgpack==1.1.0
 multidict==6.1.0
 munkres==1.1.4
 mypy-extensions==1.0.0
+networkx==3.2.1
 numpy==1.26.4
 oauthlib==3.2.2
 onnxruntime==1.21.0

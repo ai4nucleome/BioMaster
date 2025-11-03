@@ -1,0 +1,119 @@
+# BioMaster Configuration Examples - Multiple RAG Modes
+# This file shows how to configure different RAG systems
+
+# API Settings
+api:
+  main:
+    key: 'your-api-key-here'
+    base_url: 'https://api.siliconflow.cn/v1/'
+  embedding:
+    key: 'your-embedding-api-key-here'
+    base_url: 'https://api.siliconflow.cn/v1/'
+  # Ollama settings (optional)
+  ollama:
+    enabled: false
+    base_url: 'http://localhost:11434'
+
+# Model Settings
+models:
+  main: "deepseek-ai/DeepSeek-V3"
+  tool: "deepseek-ai/DeepSeek-V3"
+  embedding: "BAAI/bge-m3"
+
+# Biomaster Settings
+biomaster:
+  executor: true
+  id: 'graphrag_001'
+  generate_plan: true
+  use_ollama: false
+
+# RAG Settings - Choose one configuration below
+
+# Option 1: Vector RAG (Default, Fastest)
+# rag:
+#   type: 'vector'
+#   vector:
+#     chroma_db_dir: './chroma_db'
+
+# Option 2: GraphRAG (Context-aware)
+# rag:
+#   type: 'graph'
+#   graph:
+#     persist_directory: './graph_db'
+#     similarity_threshold: 0.75
+#     max_neighbors: 2
+
+# Option 3: HybridRAG (Recommended for production)
+rag:
+  type: 'hybrid'  # Best of both worlds
+  
+  # Vector RAG settings
+  vector:
+    chroma_db_dir: './chroma_db'
+  
+  # GraphRAG settings
+  graph:
+    persist_directory: './graph_db'
+    similarity_threshold: 0.75
+    max_neighbors: 2
+  
+  # HybridRAG settings (combines vector + graph)
+  hybrid:
+    persist_directory: './hybrid_db'
+    
+    # Weight for vector similarity scoring (0-1)
+    # Higher: Trust semantic similarity more
+    # Lower: Trust graph relationships more
+    # Recommended: 0.5-0.7
+    vector_weight: 0.6
+    
+    # Weight for graph relationship scoring (0-1)
+    # Should sum to 1.0 with vector_weight
+    # Recommended: 0.3-0.5
+    graph_weight: 0.4
+    
+    # Graph parameters (same as GraphRAG)
+    similarity_threshold: 0.75
+    max_neighbors: 2
+    
+    # Enable re-ranking of results using hybrid scoring
+    # true: Better quality, slightly slower
+    # false: Faster, may miss optimal ranking
+    # Recommended: true
+    enable_reranking: true
+
+# Data and Goal
+data:
+  files:
+    - './data/rnaseq_1.fastq.gz: RNA-Seq read 1 data (left read)'
+    - './data/rnaseq_2.fastq.gz: RNA-Seq read 2 data (right read)'
+    - './data/minigenome.fa: small genome sequence consisting of ~750 genes.'
+  
+  # Example goals that benefit from GraphRAG:
+  goal: 'Perform complete RNA-seq analysis including quality control, alignment, quantification, differential expression, and pathway enrichment visualization.'
+  
+  # Other example goals:
+  # goal: 'Perform ChIP-seq peak calling with IgG control, motif analysis, and functional enrichment'
+  # goal: 'Complete single-cell RNA-seq analysis with clustering, cell type annotation, and marker gene identification'
+  # goal: 'Hi-C data preprocessing, contact matrix generation, and visualization'
+
+# Notes:
+# 
+# When to use GraphRAG:
+# 1. Complex multi-step workflows requiring multiple interconnected tools
+# 2. When you need related tools/workflows to be automatically discovered
+# 3. When workflow context improves analysis planning
+#
+# Parameter tuning guide:
+# 
+# similarity_threshold:
+#   0.60-0.70: Maximum connectivity, rich context (may be noisy)
+#   0.75-0.80: Balanced (recommended for most cases)
+#   0.85-0.95: Strict, focused results (may miss related tools)
+#
+# max_neighbors:
+#   1: Minimal expansion, fastest
+#   2: Balanced expansion (recommended)
+#   3: Rich context, comprehensive
+#   4+: Maximum context (may include irrelevant nodes)
+
