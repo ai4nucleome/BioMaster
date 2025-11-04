@@ -26,10 +26,10 @@
     # https://sg.uiuiapi.com/v1
 api:
   main:
-    key: ''
+    key: 'sk-
     base_url: 'https://api.bltcy.ai/v1'
   embedding:
-    key: ''
+    key: 'sk-'
     base_url: 'https://api.bltcy.ai/v1'
   # Ollama settings
   ollama:
@@ -47,7 +47,7 @@ models:
 # Biomaster settings
 biomaster:
   executor: true
-  id: 'sc7'
+  id: 'ab'
   generate_plan: true
   use_ollama: false   
 # RAG settings

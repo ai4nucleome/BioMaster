@@ -141,6 +141,8 @@ https://drive.google.com/drive/folders/1vA3WIAVXVo4RZSqXKsItEZHVaBgIIv_E?usp=sha
 
 PS: Linux has been tested for direct installation, but Windows and Mac have not been tested, so it is uncertain whether any issues might arise.
 
+---
+
 ## 📖 Usage Guide
 
 ### 1. Quick Start
@@ -299,6 +301,122 @@ Open your browser and navigate to: `http://127.0.0.1:7860/`
 4. **Execute Plan**: Click "Execute Plan" button to start the automated analysis
 5. **View Results**: Click "Load and Show" button to display outputs
 6. **Stop Task**: Click "Stop Plan" button if you need to interrupt execution
+
+---
+
+## 🐳 Docker Installation (Alternative Method)
+
+> ⚠️ **Experimental Feature**: Docker support has only been tested in limited scenarios and has not undergone extensive testing across different environments and use cases. Use with caution and report any issues you encounter.
+
+Docker provides an isolated, reproducible environment with all dependencies pre-configured. This method is still under development but may offer easier deployment in some cases.
+
+### Prerequisites
+
+- Docker installed on your system ([Install Docker](https://docs.docker.com/get-docker/))
+- At least 20GB free disk space
+- Internet connection for first-time build
+
+### Quick Start with Docker
+
+#### 1. Build the Docker Image
+
+```bash
+cd BioMaster
+
+# Method 1: Using the convenience script (recommended)
+./docker/docker-run.sh
+
+# Method 2: Manual build
+docker build -f docker/Dockerfile -t biomaster-docker:latest .
+
+# Method 3: Using docker-compose
+cd docker
+docker-compose build
+```
+
+**Note**: First-time build takes 15-30 minutes depending on network speed and hardware.
+
+#### 2. Run BioMaster with Docker
+
+```bash
+# Using the convenience script (easiest)
+./docker/docker-run.sh config.yaml
+
+# Using docker-compose
+cd docker
+docker-compose up
+
+# Using docker directly
+docker run --rm \
+    -v "$(pwd)":/work \
+    -v "$(pwd)/output":/work/output \
+    -v "$(pwd)/data":/work/data \
+    biomaster-docker:latest config.yaml
+```
+
+#### 3. Interactive Mode (for debugging)
+
+```bash
+./docker/docker-interactive.sh
+
+# Inside the container:
+cd /work
+python /app/run.py config.yaml
+exit
+```
+
+### Docker Directory Structure
+
+All Docker-related files are in the `./docker/` folder:
+
+```
+docker/
+├── Dockerfile                # Main Dockerfile
+├── biomaster-docker.yml      # Conda environment specification
+├── docker-compose.yml        # Docker Compose configuration
+├── docker-run.sh            # Convenience script to run BioMaster
+├── docker-interactive.sh    # Script for interactive container access
+└── install_env.sh           # Fallback installation script
+```
+
+### Path Mapping
+
+When running in Docker, all paths are relative to your **current directory**:
+
+```
+Host Machine (e.g., /home/user/BioMaster)
+├── config.yaml ────────→ /work/config.yaml (in container)
+├── data/ ──────────────→ /work/data/ (in container)
+│   └── your_data.h5ad
+└── output/ ────────────→ /work/output/ (in container)
+    └── results/       # Analysis results automatically saved here
+```
+
+**Key Features:**
+- ✅ Paths in `config.yaml` like `./data/file.h5ad` automatically map to host machine
+- ✅ All output files are saved to host machine's `./output/` directory
+- ✅ Installed packages are cached in Docker volumes for faster subsequent runs
+
+### Common Docker Commands
+
+```bash
+# Check Docker images
+docker images | grep biomaster
+
+# Check running containers
+docker ps
+
+# View container logs
+docker logs biomaster-runner
+
+# Stop a running container
+docker stop biomaster-runner
+
+# Clean up Docker resources
+docker system prune -a
+```
+
+For more detailed Docker documentation, see the `docker/` folder.
 
 ---
 

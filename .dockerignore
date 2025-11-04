@@ -1,0 +1,56 @@
+# Git相关
+.git
+.gitignore
+
+# Python相关
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# 虚拟环境
+env/
+venv/
+ENV/
+.venv/
+
+# IDE相关
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 输出目录（构建时不需要）
+output/
+*.log
+
+# 文档
+README*.md
+docs/
+doc/
+
+# 数据目录（可选，如果需要数据可以包含）
+# data/
+
+# 数据库
+chroma_db/
+graph_db/
+hybrid_db/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+

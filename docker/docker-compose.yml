@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  biomaster:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        # Optional: Set mirror sources to speed up build
+        # APT_MIRROR: "https://mirrors.tuna.tsinghua.edu.cn/debian"
+        # PIP_INDEX_URL: "https://pypi.tuna.tsinghua.edu.cn/simple"
+        # PIP_TRUSTED_HOST: "pypi.tuna.tsinghua.edu.cn"
+    image: biomaster-docker:latest
+    container_name: biomaster-runner
+    volumes:
+      # Mount current directory to container /work (all paths relative to docker call directory)
+      - ..:/work
+      # Ensure output, data directories are also under /work
+      - ../output:/work/output
+      - ../data:/work/data
+      - ../chroma_db:/work/chroma_db
+      - ../graph_db:/work/graph_db
+      - ../hybrid_db:/work/hybrid_db
+      - ../doc:/work/doc
+      # Mount conda package cache for persistence (not envs, as they're in the image)
+      - biomaster_conda_pkgs:/opt/conda/pkgs
+    working_dir: /work
+    environment:
+      - CONFIG_PATH=config.yaml
+      # If using ollama, need to connect to host or other container
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      # Ensure using biomaster-docker environment
+      - PATH=/opt/conda/envs/biomaster-docker/bin:/opt/conda/bin:${PATH}
+      - CONDA_DEFAULT_ENV=biomaster-docker
+    # If need to access host's ollama service
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Pass command line arguments
+    command: ["config.yaml"]
+    # If need interactive mode, can add:
+    # stdin_open: true
+    # tty: true
+
+volumes:
+  # Persist conda package cache (environments are in the image)
+  biomaster_conda_pkgs:
+
+
