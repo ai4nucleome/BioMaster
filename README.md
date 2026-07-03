@@ -22,7 +22,7 @@
 
 BioMaster is a multi-agent framework designed to translate natural-language biological analysis goals into executable, monitored, and validated bioinformatics workflows. It separates workflow design, command generation, runtime debugging, and output verification into distinct agent roles, and grounds these roles in curated workflow-level and tool-level knowledge.
 
-This repository is the **v0.5 deployment-oriented release**. It is based on the v0.4 OpenCode-integrated implementation and adds a static project homepage plus an organized `source/` directory for publication, website, and deployment assets.
+This repository is the **v0.5 deployment-oriented release**. It is based on the v0.4 OpenCode-integrated implementation and adds a GitHub Pages-ready static site under `docs/` plus an organized `source/` directory for publication, website, and deployment assets.
 
 The BioMaster manuscript, **"BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow"**, has been accepted by *Patterns*. A preprint is available on bioRxiv.
 
@@ -30,19 +30,19 @@ The BioMaster manuscript, **"BioMaster: Multi-agent System for Automated Bioinfo
 
 | Area | v0.5 content |
 | --- | --- |
-| Paper context | README, citation, homepage pages, and manuscript figures aligned with the accepted *Patterns* manuscript |
+| Paper context | README, citation, documentation pages, and manuscript figures aligned with the accepted *Patterns* manuscript |
 | User interface | Modified OpenCode frontend with BioMaster and BioSkills management pages |
 | Agent runtime | Plan, Execute, Debug, and Check agents following the deterministic v0.2 workflow skeleton |
 | Knowledge layer | File-backed BioSkills library with SQLite cache generated from `.opencode/bioskills/` |
-| Deployment assets | Static homepage in `homepage/`, cleaned archive `homepage.tar.gz`, and curated figures in `source/` |
+| Deployment assets | GitHub Pages-ready static site in `docs/`, cleaned archive `docs.tar.gz`, and curated figures in `source/` |
 | Validation | BioSkills validation, SQLite sync, smoke tests, and pytest workflow coverage |
 
 ## Manuscript and Figures
 
 - Preprint: <https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract>
-- Static homepage: `homepage/index.html`
+- Static website: `docs/index.html`
 - Figure and deployment assets: `source/`
-- Homepage figures: `source/figures/`
+- Static site figures: `source/figures/`
 
 The manuscript reports an evaluation over 49 bioinformatics tasks spanning 102 bioinformatics tools. Under the reported benchmark setting, BioMaster completed 47 of 49 tasks end to end, corresponding to a 95.9% workflow execution success rate. These results describe benchmarked workflow execution behavior and should not be interpreted as replacing expert biological review or interpretation.
 
@@ -60,7 +60,7 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 - `biomaster2-main/.opencode/bioskills/` is the canonical BioSkills source.
 - `biomaster2-main/.opencode/knowledge/biomaster_skills.db` is a generated cache and should not be committed.
 - `opencode/` contains the modified OpenCode backend and web application.
-- `homepage/` contains the static public project site.
+- `docs/` contains the static public project site and can be selected directly as the GitHub Pages source.
 
 ## Repository Structure
 
@@ -68,8 +68,8 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 .
 ├── README.md
 ├── oc.sh                         # OpenCode backend/frontend launcher
-├── homepage/                     # static public project homepage
-├── homepage.tar.gz               # cleaned homepage deployment archive
+├── docs/                         # GitHub Pages-ready static public site
+├── docs.tar.gz                   # cleaned static site deployment archive
 ├── source/                       # publication and deployment assets
 │   ├── Biomaster.svg             # project logo
 │   ├── UI.png                    # UI asset
@@ -146,14 +146,14 @@ Useful launcher commands:
 ./oc.sh logs       # show recent backend/frontend logs
 ```
 
-## Homepage Deployment
+## Static Site Deployment
 
-The `homepage/` directory is plain HTML, CSS, JavaScript, and static assets. It does not require a build step.
+The `docs/` directory is plain HTML, CSS, JavaScript, and static assets. It does not require a build step and is named to match GitHub Pages' `/docs` publishing option.
 
 Preview locally:
 
 ```bash
-cd /home/agent/BioMaster/biomaster-skill-v0.5/homepage
+cd /home/agent/BioMaster/biomaster-skill-v0.5/docs
 python3 -m http.server 8080
 ```
 
@@ -165,10 +165,10 @@ http://127.0.0.1:8080
 
 Deployment options:
 
-- **GitHub Pages**: publish the `homepage/` directory as the Pages source.
-- **Nginx/Apache**: copy the contents of `homepage/` to the web root.
-- **Vercel/Netlify**: deploy `homepage/` as a static site.
-- **Archive transfer**: use `homepage.tar.gz`, which is regenerated from `homepage/` without macOS metadata files.
+- **GitHub Pages**: set the Pages source to the `v0.5` branch and `/docs` folder.
+- **Nginx/Apache**: copy the contents of `docs/` to the web root.
+- **Vercel/Netlify**: deploy `docs/` as a static site.
+- **Archive transfer**: use `docs.tar.gz`, which is regenerated from `docs/` without macOS metadata files.
 
 ## Using BioMaster
 
@@ -231,7 +231,7 @@ Generated files should remain untracked:
 
 ## Source Assets
 
-`source/` stores materials used by the README, paper, and homepage.
+`source/` stores materials used by the README, paper, and static site.
 
 | Path | Purpose |
 | --- | --- |
@@ -253,7 +253,7 @@ Keep figure claims consistent with the accepted manuscript and verified benchmar
 v0.5 is intended as a deployment and presentation version:
 
 - retains the v0.4 OpenCode/BioSkills runtime structure;
-- adds the static homepage and manuscript-facing assets;
+- adds the GitHub Pages-ready static site and manuscript-facing assets;
 - keeps the v0.2-style Plan -> Execute -> Debug -> Check workflow discipline;
 - organizes source assets for paper, documentation, and website reuse.
 
@@ -275,7 +275,7 @@ The citation entry will be updated when the final *Patterns* publication metadat
 
 ## Maintainer Checklist
 
-- Keep `homepage/` and `source/` separate from runtime-generated workflow outputs.
+- Keep `docs/` and `source/` separate from runtime-generated workflow outputs.
 - Keep BioSkills source files in `biomaster2-main/.opencode/bioskills/`.
 - Do not commit generated SQLite databases, BioSkills FTS indexes, dependency folders, or project run outputs.
 - Review large biological data files before public release or migration to Git LFS.

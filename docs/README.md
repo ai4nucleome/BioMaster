@@ -1,6 +1,6 @@
-# BioMaster Homepage
+# BioMaster Static Site
 
-This directory contains a static multi-page project homepage for BioMaster.
+This directory contains a static multi-page project site for BioMaster.
 
 ## Pages
 
@@ -17,6 +17,6 @@ Open `index.html` directly in a browser. No build step is required.
 
 ## Deployment
 
-The site is plain HTML, CSS, and JavaScript. It can be deployed by copying the
-contents of this directory into the GitHub Pages publishing directory, such as
-`docs/`, or by publishing this directory with a GitHub Pages Action.
+The site is plain HTML, CSS, and JavaScript. It can be deployed by selecting
+the `v0.5` branch and `/docs` folder in GitHub Pages settings, or by publishing
+this directory with a GitHub Pages Action.

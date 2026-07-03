@@ -2,7 +2,7 @@
 
 This directory contains publication-facing and deployment-facing assets for the
 BioMaster v0.5 release. The files here are intended for the project README,
-static homepage, manuscript-related communication, and future documentation.
+static site, manuscript-related communication, and future documentation.
 
 ## Directory Layout
 
@@ -25,10 +25,10 @@ source/
 
 | File | Type | Intended use |
 | --- | --- | --- |
-| `Biomaster.svg` | SVG logo | README, homepage favicon/logo, presentation material |
+| `Biomaster.svg` | SVG logo | README, static site favicon/logo, presentation material |
 | `UI.png` | PNG screenshot/asset | Interface illustration in documentation or release notes |
 | `figures/manuscript-fig1.pdf` | PDF figure source | Manuscript-related figure reference |
-| `figures/overview.png` | PNG figure | Homepage and README architecture overview |
+| `figures/overview.png` | PNG figure | Static site and README architecture overview |
 | `figures/task-coverage.png` | PNG figure | Benchmark coverage visualization |
 | `figures/multistep-success.png` | PNG figure | Multi-step workflow success visualization |
 | `figures/reliability.png` | PNG figure | Representative case-study/reliability visualization |
@@ -40,6 +40,6 @@ source/
 
 - Prefer `PNG` or `SVG` for web deployment.
 - Preserve `PDF` or `SVG` originals when they come from manuscript materials.
-- Keep filenames descriptive and stable so README and homepage links do not break.
+- Keep filenames descriptive and stable so README and static site links do not break.
 - Do not store generated workflow outputs, temporary screenshots, SQLite caches, or raw analysis result directories here.
 - Keep all quantitative claims consistent with the accepted manuscript and verified benchmark records.
