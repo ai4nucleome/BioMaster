@@ -19,7 +19,7 @@ from biomaster.a2a import (  # noqa: E402
 
 def test_a2a_planning_request():
     message = planning_request_from_intake(
-        "001",
+        "tumor-demo",
         mode="test",
         domain="tumor",
         discipline="scrnaseq",
@@ -32,7 +32,7 @@ def test_a2a_planning_request():
 
 
 def test_a2a_transition_chain():
-    run_id = "001"
+    run_id = "tumor-demo"
     intake_msg = intake_request(run_id, user_goal="demo", mode="test")
     plan_msg = planning_request_from_intake(
         run_id,
@@ -43,7 +43,7 @@ def test_a2a_transition_chain():
         dataset="maynard2020_3k",
         user_goal="demo",
     )
-    exec_msg = execution_request(run_id, plan_path=f"runs/{run_id}/PLAN.yaml", start_step="01_data_preflight")
+    exec_msg = execution_request(run_id, plan_path=f"projects/{run_id}/PLAN.yaml", start_step="01_data_preflight")
     debug_msg = debug_request_message(
         run_id,
         step_id="01_data_preflight",
@@ -56,9 +56,9 @@ def test_a2a_transition_chain():
         status="pass",
         proposed_fix="",
     )
-    check_msg = check_request(run_id, step_id="01_data_preflight", plan_path=f"runs/{run_id}/PLAN.yaml")
+    check_msg = check_request(run_id, step_id="01_data_preflight", plan_path=f"projects/{run_id}/PLAN.yaml")
     check_pass = check_result_message(run_id, step_id="01_data_preflight", status="pass")
-    next_exec = execution_request(run_id, plan_path=f"runs/{run_id}/PLAN.yaml", start_step="02_qc_filter")
+    next_exec = execution_request(run_id, plan_path=f"projects/{run_id}/PLAN.yaml", start_step="02_qc_filter")
     assert not validate_transition(None, intake_msg.message_type)
     assert validate_transition(None, plan_msg.message_type)
     assert not validate_transition(intake_msg.message_type, plan_msg.message_type)

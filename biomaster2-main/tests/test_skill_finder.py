@@ -15,12 +15,28 @@ def test_skill_finder_init_phase(tmp_path):
     seed_routes(db)
     result = find_skills(
         "",
-        "biomaster-intake",
+        "biomaster-plan",
         "init",
         db_path=db,
         log_selection=False,
     )
     assert result["selected_skill_ids"] == ["biomaster"]
+
+
+def test_skill_finder_auto_initializes_missing_sqlite(tmp_path):
+    db = tmp_path / "missing" / "knowledge.db"
+    assert not db.exists()
+    result = find_skills(
+        "tumor heterogeneity inferCNV Palantir cNMF scRNA-seq",
+        "plan-agent",
+        "planning",
+        db_path=db,
+        log_selection=False,
+    )
+    assert db.exists()
+    assert result["sqlite_readiness"]["created_or_synced"] is True
+    assert result["selected_route_id"] == "tumor_scrnaseq_heterogeneity"
+    assert result["sqlite_route_search"] is True
 
 
 def test_skill_finder_mode_selection_core_only(tmp_path):
@@ -29,7 +45,7 @@ def test_skill_finder_mode_selection_core_only(tmp_path):
     seed_routes(db)
     result = find_skills(
         "tumor heterogeneity inferCNV Palantir cNMF scRNA-seq",
-        "biomaster-intake",
+        "biomaster-plan",
         "mode_selection",
         db_path=db,
         log_selection=False,
@@ -48,7 +64,7 @@ def test_skill_finder_mode_selection_falls_back_to_registry(tmp_path):
     seed_routes(db)
     result = find_skills(
         "请帮我加载当前 biomaster 的 skill",
-        "biomaster-intake",
+        "biomaster-plan",
         "mode_selection",
         db_path=db,
         log_selection=False,

@@ -7,12 +7,11 @@ The Python backend lives in `.opencode/runtime/biomaster/`.
 ## Collaboration Flow
 
 ```text
-Intake (mode_selection)
-  → Plan (PLAN.yaml + manifests)
+Plan primary (mode_selection + route + project selection + PLAN.yaml)
   → Step loop:
       Execute(step N) → Debug(step N) → Check(step N)
       pass → Execute(step N+1)
-      fail → Debug/Retry(step N)
+      fail → Execute retry(step N) using Debug advice
   → Report (REPORT.md)
 ```
 
@@ -24,9 +23,9 @@ Agents exchange structured messages through `.opencode/runtime/biomaster/a2a/`; 
 |---|---|
 | `.opencode/runtime/biomaster/knowledge/skill_finder.py` | route matching and agent/phase filtering |
 | `.opencode/runtime/biomaster/knowledge/prompt_assembler.py` | skill-body and manifest assembly |
-| `.opencode/runtime/biomaster/knowledge/state_manager.py` | `run_states` CRUD |
+| `.opencode/runtime/biomaster/knowledge/state_manager.py` | project/run state CRUD |
 | `.opencode/runtime/biomaster/a2a/` | message construction and validation |
-| `.opencode/runtime/biomaster/runtime/` | run directories and step execution helpers |
+| `.opencode/runtime/biomaster/runtime/` | project directories and step execution helpers |
 | `.opencode/runtime/biomaster/compliance/plan_audit.py` | release compliance checks |
 
 ## Quick Validation

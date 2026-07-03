@@ -29,14 +29,14 @@ def test_long_workflow(tmp_path, monkeypatch):
     sync_all(db_path=db)
     seed_routes(db)
 
-    run_id = new_run_id("tumor-long", runs_root=tmp_path / "runs")
-    assert run_id == "001"
-    run = RunContext(run_id, root=tmp_path / "runs" / run_id)
+    run_id = new_run_id("tumor-long", runs_root=tmp_path / "projects")
+    assert run_id == "tumor-long"
+    run = RunContext(run_id, root=tmp_path / "projects" / run_id)
     template = ROOT / "examples" / "tumor_scrnaseq_heterogeneity" / "expected_PLAN.yaml"
     save_plan_from_template(run, template)
     plan = load_plan(run.plan_path)
-    assert plan["plan_id"] == "001"
-    assert plan["run_dir"].endswith("runs/001")
+    assert plan["plan_id"] == "tumor-long"
+    assert plan["run_dir"].endswith("projects/tumor-long")
     assert len(plan["steps"]) == 9
 
     connection = connect(db)
@@ -50,7 +50,7 @@ def test_long_workflow(tmp_path, monkeypatch):
             update_run(connection, run_id, phase=phase)
         routed = find_skills(
             "肿瘤异质性与状态轨迹分析 inferCNV Palantir cNMF",
-            "biomaster-intake",
+            "biomaster-plan",
             "pipeline_routing",
             run_id=run_id,
             db_path=db,
@@ -109,14 +109,17 @@ def test_long_workflow(tmp_path, monkeypatch):
     write_message(run.root, debug_msg)
 
     serial = run_plan_serial(run, plan, db_path=db)
-    assert serial["status"] == "blocked"
-    assert serial["blocked_step"] == "03_doublet_removal"
-    assert serial["blocked_at"] == "debug"
-    assert serial["completed_steps"] == ["01_data_preflight", "02_qc_filter"]
+    assert serial["status"] == "pass"
+    assert serial["completed_steps"] == [step["step_id"] for step in plan["steps"]]
     assert (run.root / "scripts" / "01_data_preflight" / "run.sh").exists()
     assert (run.root / "scripts" / "02_qc_filter" / "run.sh").exists()
     assert (run.root / "steps" / "02_qc_filter" / "step_result.yaml").exists()
-    assert not (run.root / "scripts" / "04_batch_correction" / "run.sh").exists()
-    assert not (run.root / "steps" / "04_batch_correction" / "step_result.yaml").exists()
+    assert (run.root / "scripts" / "04_batch_correction" / "run.sh").exists()
+    assert (run.root / "steps" / "04_batch_correction" / "step_result.yaml").exists()
+    assert (run.root / "steps" / "09_report_generation" / "step_result.yaml").exists()
+    assert not (run.root / "steps" / "09_report_generation" / "REPORT.md").exists()
 
     assert (run.root / "a2a").exists()
+    assert run.project_log_path.exists()
+    assert run.report_path.exists()
+    assert (run.root / "OPENCODE_VIEW.md").exists()

@@ -7,7 +7,7 @@ from biomaster.a2a.message import A2AMessage
 
 
 AGENT_ALIASES = {
-    "intake-agent": "biomaster-intake",
+    "intake-agent": "biomaster-plan",
     "plan-agent": "biomaster-plan",
     "execute-agent": "biomaster-execute",
     "check-agent": "biomaster-check",
@@ -75,7 +75,7 @@ def intake_request(
         payload["mode"] = mode
     return build_message(
         "intake_request",
-        from_agent="biomaster-intake",
+        from_agent="biomaster-plan",
         to_agent="biomaster-plan",
         run_id=run_id,
         phase="mode_selection",
@@ -96,7 +96,7 @@ def planning_request_from_intake(
 ) -> A2AMessage:
     return build_message(
         "planning_request",
-        from_agent="biomaster-intake",
+        from_agent="biomaster-plan",
         to_agent="biomaster-plan",
         run_id=run_id,
         phase="planning",

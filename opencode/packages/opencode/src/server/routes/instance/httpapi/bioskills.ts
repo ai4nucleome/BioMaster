@@ -78,7 +78,27 @@ function extractText(filename: string, buffer: Buffer): string {
 
 function directoryOf(request: HttpServerRequest.HttpServerRequest): string {
   const url = new URL(request.url, "http://localhost")
-  return url.searchParams.get("directory") || request.headers["x-opencode-directory"] || process.cwd()
+  return resolveBioSkillsDirectory(url.searchParams.get("directory") || request.headers["x-opencode-directory"] || process.cwd())
+}
+
+function hasBioSkills(directory: string): boolean {
+  const root = path.join(directory, ".opencode", "bioskills")
+  if (!fs.existsSync(root)) return false
+  return fs
+    .readdirSync(root, { withFileTypes: true })
+    .some((entry) => entry.isDirectory() && fs.existsSync(path.join(root, entry.name, "SKILL.md")))
+}
+
+function resolveBioSkillsDirectory(directory: string): string {
+  const resolved = path.resolve(directory)
+  if (hasBioSkills(resolved)) return resolved
+
+  // BioMaster v0.3 keeps the actual project under biomaster2-main while the
+  // OpenCode workspace can still be opened at the merge repository root.
+  const biomaster2 = path.join(resolved, "biomaster2-main")
+  if (hasBioSkills(biomaster2)) return biomaster2
+
+  return resolved
 }
 
 function jsonError(error: unknown) {

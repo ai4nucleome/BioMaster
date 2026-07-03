@@ -51,7 +51,19 @@ const setStorage = (key: string, value: string | null) => {
   }
 }
 
-const readDefaultServerUrl = () => getStorage(DEFAULT_SERVER_URL_KEY)
+const browserReachableServerUrl = (url: string | null) => {
+  if (!url) return url
+  try {
+    const parsed = new URL(url)
+    if (parsed.hostname !== "0.0.0.0") return url
+    parsed.hostname = location.hostname || "localhost"
+    return parsed.toString().replace(/\/+$/, "")
+  } catch {
+    return url.replace("://0.0.0.0:", `://${location.hostname || "localhost"}:`)
+  }
+}
+
+const readDefaultServerUrl = () => browserReachableServerUrl(getStorage(DEFAULT_SERVER_URL_KEY))
 const writeDefaultServerUrl = (url: string | null) => setStorage(DEFAULT_SERVER_URL_KEY, url)
 
 const notify: Platform["notify"] = async (title, description, href) => {
@@ -103,12 +115,13 @@ const getCurrentUrl = () => {
   if (location.hostname.includes("opencode.ai")) return "http://localhost:4096"
   const envHost = import.meta.env.VITE_OPENCODE_SERVER_HOST
   const envPort = import.meta.env.VITE_OPENCODE_SERVER_PORT
-  if (import.meta.env.DEV) return `http://${envHost ?? "localhost"}:${envPort ?? "4096"}`
+  const browserReachableHost = envHost === "0.0.0.0" ? location.hostname || "localhost" : envHost
+  if (import.meta.env.DEV) return `http://${browserReachableHost ?? "localhost"}:${envPort ?? "4096"}`
   // Production static builds are served from a plain file server (e.g. our
   // static-serve.ts on 4444), which is NOT the opencode backend. When the API
   // host/port is provided at build time, point the SDK there instead of
   // `location.origin` (which would return index.html for every API call).
-  if (envHost || envPort) return `http://${envHost ?? "localhost"}:${envPort ?? "4096"}`
+  if (envHost || envPort) return `http://${browserReachableHost ?? "localhost"}:${envPort ?? "4096"}`
   return location.origin
 }
 

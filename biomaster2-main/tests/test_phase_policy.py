@@ -10,8 +10,8 @@ from biomaster.knowledge.phases import PRIMARY_USER_AGENT, validate_phase_transi
 from biomaster.knowledge.state_manager import create_run, update_run  # noqa: E402
 
 
-def test_intake_is_primary_user_agent():
-    assert PRIMARY_USER_AGENT == "biomaster-intake"
+def test_plan_is_primary_user_agent():
+    assert PRIMARY_USER_AGENT == "biomaster-plan"
 
 
 def test_phase_transition_policy():
@@ -33,14 +33,10 @@ def test_run_state_rejects_phase_skips(tmp_path):
         run = create_run(connection)
         run_id = run["run_id"]
         assert run["phase"] == "init"
-        assert run_id.isdigit() and len(run_id) == 3
+        assert run_id.startswith("biomaster-project")
 
-        try:
-            create_run(connection, run_id="strict-flow-demo")
-        except ValueError as exc:
-            assert "3-digit ID" in str(exc)
-        else:
-            raise AssertionError("fixed non-numeric run IDs should be rejected")
+        named = create_run(connection, run_id="strict flow demo")
+        assert named["run_id"] == "strict-flow-demo"
 
         try:
             create_run(connection, selected_route_id="tumor_scrnaseq_heterogeneity")
@@ -59,7 +55,8 @@ def test_run_state_rejects_phase_skips(tmp_path):
         run = update_run(connection, run_id, phase="mode_selection")
         assert run["phase"] == "mode_selection"
 
-        numbered = create_run(connection)
-        assert int(numbered["run_id"]) == int(run_id) + 1
+        next_project = create_run(connection)
+        assert next_project["run_id"].startswith("biomaster-project")
+        assert next_project["run_id"] != run_id
     finally:
         connection.close()

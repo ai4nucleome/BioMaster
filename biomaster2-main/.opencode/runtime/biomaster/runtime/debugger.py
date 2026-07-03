@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import yaml
 
-from biomaster.knowledge import DEFAULT_DB_PATH, connect, ensure_schema, normalize_agent_name
+from biomaster.knowledge import DEFAULT_DB_PATH, connect, ensure_knowledge_db, ensure_schema, normalize_agent_name
 from biomaster.knowledge.query_skills import agent_allowed, get_skill_by_id
 from biomaster.runtime.run_context import RunContext
 
@@ -23,25 +23,8 @@ def _read_yaml(path: Path) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-def _is_file_like(expected_output: str) -> bool:
-    value = expected_output.strip()
-    return "/" in value or "." in Path(value).name or value.endswith("/")
-
-
-def _expected_output_exists(run: RunContext, step_id: str, expected_output: str) -> bool:
-    value = expected_output.strip()
-    if not _is_file_like(value):
-        return (run.step_dir(step_id) / "step_result.yaml").exists() or (run.step_dir(step_id) / "execution_log.txt").exists()
-    return any(
-        path.exists()
-        for path in (
-            run.root / value,
-            run.step_dir(step_id) / value,
-        )
-    )
-
-
 def query_sqlite_debug_context(skill_ids: list[str], db_path: Path = DEFAULT_DB_PATH) -> dict:
+    sqlite_readiness = ensure_knowledge_db(db_path)
     connection = connect(db_path)
     try:
         ensure_schema(connection)
@@ -67,6 +50,7 @@ def query_sqlite_debug_context(skill_ids: list[str], db_path: Path = DEFAULT_DB_
 
         return {
             "db_path": str(db_path),
+            "sqlite_readiness": sqlite_readiness,
             "queried_skill_ids": skill_ids,
             "resolved_skill_ids": resolved,
             "missing_skill_ids": missing,
@@ -83,18 +67,24 @@ def debug_step(run: RunContext, plan: dict, step_id: str, *, db_path: Path = DEF
 
     step_result_path = run.step_dir(step_id) / "step_result.yaml"
     step_result = _read_yaml(step_result_path)
-    missing_outputs = [
-        expected
-        for expected in _as_list(step.get("expected_outputs"))
-        if not _expected_output_exists(run, step_id, expected)
-    ]
     execution_failures: list[str] = []
+    exit_code = step_result.get("exit_code")
+    execution_status = str(step_result.get("execution_status") or "")
+    stderr_path = Path(str(step_result.get("stderr_path") or run.step_dir(step_id) / "stderr.log"))
+    stdout_path = Path(str(step_result.get("stdout_path") or run.step_dir(step_id) / "stdout.log"))
+    script_path = Path(str(step_result.get("script_path") or run.root / "scripts" / step_id / "run.sh"))
+
     if not step_result_path.exists():
         execution_failures.append("missing step_result.yaml")
-    elif step_result.get("status") != "completed":
-        execution_failures.append(f"step_result status is {step_result.get('status')}")
-    if missing_outputs:
-        execution_failures.append("missing expected outputs: " + ", ".join(missing_outputs))
+    elif execution_status != "success" or exit_code not in (0, "0"):
+        execution_failures.append(
+            f"script execution failed: execution_status={execution_status or step_result.get('status')}, exit_code={exit_code}"
+        )
+    if step_result_path.exists() and not script_path.exists():
+        execution_failures.append("missing generated script")
+    stderr_text = stderr_path.read_text(encoding="utf-8") if stderr_path.exists() else ""
+    if execution_failures and stderr_text.strip():
+        execution_failures.append("stderr: " + stderr_text.strip().splitlines()[-1])
 
     debug_skill_ids = ["debug-missing-files"] if execution_failures else []
     context_skill_ids = list(
@@ -103,7 +93,6 @@ def debug_step(run: RunContext, plan: dict, step_id: str, *, db_path: Path = DEF
                 *debug_skill_ids,
                 *_as_list(step.get("required_execute_skills")),
                 *_as_list(step.get("required_report_skills")),
-                *_as_list(step.get("required_verify_skills")),
                 "env-python-scrnaseq",
             ]
         )
@@ -119,18 +108,27 @@ def debug_step(run: RunContext, plan: dict, step_id: str, *, db_path: Path = DEF
         "plan_id": plan.get("plan_id", run.run_id),
         "step_id": step_id,
         "status": "fail" if failures else "pass",
-        "failure_type": "execution_output_missing" if missing_outputs else ("execution_error" if failures else ""),
+        "execution_status": "failed" if failures else "success",
+        "exit_code": exit_code if exit_code is not None else (1 if failures else 0),
+        "failure_type": "execution_error" if failures else "",
+        "error_summary": "; ".join(failures),
         "diagnosis": "; ".join(failures),
+        "evidence": {
+            "script_path": str(script_path),
+            "stdout_path": str(stdout_path),
+            "stderr_path": str(stderr_path),
+            "step_result_path": str(step_result_path),
+        },
         "sqlite_debug_query": sqlite_debug_query,
         "used_debug_skills": debug_skill_ids,
-        "missing_outputs": missing_outputs,
-        "proposed_fix": "generate real outputs for missing expected files before Check" if failures else "",
+        "suggested_fix": "review stderr/stdout and regenerate the step script in Execute" if failures else "",
+        "proposed_fix": "review stderr/stdout and regenerate the step script in Execute" if failures else "",
         "requires_user_approval": False,
+        "retry_required": bool(failures),
         "next_action": "retry_execute" if failures else "check",
         "retry_plan": {
             "step_id": step_id,
-            "expected_outputs": _as_list(step.get("expected_outputs")),
-            "verify_skills": _as_list(step.get("required_verify_skills")),
+            "suggested_fix": "review stderr/stdout and regenerate the step script in Execute" if failures else "",
         },
     }
     path = run.step_dir(step_id) / "debug_result.yaml"

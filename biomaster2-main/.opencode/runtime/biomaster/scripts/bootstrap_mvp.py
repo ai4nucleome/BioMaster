@@ -11,7 +11,7 @@ SKILLS = OPENCODE_ROOT / "skills"
 INTERNAL_SKILLS = OPENCODE_ROOT / "biomaster-internal" / "skills"
 COMMANDS = OPENCODE_ROOT / "commands"
 EXAMPLES = ROOT / "examples" / "tumor_scrnaseq_heterogeneity"
-RUNS = ROOT / "runs"
+PROJECTS = ROOT / "projects"
 
 
 def write(path: Path, content: str) -> None:
@@ -55,16 +55,28 @@ Load BioMaster as a single integrated system, not as a menu of individual skills
 Use at cold start or whenever the user asks to load BioMaster.
 
 ## Operating model
-The visible conversation owner is always `biomaster-intake`. Internal modules such as `registry`, `domain-guide-*`, `plan-*`, `exec-*`, `verify-*`, and `debug-*` are selected by phase and should not be offered to the user as choices.
+The visible conversation owner is always `biomaster-plan`. Internal modules such as `registry`, `domain-guide-*`, `plan-*`, `exec-*`, `verify-*`, and `debug-*` are selected by phase and should not be offered to the user as choices.
 
 ## Initial response
-Say that BioMaster has been loaded as a whole, then ask for operating mode:
-1. test mode
-2. formal analysis
-3. custom request
+Use a readable English start card:
+
+```
+## BioMaster Ready
+
+**Primary agent:** `biomaster-plan`
+**Control plane:** SQLite route and skill gates
+**Workspace model:** `projects/<project_slug>/`
+```
+
+Then ask the user to choose test mode, formal analysis, or a custom scientific objective.
+
+Use OpenCode's native option selector / QuestionTool for operating mode, project continuation/new-project choices, and risky execution confirmations whenever available.
 
 ## Boundaries
 Do not list internal skills as user-selectable options. Do not skip the fixed workflow order.
+After route selection, always inspect existing `projects/` candidates before planning.
+Use semantic project slugs based on dataset, analysis type, and goal; do not create ambiguous numeric project IDs.
+Keep user-facing output concise by default; write detailed evidence to PROJECT_LOG.yaml, REPORT.md, and OPENCODE_VIEW.md.
 """,
         ),
         (
@@ -213,7 +225,7 @@ Provide command templates, parameter conventions, log paths, and output conventi
 
 ## Procedure
 1. Validate inputs against step contract.
-2. Write script under `runs/<run_id>/steps/<step_id>/`.
+2. Write script under `projects/<project_slug>/steps/<step_id>/`.
 3. Execute with logged stdout/stderr.
 4. Emit `step_result.yaml`.
 
@@ -438,12 +450,12 @@ See REPORT_TEMPLATE.md in this skill directory.
 
 def bootstrap_commands() -> None:
     command_specs = {
-        "biomaster-start.md": "Start BioMaster workflow, create run_id, invoke Intake Agent for mode selection.",
+        "biomaster-start.md": "Start BioMaster workflow, select or create a project folder, and invoke Plan Agent for mode selection.",
         "biomaster-plan.md": "Enter planning: Skill Finder + Plan Agent → PLAN.yaml",
         "biomaster-run.md": "Execute PLAN.yaml steps via Execute Agent.",
         "biomaster-check.md": "Check step outputs via Check Agent and verify skills.",
         "biomaster-debug.md": "Debug failed step via Debug Agent.",
-        "biomaster-resume.md": "Resume an interrupted run from run_states.",
+        "biomaster-resume.md": "Resume an interrupted project from run_states or project files.",
     }
     for filename, purpose in command_specs.items():
         write(
@@ -480,7 +492,10 @@ route_id: tumor_scrnaseq_heterogeneity
 analysis_type: tumor_scrnaseq_heterogeneity
 plan_id: "<auto_run_id>"
 run_id: "<auto_run_id>"
-run_dir: runs/<auto_run_id>
+project_id: "<project_slug>"
+project_name: "<project_slug>"
+project_dir: projects/<project_slug>
+run_dir: projects/<project_slug>
 plan_version: 1
 mode: test
 dataset: maynard2020_3k
@@ -504,11 +519,13 @@ steps:
 
 
 def main() -> None:
-    bootstrap_skills()
-    bootstrap_commands()
+    if INTERNAL_SKILLS.exists():
+        from biomaster.skills.migrate_legacy_bioskills import migrate_legacy_bioskills
+
+        migrate_legacy_bioskills()
     bootstrap_examples()
-    RUNS.mkdir(parents=True, exist_ok=True)
-    write(RUNS / ".gitkeep", "")
+    PROJECTS.mkdir(parents=True, exist_ok=True)
+    write(PROJECTS / ".gitkeep", "")
     print(f"Bootstrap complete under {ROOT}")
 
 

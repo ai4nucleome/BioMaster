@@ -18,9 +18,9 @@ def test_short_workflow(tmp_path, monkeypatch):
     sync_all(db_path=db)
     seed_routes(db)
 
-    run_id = new_run_id("tumor-demo", runs_root=tmp_path / "runs")
-    assert run_id == "001"
-    run = RunContext(run_id, root=tmp_path / "runs" / run_id)
+    run_id = new_run_id("tumor-demo", runs_root=tmp_path / "projects")
+    assert run_id == "tumor-demo"
+    run = RunContext(run_id, root=tmp_path / "projects" / run_id)
     template = ROOT / "examples" / "tumor_scrnaseq_heterogeneity" / "expected_PLAN.yaml"
     save_plan_from_template(run, template)
 
@@ -40,14 +40,18 @@ def test_short_workflow(tmp_path, monkeypatch):
     assert assembled["final_context"]
 
     plan = load_plan(run.plan_path)
-    assert plan["plan_id"] == "001"
-    assert plan["run_dir"].endswith("runs/001")
+    assert plan["plan_id"] == "tumor-demo"
+    assert plan["run_dir"].endswith("projects/tumor-demo")
     step_result = execute_step(run, plan, "01_data_preflight", db_path=db)
     assert step_result["status"] == "completed"
+    assert step_result["execution_status"] == "success"
+    assert step_result["exit_code"] == 0
     assert step_result["sqlite_skill_query"]["queried_skill_ids"] == ["exec-scanpy"]
     assert step_result["sqlite_skill_query"]["resolved_skill_ids"][0]["skill_id"] == "exec-scanpy"
-    assert step_result["script_dir"].endswith("runs/001/scripts/01_data_preflight")
-    assert step_result["result_dir"].endswith("runs/001/steps/01_data_preflight")
+    assert step_result["script_dir"].endswith("projects/tumor-demo/scripts/01_data_preflight")
+    assert step_result["result_dir"].endswith("projects/tumor-demo/steps/01_data_preflight")
+    assert step_result["stdout_path"].endswith("steps/01_data_preflight/stdout.log")
+    assert step_result["stderr_path"].endswith("steps/01_data_preflight/stderr.log")
     assert (run.root / "scripts" / "01_data_preflight" / "run.sh").exists()
     assert not (run.root / "outputs").exists()
 
@@ -57,11 +61,27 @@ def test_short_workflow(tmp_path, monkeypatch):
     assert debug["sqlite_debug_query"]["resolved_skill_ids"]
     check = check_step(run, "01_data_preflight", plan=plan, db_path=db)
     assert check["status"] == "pass"
+    assert run.project_log_path.exists()
+    project_log = load_plan(run.project_log_path)
+    logged_step = project_log["steps"][0]
+    assert logged_step["summary"]
+    assert logged_step["plan_context"]["expected_outputs"]
+    assert logged_step["plan_context"]["acceptance_criteria"]
+    assert logged_step["skill_evidence"]["verify_skill_query"]
+    assert "artifacts" in logged_step
+    assert logged_step["next_action"] == "continue"
+    assert run.report_path.exists()
     view = run.root / "OPENCODE_VIEW.md"
     assert view.exists()
     view_text = view.read_text(encoding="utf-8")
+    assert "## Project Dashboard" in view_text
+    assert "| Stage | Status | Execution | Check | Evidence |" in view_text
+    assert "## Key Files" in view_text
     assert "scripts/01_data_preflight/run.sh" in view_text
     assert "steps/01_data_preflight/qc_metrics.csv" in view_text
+    report_text = run.report_path.read_text(encoding="utf-8")
+    assert "## Key Outputs" in report_text
+    assert "| Stage | Execution | Exit Code | Check | Conclusion |" in report_text
 
     message = planning_request_from_intake(
         run_id,
@@ -76,21 +96,19 @@ def test_short_workflow(tmp_path, monkeypatch):
     assert (run.root / "a2a").exists()
 
 
-def test_execute_step_requires_sqlite_skill_lookup(tmp_path, monkeypatch):
+def test_execute_step_auto_initializes_sqlite_and_records_query(tmp_path, monkeypatch):
     monkeypatch.setattr("biomaster.runtime.run_context.PROJECT_ROOT", tmp_path)
-    db = tmp_path / "empty.db"
+    db = tmp_path / "missing.db"
+    assert not db.exists()
 
-    run_id = new_run_id("tumor-demo", runs_root=tmp_path / "runs")
-    run = RunContext(run_id, root=tmp_path / "runs" / run_id)
+    run_id = new_run_id("tumor-demo", runs_root=tmp_path / "projects")
+    run = RunContext(run_id, root=tmp_path / "projects" / run_id)
     template = ROOT / "examples" / "tumor_scrnaseq_heterogeneity" / "expected_PLAN.yaml"
     save_plan_from_template(run, template)
     plan = load_plan(run.plan_path)
 
-    try:
-        execute_step(run, plan, "01_data_preflight", db_path=db)
-    except ValueError as exc:
-        assert "SQLite skill query failed" in str(exc)
-    else:
-        raise AssertionError("execution should fail before script generation when SQLite has no exec skill")
-
-    assert not (run.root / "scripts" / "01_data_preflight" / "run.sh").exists()
+    result = execute_step(run, plan, "01_data_preflight", db_path=db)
+    assert db.exists()
+    assert result["sqlite_skill_query"]["sqlite_readiness"]["created_or_synced"] is True
+    assert result["sqlite_skill_query"]["resolved_skill_ids"][0]["skill_id"] == "exec-scanpy"
+    assert (run.root / "scripts" / "01_data_preflight" / "run.sh").exists()

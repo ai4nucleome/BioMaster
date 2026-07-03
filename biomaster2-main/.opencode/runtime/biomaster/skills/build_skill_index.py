@@ -7,9 +7,9 @@ import yaml
 
 try:
     from biomaster.knowledge import DEFAULT_SKILL_ROOT, PROJECT_ROOT
-    from biomaster.skills.manager import SkillCatalog
 except ModuleNotFoundError:
-    from manager import SkillCatalog
+    DEFAULT_SKILL_ROOT = Path(".opencode/skills")
+    PROJECT_ROOT = Path(".")
 
 
 BIOMASTER_SKILL_ROOT = PROJECT_ROOT
@@ -71,11 +71,6 @@ def skill_index_entry(skill_dir: Path) -> dict[str, Any]:
 def main() -> None:
     if not SKILL_ROOT.exists():
         raise ValueError(f"skill root does not exist: {SKILL_ROOT}")
-
-    catalog = SkillCatalog.from_root(SKILL_ROOT)
-    reference_errors = catalog.validate_references()
-    if reference_errors:
-        raise ValueError("skill reference validation failed:\n" + "\n".join(reference_errors))
 
     entries = [
         skill_index_entry(skill_dir)

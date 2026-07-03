@@ -10,8 +10,7 @@ import path from "node:path"
  *   - plan   -> macro layer (description / overview)  -> for planning
  *   - execute/debug -> micro layer (commands, params, thresholds) -> for coding
  *   - check  -> usually none
- * The `biomaster-skiller` agent uses this tool to decide and fetch the right
- * layer for each sub-agent. Role -> layer defaults live in
+ * Role -> layer defaults live in
  * `.opencode/bioskills-access.yaml`; an explicit `layer` arg overrides them.
  *
  * Self-contained: reads skill files directly (no HTTP dependency on the server).

@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from biomaster.knowledge import (
     DEFAULT_DB_PATH,
     connect,
+    ensure_knowledge_db,
     ensure_schema,
     json_dumps,
     normalize_agent_name,
@@ -28,17 +29,17 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
-PLAN_AGENTS = {"biomaster-intake", "biomaster-plan"}
+PLAN_AGENTS = {"biomaster-plan"}
 EXECUTE_AGENTS = {"biomaster-execute", "biomaster-debug", "biomaster-check"}
 CHECK_AGENTS = {"biomaster-check"}
 
 PHASE_SEARCH_LAYERS: dict[str, set[str]] = {
-    "planning": {"plan", "report"},
-    "preflight": {"execute", "env", "verify"},
-    "execution": {"execute", "env", "verify"},
-    "checking": {"verify"},
-    "debugging": {"debug", "env", "execute", "verify", "report"},
-    "reporting": {"report", "verify"},
+    "planning": {"plan", "report", "bioskill"},
+    "preflight": {"execute", "env", "verify", "bioskill"},
+    "execution": {"execute", "env", "verify", "bioskill"},
+    "checking": {"verify", "bioskill"},
+    "debugging": {"debug", "env", "execute", "verify", "report", "bioskill"},
+    "reporting": {"report", "verify", "bioskill"},
 }
 
 
@@ -118,10 +119,10 @@ def build_reason(
     if workflow_records or task_records:
         return (
             f"Matched {len(workflow_records)} workflow records and {len(task_records)} task records "
-            f"from numbered knowledge for: {user_request.strip()}"
+            f"from BioSkills-derived SQLite context for: {user_request.strip()}"
         )
     if route is None:
-        return f"No pipeline route or numbered knowledge record matched the request: {user_request.strip()}"
+        return f"No pipeline route or BioSkills-derived SQLite record matched the request: {user_request.strip()}"
     return f"Route '{route['route_id']}' matched, but no required skills passed agent and enabled filters."
 
 
@@ -138,6 +139,7 @@ def find_skills(
     knowledge_limit: int = 5,
     save_run_state: bool = False,
 ) -> dict[str, object]:
+    sqlite_readiness = ensure_knowledge_db(db_path)
     connection = connect(db_path)
     try:
         ensure_schema(connection)
@@ -236,6 +238,7 @@ def find_skills(
             "agent_name": agent,
             "phase": phase,
             "run_id": run_id,
+            "sqlite_readiness": sqlite_readiness,
         }
 
         if save_run_state:

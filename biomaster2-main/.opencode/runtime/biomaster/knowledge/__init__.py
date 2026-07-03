@@ -17,13 +17,12 @@ DEFAULT_SCHEMA_PATH = Path(__file__).resolve().parent / "schema.sql"
 DEFAULT_SKILL_ROOT = OPENCODE_ROOT / "skills"
 DEFAULT_INTERNAL_SKILL_ROOT = OPENCODE_ROOT / "biomaster-internal" / "skills"
 DEFAULT_KNOWLEDGE_ROOT = OPENCODE_ROOT / "knowledge"
-TARGET_WORKFLOW_RECORDS = 56
-TARGET_TASK_RECORDS = 76
+DEFAULT_BIOSKILLS_ROOT = OPENCODE_ROOT / "bioskills"
 
 REQUIRED_TABLES = MVP_REQUIRED_TABLES
 
 AGENT_ALIASES = {
-    "intake-agent": "biomaster-intake",
+    "intake-agent": "biomaster-plan",
     "plan-agent": "biomaster-plan",
     "execute-agent": "biomaster-execute",
     "check-agent": "biomaster-check",
@@ -32,10 +31,10 @@ AGENT_ALIASES = {
 }
 
 LAYER_ALLOWED_AGENTS: dict[str, list[str]] = {
-    "registry": ["biomaster-intake", "biomaster-plan"],
-    "domain-guide": ["biomaster-intake", "biomaster-plan"],
-    "discipline": ["biomaster-intake", "biomaster-plan"],
-    "pipeline": ["biomaster-intake", "biomaster-plan"],
+    "registry": ["biomaster-plan"],
+    "domain-guide": ["biomaster-plan"],
+    "discipline": ["biomaster-plan"],
+    "pipeline": ["biomaster-plan"],
     "plan": ["biomaster-plan"],
     "exec": ["biomaster-execute", "biomaster-debug"],
     "execute": ["biomaster-execute", "biomaster-debug"],
@@ -43,10 +42,11 @@ LAYER_ALLOWED_AGENTS: dict[str, list[str]] = {
     "debug": ["biomaster-debug"],
     "env": ["biomaster-execute", "biomaster-debug"],
     "report": ["biomaster-plan", "biomaster-debug"],
+    "bioskill": ["biomaster-plan", "biomaster-execute", "biomaster-debug", "biomaster-check"],
 }
 
 KNOWLEDGE_RECORD_AGENTS: dict[str, list[str]] = {
-    "workflow": ["biomaster-intake", "biomaster-plan"],
+    "workflow": ["biomaster-plan"],
     "task": ["biomaster-execute", "biomaster-debug"],
 }
 
@@ -100,6 +100,15 @@ def migrate_schema(connection: sqlite3.Connection) -> None:
         record_columns = {row[1] for row in connection.execute("PRAGMA table_info(knowledge_records)")}
         if "content" not in record_columns:
             connection.execute("ALTER TABLE knowledge_records ADD COLUMN content TEXT")
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS sync_meta (
+          key TEXT PRIMARY KEY,
+          value TEXT NOT NULL,
+          updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
 
 
 def json_dumps(value: Any) -> str:
@@ -114,3 +123,71 @@ def json_loads(value: str | None, default: Any) -> Any:
 
 def row_to_dict(row: sqlite3.Row) -> dict[str, Any]:
     return {key: row[key] for key in row.keys()}
+
+
+def _count_rows(db_path: Path, table_name: str) -> int:
+    if not db_path.exists():
+        return 0
+    connection = sqlite3.connect(db_path)
+    try:
+        if not table_exists(connection, table_name):
+            return 0
+        row = connection.execute(f"SELECT COUNT(*) FROM {table_name}").fetchone()
+        return int(row[0]) if row else 0
+    finally:
+        connection.close()
+
+
+def _meta_value(db_path: Path, key: str) -> str | None:
+    if not db_path.exists():
+        return None
+    connection = sqlite3.connect(db_path)
+    try:
+        if not table_exists(connection, "sync_meta"):
+            return None
+        row = connection.execute("SELECT value FROM sync_meta WHERE key = ?", (key,)).fetchone()
+        return str(row[0]) if row else None
+    finally:
+        connection.close()
+
+
+def knowledge_db_ready(db_path: Path = DEFAULT_DB_PATH) -> bool:
+    if not db_path.exists():
+        return False
+    connection = sqlite3.connect(db_path)
+    try:
+        existing_tables = {
+            row[0]
+            for row in connection.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+        }
+        if not set(REQUIRED_TABLES).issubset(existing_tables):
+            return False
+    finally:
+        connection.close()
+    if _count_rows(db_path, "skills") == 0 or _count_rows(db_path, "pipeline_routes") == 0:
+        return False
+    from biomaster.knowledge.sync_skills import bioskills_signature
+
+    synced_root = _meta_value(db_path, "bioskills_root")
+    if synced_root and synced_root != str(DEFAULT_BIOSKILLS_ROOT):
+        return True
+    return _meta_value(db_path, "bioskills_signature") == bioskills_signature()
+
+
+def ensure_knowledge_db(db_path: Path = DEFAULT_DB_PATH) -> dict[str, Any]:
+    """Ensure the generated SQLite control plane exists and is queryable."""
+
+    if knowledge_db_ready(db_path):
+        return {"db_path": str(db_path), "created_or_synced": False}
+
+    from biomaster.knowledge.seed_routes import seed_routes
+    from biomaster.knowledge.sync_all import sync_all
+
+    stats = sync_all(db_path=db_path)
+    route_count = seed_routes(db_path)
+    return {
+        "db_path": str(db_path),
+        "created_or_synced": True,
+        "skills_synced": stats.get("synced", 0),
+        "routes_seeded": route_count,
+    }

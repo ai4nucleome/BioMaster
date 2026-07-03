@@ -5,16 +5,16 @@ import path from "node:path"
 /**
  * BioSkills author tool.
  *
- * Used by the `biomaster-skill-author` agent to (re)write a workflow skill into
- * the curated two-layer + structured-steps format:
+ * Used by BioSkills UI/API or offline tooling to (re)write a workflow skill
+ * into the curated two-layer + structured-steps format:
  *   - macro.md : workflow overview + per-step DESCRIPTIONS (no code)
  *   - micro.md : per-step EXECUTION instructions / code
  *   - steps.json : structured, individually toggleable/allocatable steps
- *                  ([{ id, title, tags, enabled }]) that the skiller reads
+ *                  ([{ id, title, tags, enabled }]) for UI/API indexing
  *   - SKILL.md : frontmatter metadata
  *
  * Steps in macro.md and micro.md are emitted as `## <Title>` sections in the
- * same order as steps.json so the store / skiller / frontend can align them.
+ * same order as steps.json so the store and frontend can align them.
  *
  * Writes files directly under `.opencode/bioskills/<slug>/`. The opencode
  * server's BioSkills index self-heals (re-reads) on the next read because the

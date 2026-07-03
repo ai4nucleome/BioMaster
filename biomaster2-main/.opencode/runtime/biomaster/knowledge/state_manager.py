@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 
 from biomaster.knowledge import (
@@ -21,23 +22,33 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
+def slugify_project_name(value: str | None, *, default: str = "biomaster-project") -> str:
+    raw = (value or default).strip().lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", raw).strip("-")
+    return slug or default
+
+
 def new_run_id(connection=None) -> str:
-    used: set[int] = set()
+    used: set[str] = set()
     if connection is not None:
         rows = connection.execute("SELECT run_id FROM run_states").fetchall()
         for row in rows:
-            value = str(row["run_id"])
-            if value.isdigit():
-                used.add(int(value))
-    runs_root = PROJECT_ROOT / "runs"
-    if runs_root.exists():
-        for path in runs_root.iterdir():
-            if path.is_dir() and path.name.isdigit():
-                used.add(int(path.name))
-    next_id = 1
-    while next_id in used:
-        next_id += 1
-    return f"{next_id:03d}"
+            used.add(str(row["run_id"]))
+    projects_root = PROJECT_ROOT / "projects"
+    projects_root.mkdir(parents=True, exist_ok=True)
+    existing_projects = {path.name for path in projects_root.iterdir() if path.is_dir()}
+    candidate = "biomaster-project"
+    if candidate in existing_projects:
+        index = 2
+        while f"biomaster-project-{index:03d}" in existing_projects:
+            index += 1
+        candidate = f"biomaster-project-{index:03d}"
+    if candidate not in used:
+        return candidate
+    index = 2
+    while f"biomaster-project-{index:03d}" in used:
+        index += 1
+    return f"biomaster-project-{index:03d}"
 
 
 def create_run(
@@ -54,9 +65,7 @@ def create_run(
     disabled_skill_ids: list[str] | None = None,
     state_json: dict | None = None,
 ) -> dict:
-    run_id = run_id or new_run_id(connection)
-    if not str(run_id).isdigit() or len(str(run_id)) != 3:
-        raise ValueError("run_id must be an auto-numbered 3-digit ID such as 001; do not use fixed demo IDs")
+    run_id = slugify_project_name(run_id or new_run_id(connection))
     if selected_route_id:
         raise ValueError("selected_route_id must come from SQLite Skill Finder after pipeline_routing, not create_run")
     errors = validate_phase_transition(None, phase)

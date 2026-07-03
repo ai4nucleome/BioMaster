@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 import argparse
+import json
 import re
 
-from biomaster.knowledge import DEFAULT_INTERNAL_SKILL_ROOT
+import yaml
+
+from biomaster.knowledge import DEFAULT_BIOSKILLS_ROOT
 
 
 TARGETS = {
@@ -68,7 +71,7 @@ def create_skill(
     target: str,
     description: str,
     metadata_value: str | None = None,
-    root: Path = DEFAULT_INTERNAL_SKILL_ROOT,
+    root: Path = DEFAULT_BIOSKILLS_ROOT,
     overwrite: bool = False,
 ) -> Path:
     if target not in TARGETS:
@@ -83,40 +86,63 @@ def create_skill(
     skill_dir.mkdir(parents=True, exist_ok=True)
     required_key = spec["required_metadata"]
     required_value = metadata_value or spec["default_value"]
-    text = f"""---
-name: {skill_name}
-description: {description}
-compatibility: opencode
-metadata:
-  layer: {spec["layer"]}
-  {required_key}: {required_value}
-  status: active
-  source: manual
----
+    fields = {
+        "name": skill_name,
+        "description": description,
+        "domain": required_value if required_key in {"analysis", "domain"} else "bioinformatics",
+        "primary_tool": required_value if required_key in {"tool", "output", "failure"} else "",
+        "methods": [required_value],
+        "macro_tags": [target, required_value],
+        "micro_tags": [target, required_value],
+        "source": "manual",
+        "status": "active",
+        "enabled": True,
+        "custom": True,
+        "biomaster_layer": spec["layer"],
+        required_key: required_value,
+    }
+    skill_file.write_text(
+        "---\n" + yaml.safe_dump(fields, sort_keys=False, allow_unicode=True).strip() + "\n---\n"
+        f"\n# {skill_name}\n",
+        encoding="utf-8",
+    )
+    macro = f"""# {skill_name}
 
-# {skill_name}
+## Overview
+
+{description}
 
 ## {spec["body_heading"]}
 
 Describe when this skill should be selected, what inputs it expects, and what outputs it contributes.
-
-## Integration
-
-- Target: `{target}`
-- Sync with: `make knowledge-seed`
-- Select through SQLite Skill Finder during the matching phase.
 """
-    skill_file.write_text(text, encoding="utf-8")
+    micro = f"""# {skill_name}
+
+## Execution Detail
+
+Add concrete commands, parameters, checks, or debugging instructions here.
+"""
+    steps = [
+        {
+            "id": spec["layer"],
+            "title": spec["body_heading"],
+            "tags": [target, required_value],
+            "enabled": True,
+        }
+    ]
+    (skill_dir / "macro.md").write_text(macro, encoding="utf-8")
+    (skill_dir / "micro.md").write_text(micro, encoding="utf-8")
+    (skill_dir / "steps.json").write_text(json.dumps(steps, indent=2) + "\n", encoding="utf-8")
     return skill_file
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Create a BioMaster internal skill.")
+    parser = argparse.ArgumentParser(description="Create a BioMaster BioSkill.")
     parser.add_argument("name", help="Skill name, e.g. custom-qc or exec-custom-qc")
     parser.add_argument("--target", choices=sorted(TARGETS), required=True)
     parser.add_argument("--description", required=True)
     parser.add_argument("--metadata-value", help="Value for the target's required metadata field")
-    parser.add_argument("--root", type=Path, default=DEFAULT_INTERNAL_SKILL_ROOT)
+    parser.add_argument("--root", type=Path, default=DEFAULT_BIOSKILLS_ROOT)
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
 

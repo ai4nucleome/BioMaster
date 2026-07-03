@@ -1,7 +1,10 @@
 analysis_type: tumor_scrnaseq_heterogeneity
 plan_id: "<auto_run_id>"
 run_id: "<auto_run_id>"
-run_dir: runs/<auto_run_id>
+project_id: "<project_slug>"
+project_name: "<project_slug>"
+project_dir: projects/<project_slug>
+run_dir: projects/<project_slug>
 plan_version: 1
 mode: test
 dataset: maynard2020_3k

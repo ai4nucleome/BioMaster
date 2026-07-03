@@ -1,29 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
-    "biomaster-intake": {
-      "description": "Primary BioMaster entry agent. Collects operating mode, domain, discipline, and routes to pipeline.",
-      "mode": "primary",
-      "temperature": 0.1,
-      "prompt": "{file:agents/biomaster-intake.md}",
-      "tools": {
-        "write": false,
-        "edit": false,
-        "bash": false
-      },
-      "permission": {
-        "edit": "deny",
-        "bash": {
-          "*": "deny"
-        }
-      }
-    },
     "biomaster-plan": {
-      "description": "Subagent that generates PLAN.yaml using plan skills, IO contracts, and manifests.",
-      "mode": "subagent",
+      "description": "Primary BioMaster agent. Collects goals, selects project context, routes through SQLite, generates PLAN.yaml, and coordinates worker agents.",
+      "mode": "primary",
       "temperature": 0.1,
       "prompt": "{file:agents/biomaster-plan.md}",
       "tools": {
+        "read": true,
         "write": true,
         "edit": true,
         "bash": false
@@ -41,6 +25,7 @@
       "temperature": 0.2,
       "prompt": "{file:agents/biomaster-execute.md}",
       "tools": {
+        "read": true,
         "write": true,
         "edit": true,
         "bash": true
@@ -58,6 +43,7 @@
       "temperature": 0.1,
       "prompt": "{file:agents/biomaster-check.md}",
       "tools": {
+        "read": true,
         "write": true,
         "edit": true,
         "bash": true
@@ -75,6 +61,7 @@
       "temperature": 0.2,
       "prompt": "{file:agents/biomaster-debug.md}",
       "tools": {
+        "read": true,
         "write": true,
         "edit": true,
         "bash": true

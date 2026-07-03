@@ -7,12 +7,12 @@ PHASE_ALLOWED_LAYERS: dict[str, set[str]] = {
     "mode_selection": {"registry", "domain-guide"},
     "domain_anchoring": {"registry", "domain-guide"},
     "pipeline_routing": {"registry", "domain-guide", "discipline", "pipeline"},
-    "planning": {"registry", "domain-guide", "discipline", "pipeline", "plan", "report"},
-    "preflight": {"execute", "env", "verify"},
-    "execution": {"execute", "env", "verify"},
-    "checking": {"verify"},
-    "debugging": {"debug", "env", "execute", "verify"},
-    "reporting": {"report", "verify"},
+    "planning": {"registry", "domain-guide", "discipline", "pipeline", "plan", "report", "bioskill"},
+    "preflight": {"execute", "env", "verify", "bioskill"},
+    "execution": {"execute", "env", "verify", "bioskill"},
+    "checking": {"verify", "bioskill"},
+    "debugging": {"debug", "env", "execute", "verify", "bioskill"},
+    "reporting": {"report", "verify", "bioskill"},
     "done": set(),
 }
 
@@ -44,7 +44,7 @@ VALID_PHASE_TRANSITIONS: dict[str, set[str]] = {
     "done": set(),
 }
 
-PRIMARY_USER_AGENT = "biomaster-intake"
+PRIMARY_USER_AGENT = "biomaster-plan"
 SUBAGENT_BY_PHASE: dict[str, str] = {
     "planning": "biomaster-plan",
     "preflight": "biomaster-execute",

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "registry",
+    "title": "Registry",
+    "tags": [
+      "registry",
+      "bioinformatics"
+    ],
+    "enabled": true
+  }
+]

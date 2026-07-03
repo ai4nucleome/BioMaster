@@ -12,7 +12,7 @@ from biomaster.knowledge import DEFAULT_DB_PATH, PROJECT_ROOT
 
 
 DB_PATH = DEFAULT_DB_PATH
-RUNS_ROOT = PROJECT_ROOT / "runs"
+PROJECTS_ROOT = PROJECT_ROOT / "projects"
 
 
 def _read_json_stdin() -> dict[str, Any]:
@@ -46,11 +46,14 @@ def _latest_run_from_db() -> dict[str, Any] | None:
         connection.close()
 
 
-def _latest_run_from_files() -> str | None:
-    if not RUNS_ROOT.exists():
+def _latest_project_from_files() -> str | None:
+    if not PROJECTS_ROOT.exists():
         return None
-    candidates = sorted(path.name for path in RUNS_ROOT.iterdir() if path.is_dir() and path.name.isdigit())
-    return candidates[-1] if candidates else None
+    candidates = sorted(
+        (path for path in PROJECTS_ROOT.iterdir() if path.is_dir()),
+        key=lambda path: path.stat().st_mtime,
+    )
+    return candidates[-1].name if candidates else None
 
 
 def _step_counts(run_dir: Path) -> tuple[int, int, str]:
@@ -74,12 +77,12 @@ def build_status(payload: dict[str, Any]) -> str:
         return ""
 
     run_state = _latest_run_from_db()
-    run_id = str(run_state.get("run_id")) if run_state else (_latest_run_from_files() or "")
+    run_id = str(run_state.get("run_id")) if run_state else (_latest_project_from_files() or "")
     if not run_id:
-        return "BioMaster: no active run"
+        return "BioMaster: no active project"
 
     phase = str(run_state.get("phase") or "unknown") if run_state else "unknown"
-    run_dir = RUNS_ROOT / run_id
+    run_dir = PROJECTS_ROOT / run_id
     total, done, current = _step_counts(run_dir)
     remaining = max(total - done, 0)
     if total:
@@ -89,7 +92,7 @@ def build_status(payload: dict[str, Any]) -> str:
         progress = "PLAN not registered"
         current_text = ""
 
-    return f"BioMaster run {run_id} | phase: {phase} | {progress}{current_text}"
+    return f"BioMaster project {run_id} | phase: {phase} | {progress}{current_text}"
 
 
 def main() -> None:

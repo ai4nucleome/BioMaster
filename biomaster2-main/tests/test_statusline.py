@@ -12,8 +12,8 @@ from biomaster.runtime import statusline  # noqa: E402
 
 def test_statusline_reports_plan_task_progress(tmp_path, monkeypatch):
     db_path = tmp_path / "knowledge.db"
-    runs_root = tmp_path / "runs"
-    run_dir = runs_root / "009"
+    projects_root = tmp_path / "projects"
+    run_dir = projects_root / "tumor-demo"
     run_dir.mkdir(parents=True)
 
     connection = sqlite3.connect(db_path)
@@ -21,7 +21,7 @@ def test_statusline_reports_plan_task_progress(tmp_path, monkeypatch):
         "CREATE TABLE run_states (id INTEGER PRIMARY KEY, run_id TEXT, phase TEXT, updated_at TEXT)"
     )
     connection.execute(
-        "INSERT INTO run_states (run_id, phase, updated_at) VALUES ('009', 'execution', '2026-01-01T00:00:00Z')"
+        "INSERT INTO run_states (run_id, phase, updated_at) VALUES ('tumor-demo', 'execution', '2026-01-01T00:00:00Z')"
     )
     connection.commit()
     connection.close()
@@ -36,11 +36,11 @@ def test_statusline_reports_plan_task_progress(tmp_path, monkeypatch):
     )
 
     monkeypatch.setattr(statusline, "DB_PATH", db_path)
-    monkeypatch.setattr(statusline, "RUNS_ROOT", runs_root)
+    monkeypatch.setattr(statusline, "PROJECTS_ROOT", projects_root)
     monkeypatch.setattr(statusline, "PROJECT_ROOT", tmp_path)
 
     text = statusline.build_status({"cwd": str(tmp_path)})
-    assert "BioMaster run 009" in text
+    assert "BioMaster project tumor-demo" in text
     assert "phase: execution" in text
     assert "1/2 steps complete" in text
     assert "current: 02_b" in text

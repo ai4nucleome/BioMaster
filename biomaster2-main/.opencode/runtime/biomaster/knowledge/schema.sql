@@ -85,6 +85,12 @@ CREATE TABLE IF NOT EXISTS skill_selection_logs (
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS sync_meta (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE INDEX IF NOT EXISTS idx_skills_layer ON skills(layer);
 CREATE INDEX IF NOT EXISTS idx_skills_enabled ON skills(enabled);
 

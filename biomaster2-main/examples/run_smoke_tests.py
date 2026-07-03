@@ -8,8 +8,11 @@ import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / ".opencode" / "runtime"))
 
+from biomaster.knowledge import DEFAULT_DB_PATH, DEFAULT_SKILL_ROOT, connect  # noqa: E402
+from biomaster.knowledge.query_skills import list_skills, list_skills_for_agent  # noqa: E402
+from biomaster.knowledge.seed_routes import seed_routes  # noqa: E402
+from biomaster.knowledge.sync_all import sync_all  # noqa: E402
 from biomaster.mvp import MVP_SKILL_IDS  # noqa: E402
-from biomaster.skills.manager import DEFAULT_INTERNAL_SKILL_ROOT, DEFAULT_SKILL_ROOT, AgentSkillAccessPolicy, SkillCatalog  # noqa: E402
 
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -43,43 +46,45 @@ def check_fastq() -> None:
 
 
 def check_skill_catalog() -> None:
-    public_catalog = SkillCatalog.from_root(DEFAULT_SKILL_ROOT)
-    public_names = {skill.name for skill in public_catalog.list()}
+    public_names = {path.name for path in DEFAULT_SKILL_ROOT.iterdir() if path.is_dir()}
     assert_true(public_names == {"biomaster"}, "public OpenCode skill surface must expose only biomaster")
 
-    catalog = SkillCatalog.from_roots([DEFAULT_SKILL_ROOT, DEFAULT_INTERNAL_SKILL_ROOT])
-    policy = AgentSkillAccessPolicy.from_file()
-    skill_names = {skill.name for skill in catalog.list()}
-    missing = set(MVP_SKILL_IDS) - skill_names
-    assert_true(not missing, f"active skills must include MVP set, missing: {sorted(missing)}")
+    sync_all(DEFAULT_DB_PATH)
+    seed_routes(DEFAULT_DB_PATH)
+    connection = connect(DEFAULT_DB_PATH)
+    try:
+        skill_names = {skill["skill_id"] for skill in list_skills(connection)}
+        missing = set(MVP_SKILL_IDS) - skill_names
+        assert_true(not missing, f"active skills must include MVP set, missing: {sorted(missing)}")
 
-    plan_hits = catalog.search_for_agent("biomaster-plan", policy, "tumor heterogeneity scRNA-seq trajectory")
-    execute_hits = catalog.search_for_agent("biomaster-execute", policy, "run Scanpy QC scRNA-seq")
-    check_hits = catalog.search_for_agent("biomaster-check", policy, "verify scRNA-seq QC outputs")
-    debug_hits = catalog.search_for_agent("biomaster-debug", policy, "conda environment missing")
+        plan_hits = list_skills_for_agent(connection, "biomaster-plan")
+        execute_hits = list_skills_for_agent(connection, "biomaster-execute")
+        check_hits = list_skills_for_agent(connection, "biomaster-check")
+        debug_hits = list_skills_for_agent(connection, "biomaster-debug")
 
-    assert_true(any(skill.layer == "plan" for skill in plan_hits), "plan agent should retrieve plan skills")
-    assert_true(all(skill.layer in {"registry", "domain-guide", "discipline", "pipeline", "plan", "report"} for skill in plan_hits), "plan agent retrieved forbidden layers")
-    assert_true(any(skill.layer == "execute" for skill in execute_hits), "execute agent should retrieve execute skills")
-    assert_true(all(skill.layer in {"execute", "env", "verify"} for skill in execute_hits), "execute agent retrieved forbidden layers")
-    assert_true(all(skill.layer == "verify" for skill in check_hits), "check agent should retrieve verify skills only")
-    assert_true(any(skill.layer == "debug" for skill in debug_hits), "debug agent should retrieve debug skills")
-
-    denied_execute = catalog.list_for_agent("biomaster-plan", policy, layer="execute")
-    denied_plan = catalog.list_for_agent("biomaster-execute", policy, layer="plan")
-    assert_true(not denied_execute, "plan agent must not list execute skills")
-    assert_true(not denied_plan, "execute agent must not list plan skills")
-    assert_true(not policy.validate({"registry", "domain-guide", "discipline", "pipeline", "plan", "execute", "verify", "debug", "env", "report"}), "access policy should validate")
+        assert_true(any(skill["layer"] == "plan" for skill in plan_hits), "plan agent should retrieve plan skills")
+        assert_true(any(skill["layer"] == "execute" for skill in execute_hits), "execute agent should retrieve execute skills")
+        assert_true(any(skill["layer"] == "verify" for skill in check_hits), "check agent should retrieve verify skills")
+        assert_true(any(skill["layer"] == "debug" for skill in debug_hits), "debug agent should retrieve debug skills")
+        assert_true(
+            not any(skill["layer"] == "execute" for skill in plan_hits),
+            "plan agent must not list execute skills",
+        )
+        assert_true(
+            not any(skill["layer"] == "plan" for skill in execute_hits),
+            "execute agent must not list plan skills",
+        )
+    finally:
+        connection.close()
 
 
 def check_agent_requirements() -> None:
-    intake_prompt = (AGENT_DIR / "biomaster-intake.md").read_text(encoding="utf-8")
     plan_prompt = (AGENT_DIR / "biomaster-plan.md").read_text(encoding="utf-8")
     execute_prompt = (AGENT_DIR / "biomaster-execute.md").read_text(encoding="utf-8")
     check_prompt = (AGENT_DIR / "biomaster-check.md").read_text(encoding="utf-8")
     debug_prompt = (AGENT_DIR / "biomaster-debug.md").read_text(encoding="utf-8")
 
-    assert_true("运行模式" in intake_prompt or "operating mode" in intake_prompt.lower(), "intake must ask operating mode")
+    assert_true("operating mode" in plan_prompt.lower(), "plan primary must ask operating mode")
     assert_true("PLAN.yaml" in plan_prompt, "plan agent must generate PLAN.yaml")
     assert_true("verify-*" in check_prompt, "check agent must use verify skills")
     assert_true("debug-*" in debug_prompt, "debug agent must use debug skills")

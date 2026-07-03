@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import yaml
 
-from biomaster.knowledge import DEFAULT_DB_PATH, DEFAULT_INTERNAL_SKILL_ROOT, DEFAULT_SKILL_ROOT, OPENCODE_ROOT, PACKAGE_ROOT, PROJECT_ROOT
+from biomaster.knowledge import DEFAULT_BIOSKILLS_ROOT, DEFAULT_DB_PATH, DEFAULT_SKILL_ROOT, OPENCODE_ROOT, PACKAGE_ROOT, PROJECT_ROOT
 from biomaster.mvp import MVP_CORE_TABLES, MVP_SKILL_IDS, REGISTRY_REQUIRED_OUTPUT_FIELDS, TUMOR_PIPELINE_STEPS
 
 SKILL_ROOT = DEFAULT_SKILL_ROOT
-INTERNAL_SKILL_ROOT = DEFAULT_INTERNAL_SKILL_ROOT
+BIOSKILLS_ROOT = DEFAULT_BIOSKILLS_ROOT
 AGENT_DIR = OPENCODE_ROOT / "agents"
 COMMAND_DIR = OPENCODE_ROOT / "commands"
 A2A_SCHEMA_DIR = PACKAGE_ROOT / "a2a" / "schemas"
@@ -20,12 +20,12 @@ def check_mvp_skills() -> list[str]:
     public = {path.name for path in SKILL_ROOT.iterdir() if path.is_dir()}
     if public != {"biomaster"}:
         errors.append(f"public .opencode/skills must expose only biomaster, found: {sorted(public)}")
-    present = public | {path.name for path in INTERNAL_SKILL_ROOT.iterdir() if path.is_dir()}
+    present = public | {path.name for path in BIOSKILLS_ROOT.iterdir() if path.is_dir()}
     missing = MVP_SKILL_IDS - present
     if missing:
         errors.append(f"missing MVP skills: {sorted(missing)}")
     for skill_id in MVP_SKILL_IDS:
-        skill_file = (SKILL_ROOT / skill_id / "SKILL.md") if skill_id == "biomaster" else (INTERNAL_SKILL_ROOT / skill_id / "SKILL.md")
+        skill_file = (SKILL_ROOT / skill_id / "SKILL.md") if skill_id == "biomaster" else (BIOSKILLS_ROOT / skill_id / "SKILL.md")
         if not skill_file.exists():
             errors.append(f"missing SKILL.md for {skill_id}")
     return errors
@@ -33,7 +33,7 @@ def check_mvp_skills() -> list[str]:
 
 def check_exec_scanpy_templates() -> list[str]:
     errors: list[str] = []
-    base = INTERNAL_SKILL_ROOT / "exec-scanpy" / "examples"
+    base = BIOSKILLS_ROOT / "exec-scanpy" / "examples"
     for name in ("qc_template.py", "clustering_template.py"):
         if not (base / name).exists():
             errors.append(f"missing exec-scanpy/examples/{name}")
@@ -43,13 +43,13 @@ def check_exec_scanpy_templates() -> list[str]:
 
 
 def check_registry_outputs() -> list[str]:
-    text = (INTERNAL_SKILL_ROOT / "registry" / "SKILL.md").read_text(encoding="utf-8")
+    text = (BIOSKILLS_ROOT / "registry" / "macro.md").read_text(encoding="utf-8") + (BIOSKILLS_ROOT / "registry" / "micro.md").read_text(encoding="utf-8")
     return [field for field in REGISTRY_REQUIRED_OUTPUT_FIELDS if f"{field}:" not in text]
 
 
 def check_plan_manifests() -> list[str]:
     errors: list[str] = []
-    plan_dir = INTERNAL_SKILL_ROOT / "plan-scrnaseq-tumor-heterogeneity"
+    plan_dir = BIOSKILLS_ROOT / "plan-scrnaseq-tumor-heterogeneity"
     if not (plan_dir / "IO_CONTRACT.md").exists():
         errors.append("missing IO_CONTRACT.md")
     for index in range(1, 9):
@@ -76,7 +76,6 @@ def check_expected_plan_steps() -> list[str]:
 def check_agents_and_commands() -> list[str]:
     errors: list[str] = []
     for name in (
-        "biomaster-intake.md",
         "biomaster-plan.md",
         "biomaster-execute.md",
         "biomaster-check.md",

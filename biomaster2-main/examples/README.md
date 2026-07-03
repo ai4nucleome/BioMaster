@@ -23,7 +23,7 @@ PYTHONPATH=.opencode/runtime python3 -m pytest tests/test_short_workflow.py test
 - `data/` contains synthetic RNA-seq counts, metadata, and a tiny FASTQ file.
 - `real_data/` contains small sample files for FASTQ, featureCounts, ClinVar, narrowPeak, 10x, and MAF-style scenarios.
 - `requests/` contains prompt templates for manual smoke tests.
-- `.opencode/knowledge/workflows` and `.opencode/knowledge/tasks` contain numbered workflow/task knowledge records that are synced into SQLite as searchable context.
+- `.opencode/bioskills` is the unified skill and knowledge source that is synced into SQLite.
 
 ## Validation
 

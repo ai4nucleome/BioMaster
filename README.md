@@ -16,10 +16,11 @@ library (macro description layer + micro execution layer).
 │       └── app/       # SolidJS web app (incl. the BioSkills Library page)
 └── biomaster2-main/   # BioMaster project
     └── .opencode/
-        ├── agents/    # intake, plan, execute, debug, check, skiller,
+        ├── agents/    # plan primary plus execute, debug, check, skiller,
         │              #   skill-author, skill-creator
         ├── tools/     # bioskills.ts (skill router), bioskills-author.ts
-        ├── bioskills/ # file-backed BioSkills library (one folder per skill)
+        ├── bioskills/ # unified file-backed BioSkills library (one folder per skill)
+        ├── knowledge/ # generated SQLite cache derived from bioskills
         └── bioskills-access.yaml  # role -> skill layer policy (integration interface)
 ```
 
@@ -58,6 +59,20 @@ tools, and BioSkills library are all available.
 ```
 
 Default ports: backend `4096`, frontend `4444` (edit `oc.sh` to change).
+To expose the dev server beyond localhost, bind both services to all interfaces:
+
+```bash
+HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD=agent ./oc.sh restart
+```
+
+Then open the frontend with your server IP, for example
+`http://<server-ip>:4444`. Do not use `0.0.0.0` as the browser hostname. If
+you set `OPENCODE_SERVER_PASSWORD`, pass credentials once with `auth_token`; for
+the example password above (`opencode:agent`):
+
+```text
+http://<server-ip>:4444/?auth_token=b3BlbmNvZGU6YWdlbnQ=
+```
 
 ## What's new in v0.3
 
@@ -78,5 +93,9 @@ Default ports: backend `4096`, frontend `4444` (edit `oc.sh` to change).
 ## Notes
 
 - Demo datasets under `biomaster2-main/data/` are included for test-mode runs.
-- `node_modules/`, build output, and the generated BioSkills FTS index (`.index.db`)
-  are not tracked; they are recreated by `bun install` / at runtime.
+- `node_modules/`, build output, the BioSkills FTS index (`.index.db`), and
+  `biomaster_skills.db` are not tracked; they are recreated by `bun install` /
+  BioSkills reads / `make knowledge-seed`.
+- Before publishing to GitHub, keep source files, `.opencode/bioskills/`, runtime
+  Python code, tests, and docs. Do not include generated `projects/<slug>/`
+  outputs, SQLite caches, local `.opencode/` installs, or dependency folders.

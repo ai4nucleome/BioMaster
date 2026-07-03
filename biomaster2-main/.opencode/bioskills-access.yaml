@@ -1,31 +1,29 @@
 # Role -> skill layer mapping for the file-backed BioSkills library.
 #
-# This file is the STABLE INTEGRATION INTERFACE between the BioMaster
-# sub-agents and the skill router (`biomaster-skiller` + `.opencode/tools/bioskills.ts`).
-# It is intentionally decoupled from the legacy SQLite `agent_skill_access.yaml` /
-# skill_finder.py pipeline; it governs the NEW file-backed bioskills library only.
+# This file is the STABLE INTEGRATION INTERFACE between BioMaster worker roles
+# and the file-backed BioSkills library. Runtime workflows follow the v0.2
+# Plan -> Execute -> Debug -> Check skeleton; BioSkills and SQLite remain the
+# v0.3 knowledge layer.
 #
 # ── Why an interface? ────────────────────────────────────────────────────
-# The BioMaster worker set (plan / execute / debug / check) is NOT final: agents
-# may be merged, renamed, or added later. To connect a new/changed agent to the
-# skill system you should only ever have to edit THIS file — never the skiller
-# prompt or the bioskills tool. Resolution is centralized so the wiring survives
-# refactors of the agent graph.
+# The BioMaster worker set is intentionally narrow: plan / execute / debug /
+# check. To connect a role to the BioSkills library, edit THIS file rather than
+# changing agent prompts.
 #
 # ── Layer values ─────────────────────────────────────────────────────────
 #   macro - description / overview layer (macro.md + macro_tags)      -> planning
 #   micro - execution layer (micro.md + micro_tags: cmds/params/etc.) -> coding
-#   all   - both layers                                               -> routers/authors
+#   all   - both layers                                               -> skill management tooling
 #   none  - no skills exposed                                         -> pure verification
 #
 # ── Capability guidance (how to classify a NEW agent) ────────────────────
 #   planning-type      (turns intent into a plan)      -> macro
 #   coding-type        (writes/fixes commands)         -> micro
 #   verification-type  (checks outputs, no authoring)  -> none
-#   router/author-type (needs the whole library)       -> all
+#   management tooling (needs the whole library)       -> all
 #
 # ── Resolution order (implemented in bioskills.ts) ───────────────────────
-#   1. explicit `layer` arg on the tool call (skiller override)
+#   1. explicit `layer` arg on the tool call
 #   2. roles[agent]                      (exact match)
 #   3. roles[ aliases[agent] ]           (renamed / merged agent -> canonical role)
 #   4. default.layer                     (safe fallback for any unregistered agent)
@@ -34,8 +32,6 @@ default:
   layer: macro
 
 roles:
-  biomaster-intake:
-    layer: macro
   biomaster-plan:
     layer: macro
   biomaster-execute:
@@ -51,6 +47,7 @@ roles:
 # they inherit that role's policy without adding a new `roles:` entry.
 # Edit these when the agent graph changes (merge/rename/add).
 aliases:
+  biomaster-intake: biomaster-plan
   biomaster-worker: biomaster-execute      # example: a merged execute+debug worker -> micro
 #   biomaster-coder: biomaster-execute
 #   biomaster-planner: biomaster-plan

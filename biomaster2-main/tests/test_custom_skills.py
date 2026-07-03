@@ -4,7 +4,6 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from biomaster.knowledge import DEFAULT_INTERNAL_SKILL_ROOT, DEFAULT_SKILL_ROOT  # noqa: E402
 from biomaster.knowledge.seed_routes import seed_routes  # noqa: E402
 from biomaster.knowledge.skill_finder import find_skills  # noqa: E402
 from biomaster.knowledge.sync_skills import sync_skills  # noqa: E402
@@ -31,7 +30,7 @@ def test_custom_plan_and_execute_skills_are_selectable(tmp_path):
     db = tmp_path / "knowledge.db"
     sync_skills(
         db_path=db,
-        skill_roots=[DEFAULT_SKILL_ROOT, DEFAULT_INTERNAL_SKILL_ROOT, custom_root],
+        skill_roots=[custom_root],
         project_root=ROOT,
     )
     seed_routes(db)

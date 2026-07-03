@@ -16,6 +16,7 @@
           "step_id": { "type": "string" },
           "objective": { "type": "string" },
           "required_execute_skills": { "type": "array", "items": { "type": "string" } },
+          "required_report_skills": { "type": "array", "items": { "type": "string" } },
           "required_verify_skills": { "type": "array", "items": { "type": "string" } }
         }
       }

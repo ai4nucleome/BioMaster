@@ -121,7 +121,7 @@ TUMOR_PIPELINE_STEPS: tuple[dict[str, object], ...] = (
     {
         "step_id": "09_report_generation",
         "objective": "Summarize all prior steps into a structured report.",
-        "required_execute_skills": ["report-tumor-scrnaseq"],
+        "required_report_skills": ["report-tumor-scrnaseq"],
         "required_verify_skills": ["verify-scrna-qc"],
         "expected_outputs": ["REPORT.md"],
         "acceptance_criteria": [

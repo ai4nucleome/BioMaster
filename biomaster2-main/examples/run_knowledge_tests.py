@@ -9,7 +9,7 @@ sys.path.insert(0, str(PROJECT_ROOT / ".opencode" / "runtime"))
 
 from biomaster.knowledge import REQUIRED_TABLES, connect, table_exists  # noqa: E402
 from biomaster.knowledge.init_db import init_database  # noqa: E402
-from biomaster.knowledge.query_skills import get_route, list_knowledge_records, list_skills, list_skills_for_agent, search_knowledge_records, search_routes, skills_for_route  # noqa: E402
+from biomaster.knowledge.query_skills import get_route, list_knowledge_records, list_skills, list_skills_for_agent, search_routes, skills_for_route  # noqa: E402
 from biomaster.knowledge.seed_routes import seed_routes  # noqa: E402
 from biomaster.knowledge.skill_finder import find_skills  # noqa: E402
 from biomaster.knowledge.state_manager import create_run, disable_skills, update_run  # noqa: E402
@@ -40,8 +40,6 @@ def check_database_bootstrap() -> None:
 def check_skill_sync() -> None:
     stats = sync_all(db_path=TEST_DB)
     assert_true(stats["synced"] >= len(MVP_SKILL_IDS), f"expected at least {len(MVP_SKILL_IDS)} MVP skills, synced {stats['synced']}")
-    assert_true(stats["workflows_synced"] == 56, f"expected 56 workflow records, synced {stats['workflows_synced']}")
-    assert_true(stats["tasks_synced"] == 76, f"expected 76 task records, synced {stats['tasks_synced']}")
 
     connection = connect(TEST_DB)
     try:
@@ -53,9 +51,13 @@ def check_skill_sync() -> None:
             assert_true(skill["body"], f"missing skill body for {skill['skill_id']}")
         workflows = list_knowledge_records(connection, record_type="workflow")
         tasks = list_knowledge_records(connection, record_type="task")
-        assert_true(len(workflows) == 56, f"expected 56 workflows, found {len(workflows)}")
-        assert_true(len(tasks) == 76, f"expected 76 tasks, found {len(tasks)}")
-        assert_true(search_knowledge_records(connection, "DESeq2", record_type="task"), "task knowledge search should find DESeq2 records")
+        assert_true(len(workflows) == 0, f"legacy workflow records should not be synced, found {len(workflows)}")
+        assert_true(len(tasks) == 0, f"legacy task records should not be synced, found {len(tasks)}")
+        assert_true("bioclaw-cell-annotation" in synced_ids, "BioSkills library records must be synced")
+        assert_true(
+            connection.execute("SELECT value FROM sync_meta WHERE key = 'bioskills_signature'").fetchone(),
+            "BioSkills sync signature must be recorded",
+        )
     finally:
         connection.close()
 
@@ -90,7 +92,7 @@ def check_agent_filtering() -> None:
         check_layers = {skill["layer"] for skill in check_skills}
         assert_true({"plan", "pipeline", "domain-guide"}.intersection(plan_layers), "plan agent should see planning layers")
         assert_true("execute" in execute_layers, "execute agent should see execute skills")
-        assert_true(check_layers == {"verify"}, "check agent should see verify skills only")
+        assert_true("verify" in check_layers, "check agent should see verify skills")
         assert_true(not any(skill["layer"] == "execute" for skill in plan_skills), "plan agent must not see execute skills")
         assert_true(not any(skill["layer"] == "plan" for skill in execute_skills), "execute agent must not see plan skills")
     finally:
@@ -106,7 +108,7 @@ def check_skill_finder_and_run_state() -> None:
             run = update_run(connection, run_id, phase=phase)
         routed = find_skills(
             "肿瘤异质性与状态轨迹分析 inferCNV Palantir cNMF",
-            "biomaster-intake",
+            "biomaster-plan",
             "pipeline_routing",
             run_id=run_id,
             db_path=TEST_DB,

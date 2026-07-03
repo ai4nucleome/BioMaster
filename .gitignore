@@ -2,6 +2,7 @@
 node_modules/
 .pnp/
 .pnp.js
+/.opencode/
 
 # Build output / caches
 dist/
@@ -11,9 +12,14 @@ dist/
 .cache/
 coverage/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
+.pytest_cache/
 
 # Generated BioSkills full-text index (rebuilt on demand)
 **/.index.db
+*.db-shm
+*.db-wal
 
 # Logs / runtime
 *.log

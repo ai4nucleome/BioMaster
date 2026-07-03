@@ -6,10 +6,13 @@
   "required": [
     "step_id",
     "objective",
-    "required_execute_skills",
     "required_verify_skills",
     "expected_outputs",
     "acceptance_criteria"
+  ],
+  "anyOf": [
+    { "required": ["required_execute_skills"] },
+    { "required": ["required_report_skills"] }
   ],
   "properties": {
     "step_id": {
@@ -25,6 +28,13 @@
       "items": {
         "type": "string",
         "pattern": "^exec-[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "required_report_skills": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^report-[a-z0-9]+(-[a-z0-9]+)*$"
       }
     },
     "required_verify_skills": {

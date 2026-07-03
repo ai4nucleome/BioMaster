@@ -2239,7 +2239,13 @@ export default function LegacyLayout(props: ParentProps) {
       onOpenSettings={openSettings}
       skillsLabel={() => "BioSkills"}
       onOpenSkills={() => {
-        const root = currentProject()?.worktree ?? projects()[0]?.worktree
+        const roots = [currentProject()?.worktree, ...projects().map((project) => project.worktree)].filter(
+          (root): root is string => Boolean(root),
+        )
+        const root =
+          roots.find((candidate) => candidate.endsWith("/biomaster2-main")) ??
+          roots.find((candidate) => candidate.includes("/biomaster2-main")) ??
+          roots[0]
         if (root) navigateWithSidebarReset(`/${base64Encode(root)}/skills`)
       }}
       helpLabel={() => language.t("sidebar.help")}

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "plan",
+    "title": "Plan",
+    "tags": [
+      "plan",
+      "bioinformatics",
+      "metagenomics"
+    ],
+    "enabled": true
+  }
+]

@@ -16,15 +16,35 @@ BIO_DIR="$ROOT/biomaster2-main"
 OC_INDEX="$ROOT/opencode/packages/opencode/src/index.ts"
 APP_DIR="$ROOT/opencode/packages/app"
 
-BACKEND_PORT=4096
-FRONTEND_PORT=4444
-HOSTNAME_BIND="127.0.0.1"
+BACKEND_PORT="${BACKEND_PORT:-4096}"
+FRONTEND_PORT="${FRONTEND_PORT:-4444}"
+HOSTNAME_BIND="${HOSTNAME_BIND:-127.0.0.1}"
+HEALTHCHECK_HOST="$HOSTNAME_BIND"
+if [ "$HEALTHCHECK_HOST" = "0.0.0.0" ]; then
+  HEALTHCHECK_HOST="127.0.0.1"
+fi
 
 BACKEND_LOG="/tmp/opencode-backend.log"
 FRONTEND_LOG="/tmp/opencode-frontend.log"
 
-backend_pid() { pgrep -f "index.ts serve --port ${BACKEND_PORT}" | head -1; }
-frontend_pid() { pgrep -f "vite --port ${FRONTEND_PORT}" | head -1; }
+if command -v bun >/dev/null 2>&1; then
+  BUN_CMD="bun"
+else
+  BUN_CMD="npx -y --package bun@1.3.14 bun"
+fi
+
+BIOSKILLS_PATH="$(python3 - <<PY
+import base64
+path = "${BIO_DIR}"
+slug = base64.urlsafe_b64encode(path.encode()).decode().rstrip("=")
+print(f"/{slug}/skills")
+PY
+)"
+
+backend_pids() { pgrep -f "opencode/packages/opencode/src/index.ts serve .*--port ${BACKEND_PORT}"; }
+backend_pid() { backend_pids | head -1; }
+frontend_pids() { pgrep -f "(npm exec bun@1.3.14.*run dev|bun.*run dev|vite).*--port ${FRONTEND_PORT}"; }
+frontend_pid() { frontend_pids | head -1; }
 
 http_code() { curl -s -o /dev/null -w "%{http_code}" --max-time 4 "$1" 2>/dev/null; }
 
@@ -34,7 +54,7 @@ start_backend() {
     return
   fi
   echo "starting backend on ${HOSTNAME_BIND}:${BACKEND_PORT} (project: ${BIO_DIR}) ..."
-  setsid bash -c "cd '$BIO_DIR' && bun run --conditions=browser '$OC_INDEX' serve --port ${BACKEND_PORT} --hostname ${HOSTNAME_BIND} --print-logs > '$BACKEND_LOG' 2>&1" < /dev/null &
+  setsid bash -c "cd '$BIO_DIR' && ${BUN_CMD} --conditions=browser '$OC_INDEX' serve --port ${BACKEND_PORT} --hostname ${HOSTNAME_BIND} --print-logs > '$BACKEND_LOG' 2>&1" < /dev/null &
   disown
 }
 
@@ -46,7 +66,7 @@ start_frontend() {
   echo "starting frontend on ${HOSTNAME_BIND}:${FRONTEND_PORT} ..."
   # Use `bun --bun` so vite runs on bun's runtime instead of whatever `node`
   # happens to be first in PATH (background shells can pick up an ancient node).
-  setsid bash -c "cd '$APP_DIR' && bun --bun run dev -- --port ${FRONTEND_PORT} --host ${HOSTNAME_BIND} > '$FRONTEND_LOG' 2>&1" < /dev/null &
+  setsid bash -c "cd '$APP_DIR' && VITE_OPENCODE_SERVER_HOST=${HOSTNAME_BIND} VITE_OPENCODE_SERVER_PORT=${BACKEND_PORT} ${BUN_CMD} --bun run dev -- --port ${FRONTEND_PORT} --host ${HOSTNAME_BIND} > '$FRONTEND_LOG' 2>&1" < /dev/null &
   disown
 }
 
@@ -59,6 +79,30 @@ stop_one() {
   fi
 }
 
+stop_backend() {
+  local pids
+  pids="$(backend_pids)"
+  if [ -n "$pids" ]; then
+    echo "$pids" | while read -r pid; do
+      [ -n "$pid" ] && kill "$pid" 2>/dev/null && echo "stopped backend (pid $pid)"
+    done
+  else
+    echo "backend not running"
+  fi
+}
+
+stop_frontend() {
+  local pids
+  pids="$(frontend_pids)"
+  if [ -n "$pids" ]; then
+    echo "$pids" | while read -r pid; do
+      [ -n "$pid" ] && kill "$pid" 2>/dev/null && echo "stopped frontend (pid $pid)"
+    done
+  else
+    echo "frontend not running"
+  fi
+}
+
 case "${1:-status}" in
   start)
     start_backend
@@ -68,8 +112,8 @@ case "${1:-status}" in
     "$SELF" status
     ;;
   stop)
-    stop_one "$(backend_pid)" backend
-    stop_one "$(frontend_pid)" frontend
+    stop_backend
+    stop_frontend
     ;;
   restart)
     "$SELF" stop
@@ -77,8 +121,14 @@ case "${1:-status}" in
     "$SELF" start
     ;;
   status)
-    echo "backend  (${BACKEND_PORT}): pid=$(backend_pid || echo -) http=$(http_code http://${HOSTNAME_BIND}:${BACKEND_PORT}/agent)"
-    echo "frontend (${FRONTEND_PORT}): pid=$(frontend_pid || echo -) http=$(http_code http://${HOSTNAME_BIND}:${FRONTEND_PORT}/)"
+    echo "backend  (${BACKEND_PORT}): pid=$(backend_pid || echo -) http=$(http_code http://${HEALTHCHECK_HOST}:${BACKEND_PORT}/agent)"
+    echo "frontend (${FRONTEND_PORT}): pid=$(frontend_pid || echo -) http=$(http_code http://${HEALTHCHECK_HOST}:${FRONTEND_PORT}/)"
+    if [ "$HOSTNAME_BIND" = "0.0.0.0" ]; then
+      echo "bioskills: http://<server-ip>:${FRONTEND_PORT}${BIOSKILLS_PATH}"
+      echo "local:     http://${HEALTHCHECK_HOST}:${FRONTEND_PORT}${BIOSKILLS_PATH}"
+    else
+      echo "bioskills: http://${HOSTNAME_BIND}:${FRONTEND_PORT}${BIOSKILLS_PATH}"
+    fi
     ;;
   logs)
     echo "=== backend ($BACKEND_LOG) ==="; tail -n 20 "$BACKEND_LOG" 2>/dev/null

@@ -2,9 +2,15 @@
 examples/results/*
 !examples/results/.gitkeep
 CHECK_REPORT.yaml
+test_output.h5ad
 runs/[0-9][0-9][0-9]/
 !runs/.gitkeep
+projects/*/
+!projects/.gitkeep
 .opencode/knowledge/biomaster_skills.db
+.opencode/knowledge/*.db-shm
+.opencode/knowledge/*.db-wal
+.opencode/bioskills/.index.db
 .opencode/node_modules/
 .opencode/package.json
 .opencode/package-lock.json
