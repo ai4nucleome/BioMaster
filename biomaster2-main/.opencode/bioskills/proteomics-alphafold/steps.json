@@ -1,0 +1,58 @@
+[
+  {
+    "id": "backend-selection",
+    "title": "Backend Selection",
+    "tags": [
+      "tool-selection",
+      "prerequisites",
+      "environment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "structure-prediction",
+    "title": "Structure Prediction",
+    "tags": [
+      "structure-prediction",
+      "colabfold",
+      "alphafold",
+      "esmfold",
+      "multimer"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "confidence-metric-extraction",
+    "title": "Confidence Metric Extraction",
+    "tags": [
+      "confidence-metrics",
+      "plddt",
+      "ptm",
+      "iptm",
+      "pae",
+      "metric-extraction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "quality-assessment-verification",
+    "title": "Quality Assessment & Verification",
+    "tags": [
+      "qc",
+      "validation",
+      "thresholds",
+      "verification"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "troubleshooting",
+    "title": "Troubleshooting",
+    "tags": [
+      "troubleshooting",
+      "error-handling",
+      "diagnostics"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,75 @@
+[
+  {
+    "id": "input-preparation",
+    "title": "Input Preparation",
+    "tags": [
+      "input-prep",
+      "filtering",
+      "qc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "soft-thresholding-power-selection",
+    "title": "Soft-Thresholding Power Selection",
+    "tags": [
+      "soft-thresholding",
+      "scale-free"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "network-construction-and-module-detection",
+    "title": "Network Construction and Module Detection",
+    "tags": [
+      "network-construction",
+      "module-detection",
+      "tom",
+      "blockwise-modules"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "module-trait-relationships",
+    "title": "Module-Trait Relationships",
+    "tags": [
+      "eigengenes",
+      "trait-correlation",
+      "heatmap"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "hub-gene-identification",
+    "title": "Hub Gene Identification",
+    "tags": [
+      "hub-genes",
+      "module-membership",
+      "gene-significance",
+      "connectivity"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "network-export-for-cytoscape",
+    "title": "Network Export for Cytoscape",
+    "tags": [
+      "export",
+      "visualization",
+      "cytoscape"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "alternative-implementations",
+    "title": "Alternative Implementations",
+    "tags": [
+      "cemitool",
+      "hdwgcna",
+      "pywgcna",
+      "single-cell",
+      "metacells"
+    ],
+    "enabled": true
+  }
+]

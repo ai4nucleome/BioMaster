@@ -1,0 +1,74 @@
+[
+  {
+    "id": "tool-selection-and-environment-setup",
+    "title": "Tool Selection and Environment Setup",
+    "tags": [
+      "tool-selection",
+      "environment-setup",
+      "version-check"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "data-preparation-and-chromosome-splits",
+    "title": "Data Preparation and Chromosome Splits",
+    "tags": [
+      "data-prep",
+      "chromosome-splits",
+      "qc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "bias-model-training",
+    "title": "Bias Model Training",
+    "tags": [
+      "bias-model",
+      "tn5-bias",
+      "cnn-training"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "accessibility-model-training",
+    "title": "Accessibility Model Training",
+    "tags": [
+      "accessibility-model",
+      "cnn-training",
+      "bias-correction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "variant-effect-prediction",
+    "title": "Variant Effect Prediction",
+    "tags": [
+      "variant-effect",
+      "ism",
+      "tangermeme",
+      "variant-scorer"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "motif-discovery-with-deeplift-and-tf-modisco",
+    "title": "Motif Discovery with DeepLIFT and TF-MoDISco",
+    "tags": [
+      "deeplift",
+      "shap",
+      "tfmodisco",
+      "motif-discovery"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cross-tool-validation-and-reconciliation",
+    "title": "Cross-Tool Validation and Reconciliation",
+    "tags": [
+      "validation",
+      "reconciliation",
+      "cross-tool"
+    ],
+    "enabled": true
+  }
+]

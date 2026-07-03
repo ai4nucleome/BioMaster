@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build output / caches
+dist/
+.output/
+.turbo/
+.vite/
+.cache/
+coverage/
+*.tsbuildinfo
+
+# Generated BioSkills full-text index (rebuilt on demand)
+**/.index.db
+
+# Logs / runtime
+*.log
+/tmp/
+.DS_Store
+
+# Local env / secrets
+.env
+.env.*
+!.env.example

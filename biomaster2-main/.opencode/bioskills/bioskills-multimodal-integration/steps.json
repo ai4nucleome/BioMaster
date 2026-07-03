@@ -1,0 +1,70 @@
+[
+  {
+    "id": "load-multimodal-data",
+    "title": "Load Multimodal Data",
+    "tags": [
+      "data-io",
+      "multi-assay",
+      "cite-seq",
+      "multiome"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "per-modality-qc-and-normalization",
+    "title": "Per-Modality QC and Normalization",
+    "tags": [
+      "qc",
+      "normalization",
+      "clr",
+      "tfidf",
+      "mito",
+      "tss-enrichment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "per-modality-dimensionality-reduction",
+    "title": "Per-Modality Dimensionality Reduction",
+    "tags": [
+      "pca",
+      "lsi",
+      "svd",
+      "dimensionality-reduction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "multimodal-integration",
+    "title": "Multimodal Integration",
+    "tags": [
+      "wnn",
+      "mofa",
+      "integration",
+      "multimodal-neighbors"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "joint-clustering-and-embedding",
+    "title": "Joint Clustering and Embedding",
+    "tags": [
+      "clustering",
+      "umap",
+      "community-detection",
+      "leiden"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-and-marker-discovery",
+    "title": "Visualization and Marker Discovery",
+    "tags": [
+      "visualization",
+      "markers",
+      "modality-weights",
+      "differential-expression"
+    ],
+    "enabled": true
+  }
+]

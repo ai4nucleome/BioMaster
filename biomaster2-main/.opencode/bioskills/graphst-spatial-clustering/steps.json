@@ -1,0 +1,56 @@
+[
+  {
+    "id": "installation-environment-setup",
+    "title": "Installation & Environment Setup",
+    "tags": [
+      "installation",
+      "conda",
+      "r-mclust"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "data-loading-preprocessing",
+    "title": "Data Loading & Preprocessing",
+    "tags": [
+      "data-loading",
+      "preprocessing",
+      "hvg",
+      "normalization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "graph-construction-representation-learning",
+    "title": "Graph Construction & Representation Learning",
+    "tags": [
+      "graph-construction",
+      "representation-learning",
+      "gnn",
+      "contrastive-learning"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "spatial-clustering-refinement",
+    "title": "Spatial Clustering & Refinement",
+    "tags": [
+      "clustering",
+      "mclust",
+      "leiden",
+      "louvain",
+      "refinement"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-evaluation",
+    "title": "Visualization & Evaluation",
+    "tags": [
+      "visualization",
+      "umap",
+      "ari"
+    ],
+    "enabled": true
+  }
+]

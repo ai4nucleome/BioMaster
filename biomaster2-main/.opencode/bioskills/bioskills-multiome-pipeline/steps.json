@@ -1,0 +1,66 @@
+[
+  {
+    "id": "load-multiome-data",
+    "title": "Load Multiome Data",
+    "tags": [
+      "data-io",
+      "seurat",
+      "signac",
+      "chromatin-assay"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "rna-quality-control-and-processing",
+    "title": "RNA Quality Control and Processing",
+    "tags": [
+      "qc",
+      "sctransform",
+      "pca"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "atac-quality-control-and-processing",
+    "title": "ATAC Quality Control and Processing",
+    "tags": [
+      "qc",
+      "tf-idf",
+      "lsi",
+      "tss-enrichment",
+      "nucleosome-signal"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "weighted-nearest-neighbors-integration",
+    "title": "Weighted Nearest Neighbors Integration",
+    "tags": [
+      "wnn",
+      "integration",
+      "umap",
+      "clustering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-and-markers",
+    "title": "Visualization and Markers",
+    "tags": [
+      "visualization",
+      "marker-genes",
+      "differential-peaks"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "gene-peak-linkage",
+    "title": "Gene-Peak Linkage",
+    "tags": [
+      "gene-peak-linkage",
+      "coverage-plot",
+      "cis-regulatory"
+    ],
+    "enabled": true
+  }
+]

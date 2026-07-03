@@ -1,0 +1,29 @@
+# Bioskills Sra Data
+
+## Overview
+
+This skill downloads sequencing data (FASTQ) from the NCBI Sequence Read Archive (SRA) and the ENA mirror, and verifies it for downstream analysis. Given one or more SRA accessions — either runnable accessions (SRR/ERR/DRR) directly, or higher-level identifiers (GSE, BioProject/PRJNA, SRX, SRS) that must be resolved to runs — it produces verified, gzip-compressed FASTQ files ready for QC and alignment.
+
+It covers three download paths: the ENA mirror (the recommended off-cloud default, serving pre-compressed FASTQ directly with no SRA-to-FASTQ conversion), the SRA toolkit (prefetch + fasterq-dump, the classic on-prem path), and AWS/GCP STRIDES (for same-region cloud-native pipelines with zero egress cost). It also handles single-cell/10x technical reads (cell barcodes, UMIs, sample index) that default extraction skips, and performs post-download integrity verification (vdb-validate for .sra files, md5sum for ENA FASTQ).
+
+Use this skill whenever you need to pull raw sequencing reads from public archives. Inputs: SRA/ENA accessions or project-level IDs. Outputs: verified, compressed FASTQ files on local or cloud storage. Reference versions: sra-tools 3.0+, pysradb 2.2+, ENA portal API 2.0+.
+
+## Setup & Source Selection
+
+Install the required tooling and choose where to pull data from. Install sra-tools (NCBI's toolkit: prefetch, fasterq-dump, vdb-validate, vdb-config) via conda, pysradb for metadata resolution, and the AWS CLI if using the STRIDES cloud path. Configure the SRA cache location with vdb-config because the default ~/ncbi/ directory is often too small and will fill up mid-download; in Docker, mount a host volume at ~/.ncbi/ so the cache config persists across container rebuilds. Then select a download source using the decision matrix: the ENA mirror is the recommended default for off-cloud work because it serves pre-compressed FASTQ directly with no SRA-to-FASTQ conversion and is usually the fastest; AWS or GCP STRIDES is best for same-region cloud compute because egress is free within region; SRA-direct (prefetch + fasterq-dump) is the on-prem fallback when neither is available, though NCBI throttles by IP and can be slow during US business hours. Public Aspera is retired (NCBI 2019, ENA ~2023) and should not be used. Finally, understand the SRA accession hierarchy: runs (SRR/ERR/DRR) are the actual download unit, while BioProject (PRJNA...) and GSE IDs are convenient top-level handles that must be resolved to runs before downloading.
+
+## Metadata Resolution
+
+Convert top-level project or experiment identifiers into the runnable accessions that are the actual download unit. Inputs such as GSE series, BioProject (PRJNA/PRJEB/PRJDB), SRX/ERX experiments, or SRS/ERS/DRS samples cannot be downloaded directly — they must be resolved to SRR/ERR/DRR runs first. Use pysradb's SRAweb to walk the hierarchy (GSE to SRP to SRR, or BioProject directly to a metadata table of runs) and return a table of run accessions with detailed metadata. For batches of mixed IDs, resolve each one and collect failures gracefully so a single bad ID does not abort the whole batch. This step is only needed when the input is not already an SRR/ERR/DRR run accession.
+
+## Download & Extract
+
+Download FASTQ from the chosen source and extract to final, compressed FASTQ files. Three execution paths are supported. Path A (ENA mirror, preferred off-cloud default): query the ENA portal API for direct FASTQ URLs and md5 checksums, then download each file with curl and verify md5 inline — ENA serves pre-compressed FASTQ so no conversion or post-compression is needed. Path B (SRA toolkit, classic on-prem): prefetch the .sra file with an explicit --max-size because the default 20G silently skips larger runs and returns success with no file; validate with vdb-validate; then run fasterq-dump with multi-threading and --split-files; finally compress with pigz because fasterq-dump does not compress and writes roughly 3x the final size as uncompressed scratch (ensure scratch has 4-5x the compressed size, or use --mem to trade memory for disk). Path C (AWS STRIDES, cloud-native): copy the .sra object from s3://sra-pub-run-odp with --no-sign-request (the object is named without a .sra suffix, so rename it on copy), then fasterq-dump and pigz locally; run from a us-east-1 EC2 instance to avoid cross-region egress charges. For GCP, use us-central1.
+
+## Single-cell / 10x Handling
+
+Handle 10x Genomics and other single-cell records whose technical reads (cell barcodes, UMIs, sample index) are interleaved with biological reads. Default fasterq-dump and fastq-dump skip technical reads, which produces only the cDNA file and breaks downstream tools like CellRanger and STARsolo. First inspect the run with sra-stat to confirm the read structure and spot/base counts. Then extract with --include-technical --split-files to recover all reads. For 10x v3 expect three files per run (R1 with 28-bp barcode+UMI, R2 with cDNA, I1 with the sample index); 10x v2 has a similar three-file layout with the barcode and UMI split differently between R1 and R2. Compress the output with pigz afterward. Note that some 10x records have incomplete split semantics under fasterq-dump and may require fastq-dump for full extraction.
+
+## Verification
+
+Verify download integrity before proceeding to QC or alignment. For SRA-format files (.sra) use vdb-validate from the toolkit; for ENA FASTQ files use md5sum against the md5 values returned by the ENA portal API's fastq_md5 field. Treat any mismatch as a hard failure and re-download. This step also guards against the prefetch --max-size silent-skip trap (where prefetch returns success but downloads nothing because the run exceeded the size limit) and against partial or corrupt transfers — if vdb-validate fails because no file exists, re-run prefetch with a generous explicit --max-size such as 200G for unknown-size runs.

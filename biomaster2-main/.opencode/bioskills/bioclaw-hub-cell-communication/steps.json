@@ -1,0 +1,50 @@
+[
+  {
+    "id": "validate-annotations",
+    "title": "Validate Annotations",
+    "tags": [
+      "qc",
+      "annotation-validation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "load-ligand-receptor-resource",
+    "title": "Load Ligand-Receptor Resource",
+    "tags": [
+      "ligand-receptor",
+      "database"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "run-interaction-scoring",
+    "title": "Run Interaction Scoring",
+    "tags": [
+      "interaction-scoring",
+      "liana",
+      "permutation-test"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "aggregate-and-summarize",
+    "title": "Aggregate and Summarize",
+    "tags": [
+      "aggregation",
+      "summarization",
+      "sender-receiver"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualize-and-report-caveats",
+    "title": "Visualize and Report Caveats",
+    "tags": [
+      "visualization",
+      "interpretation",
+      "caveats"
+    ],
+    "enabled": true
+  }
+]

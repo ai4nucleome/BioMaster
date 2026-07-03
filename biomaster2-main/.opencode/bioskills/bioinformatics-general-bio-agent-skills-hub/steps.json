@@ -1,0 +1,34 @@
+[
+  {
+    "id": "search-the-index-to-find-candidate-skills",
+    "title": "Search the index to find candidate skills",
+    "tags": [
+      "search",
+      "index",
+      "routing",
+      "skill-discovery"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "fetch-the-chosen-skill-s-skill-md",
+    "title": "Fetch the chosen skill's SKILL.md",
+    "tags": [
+      "fetch",
+      "skill-retrieval",
+      "github-raw"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "offline-bulk-private-fallback-clone",
+    "title": "Offline / bulk / private fallback (clone)",
+    "tags": [
+      "clone",
+      "offline",
+      "mirror",
+      "fallback"
+    ],
+    "enabled": true
+  }
+]

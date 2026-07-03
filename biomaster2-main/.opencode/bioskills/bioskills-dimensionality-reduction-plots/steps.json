@@ -1,0 +1,66 @@
+[
+  {
+    "id": "method-selection-input-preparation",
+    "title": "Method Selection & Input Preparation",
+    "tags": [
+      "method-selection",
+      "normalization",
+      "scaling"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "pca-variance-loadings",
+    "title": "PCA — Variance & Loadings",
+    "tags": [
+      "pca",
+      "variance-explained",
+      "loadings",
+      "batch-diagnostic"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "t-sne-kobak-berens-defaults",
+    "title": "t-SNE — Kobak-Berens Defaults",
+    "tags": [
+      "tsne",
+      "perplexity",
+      "pca-initialization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "umap-modern-defaults",
+    "title": "UMAP — Modern Defaults",
+    "tags": [
+      "umap",
+      "n-neighbors",
+      "min-dist",
+      "reproducibility"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "phate-continuous-trajectories",
+    "title": "PHATE — Continuous Trajectories",
+    "tags": [
+      "phate",
+      "trajectory",
+      "diffusion"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "plotting-saving-reproducibility",
+    "title": "Plotting, Saving & Reproducibility",
+    "tags": [
+      "visualization",
+      "saving",
+      "dpi",
+      "reproducibility",
+      "interpretation"
+    ],
+    "enabled": true
+  }
+]

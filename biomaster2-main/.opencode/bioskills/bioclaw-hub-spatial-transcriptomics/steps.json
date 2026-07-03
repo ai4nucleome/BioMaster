@@ -1,0 +1,77 @@
+[
+  {
+    "id": "validate-spatial-assets",
+    "title": "Validate Spatial Assets",
+    "tags": [
+      "spatial-validation",
+      "coordinate-check",
+      "barcode-alignment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "preprocess-expression-and-spatial-structure",
+    "title": "Preprocess Expression and Spatial Structure",
+    "tags": [
+      "qc",
+      "normalization",
+      "hvg-selection",
+      "spatial-neighbors"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "domain-detection",
+    "title": "Domain Detection",
+    "tags": [
+      "pca",
+      "leiden",
+      "domain-detection",
+      "spatial-autocorrelation",
+      "marker-genes"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "deconvolution",
+    "title": "Deconvolution",
+    "tags": [
+      "deconvolution",
+      "cell-type-scoring",
+      "spatial-regression"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "neighborhood-and-communication-analysis",
+    "title": "Neighborhood and Communication Analysis",
+    "tags": [
+      "neighborhood-enrichment",
+      "interaction-matrix",
+      "ripley",
+      "ligand-receptor"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualize-spatial-biology",
+    "title": "Visualize Spatial Biology",
+    "tags": [
+      "spatial-plotting",
+      "visualization",
+      "publication-figures"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "export-interpretable-artifacts",
+    "title": "Export Interpretable Artifacts",
+    "tags": [
+      "export",
+      "save-results",
+      "csv-output",
+      "h5ad"
+    ],
+    "enabled": true
+  }
+]

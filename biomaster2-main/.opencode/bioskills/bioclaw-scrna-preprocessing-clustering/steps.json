@@ -1,0 +1,65 @@
+[
+  {
+    "id": "load-and-validate",
+    "title": "Load And Validate",
+    "tags": [
+      "data-io",
+      "anndata",
+      "var-names"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "compute-qc-metrics",
+    "title": "Compute QC Metrics",
+    "tags": [
+      "qc",
+      "qc-metrics",
+      "violin-plot"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "filter-cells-and-genes",
+    "title": "Filter Cells And Genes",
+    "tags": [
+      "filtering",
+      "doublet-removal",
+      "thresholds"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "normalize-and-select-hvgs",
+    "title": "Normalize And Select HVGs",
+    "tags": [
+      "normalization",
+      "log1p",
+      "highly-variable-genes",
+      "scaling"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "reduce-dimensions-and-cluster",
+    "title": "Reduce Dimensions And Cluster",
+    "tags": [
+      "pca",
+      "neighbors",
+      "umap",
+      "leiden",
+      "clustering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "export-analysis-ready-artifacts",
+    "title": "Export Analysis-Ready Artifacts",
+    "tags": [
+      "export",
+      "h5ad",
+      "qc-report"
+    ],
+    "enabled": true
+  }
+]

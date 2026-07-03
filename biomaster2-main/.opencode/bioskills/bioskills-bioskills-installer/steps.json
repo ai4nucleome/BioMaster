@@ -1,0 +1,38 @@
+[
+  {
+    "id": "pre-installation-check",
+    "title": "Pre-installation Check",
+    "tags": [
+      "prerequisites",
+      "environment-check"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "installation",
+    "title": "Installation",
+    "tags": [
+      "installation",
+      "download"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "verification",
+    "title": "Verification",
+    "tags": [
+      "verification",
+      "validation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "post-installation-usage",
+    "title": "Post-installation Usage",
+    "tags": [
+      "usage",
+      "discovery"
+    ],
+    "enabled": true
+  }
+]

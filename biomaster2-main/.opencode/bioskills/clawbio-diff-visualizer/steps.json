@@ -1,0 +1,43 @@
+[
+  {
+    "id": "input-detection-validation",
+    "title": "Input Detection & Validation",
+    "tags": [
+      "input-detection",
+      "validation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "bulk-differential-visualization",
+    "title": "Bulk Differential Visualization",
+    "tags": [
+      "volcano",
+      "ma-plot",
+      "heatmap",
+      "bar-chart"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "scrna-marker-visualization",
+    "title": "scRNA Marker Visualization",
+    "tags": [
+      "contrast-volcano",
+      "marker-bars",
+      "dotplot",
+      "umap"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "report-reproducibility",
+    "title": "Report & Reproducibility",
+    "tags": [
+      "report",
+      "reproducibility",
+      "html"
+    ],
+    "enabled": true
+  }
+]

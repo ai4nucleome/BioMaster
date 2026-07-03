@@ -1,0 +1,62 @@
+[
+  {
+    "id": "data-loading-gene-alignment",
+    "title": "Data Loading & Gene Alignment",
+    "tags": [
+      "data-loading",
+      "gene-alignment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "reference-signature-training-cell2location",
+    "title": "Reference Signature Training (cell2location)",
+    "tags": [
+      "cell2location",
+      "reference-signature",
+      "regression-model"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "spatial-deconvolution-cell2location",
+    "title": "Spatial Deconvolution (cell2location)",
+    "tags": [
+      "cell2location",
+      "spatial-deconvolution",
+      "abundance-estimation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "alternative-deconvolution-methods",
+    "title": "Alternative Deconvolution Methods",
+    "tags": [
+      "tangram",
+      "rctd",
+      "optimal-transport",
+      "alternative-methods"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "result-extraction-quality-evaluation",
+    "title": "Result Extraction & Quality Evaluation",
+    "tags": [
+      "result-extraction",
+      "quality-evaluation",
+      "marker-correlation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-export",
+    "title": "Visualization & Export",
+    "tags": [
+      "visualization",
+      "spatial-plot",
+      "export"
+    ],
+    "enabled": true
+  }
+]

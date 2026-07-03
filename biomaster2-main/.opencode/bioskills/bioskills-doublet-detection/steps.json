@@ -1,0 +1,67 @@
+[
+  {
+    "id": "data-loading-channel-verification",
+    "title": "Data Loading & Channel Verification",
+    "tags": [
+      "data-loading",
+      "fcs",
+      "channel-check"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "scatter-based-singlet-gating",
+    "title": "Scatter-Based Singlet Gating",
+    "tags": [
+      "singlet-gating",
+      "fsc",
+      "ssc",
+      "flowDensity",
+      "ratio"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cytof-doublet-detection",
+    "title": "CyTOF Doublet Detection",
+    "tags": [
+      "cytof",
+      "catalyst",
+      "dna-content",
+      "event-length"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "regression-based-doublet-detection",
+    "title": "Regression-Based Doublet Detection",
+    "tags": [
+      "regression",
+      "residuals",
+      "catalyst",
+      "doublet-rate"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "batch-processing-quality-control",
+    "title": "Batch Processing & Quality Control",
+    "tags": [
+      "batch-processing",
+      "qc",
+      "flowAI",
+      "fsApply"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-reporting",
+    "title": "Visualization & Reporting",
+    "tags": [
+      "visualization",
+      "ggplot2",
+      "reporting"
+    ],
+    "enabled": true
+  }
+]

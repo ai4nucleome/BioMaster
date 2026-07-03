@@ -1,0 +1,62 @@
+[
+  {
+    "id": "setup-basic-spatial-plot",
+    "title": "Setup & Basic Spatial Plot",
+    "tags": [
+      "imports",
+      "spatial-scatter",
+      "qc-overlay"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "tissue-image-overlay-appearance",
+    "title": "Tissue Image Overlay & Appearance",
+    "tags": [
+      "histology-overlay",
+      "appearance",
+      "spot-size"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "gene-expression-on-tissue",
+    "title": "Gene Expression on Tissue",
+    "tags": [
+      "gene-expression",
+      "colormap",
+      "co-expression"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "multi-sample-comparison-annotation",
+    "title": "Multi-Sample Comparison & Annotation",
+    "tags": [
+      "multi-sample",
+      "annotation",
+      "crop-zoom"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "spatial-statistics-visualization",
+    "title": "Spatial Statistics Visualization",
+    "tags": [
+      "spatial-statistics",
+      "moran-i",
+      "neighborhood-enrichment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "interactive-exploration-publication-figures",
+    "title": "Interactive Exploration & Publication Figures",
+    "tags": [
+      "napari",
+      "publication",
+      "multi-panel"
+    ],
+    "enabled": true
+  }
+]

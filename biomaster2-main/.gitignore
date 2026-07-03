@@ -1,0 +1,22 @@
+# Generated outputs
+examples/results/*
+!examples/results/.gitkeep
+CHECK_REPORT.yaml
+runs/[0-9][0-9][0-9]/
+!runs/.gitkeep
+.opencode/knowledge/biomaster_skills.db
+.opencode/node_modules/
+.opencode/package.json
+.opencode/package-lock.json
+.opencode/bun.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.benchmarks/
+
+# Editor / OS
+.DS_Store
+*.swp

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["message_type", "from", "to", "run_id", "phase", "payload"],
+  "properties": {
+    "message_type": { "const": "debug_request" },
+    "payload": {
+      "type": "object",
+      "required": ["step_id", "failed_check"],
+      "properties": {
+        "step_id": { "type": "string" },
+        "failed_check": { "type": "string" },
+        "suggested_debug_skills": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,3785 @@
+tasks:
+- id: task-0001
+  title: '2. run-sort-bam.sh:'
+  summary: '2. run-sort-bam.sh: Data-type-independent, generic bam sorting module
+    Input : any unsorted bam file (.bam) Output : a bam file sorted by coordinate
+    (.sorted.bam) and its index (.sorted.bam.bai). Usage Run the followin...'
+  keywords:
+  - run-sort-bam
+  - run-sort-bam.sh
+  - 2. run-sort-bam.sh
+  - '2. run-sort-bam.sh:
+
+    Data-type-independent'
+  - 'generic bam sorting module
+
+    Input : any unsorted bam file (.bam)
+
+    Output : a bam file sorted by coordinate (.sorted.bam) and its index (.sorted.bam.bai).
+
+    Usage
+
+    Run the following in the container.
+
+    run-sort-bam.sh <input_bam> <output_prefix>
+
+    # input_bam : any bam file to be sorted
+
+    # output_prefix : prefix of the output bam file'
+  - 'Set parameters according to the example: Suppose the input file is'
+  - output
+  - GM12878_bwa_1.bam and
+  - GM12878_bwa_2.bam
+  - the target is
+  - GM12878_bwa_sorted.bam and
+  - GM12878_bwa_sorted
+  - 'Generate the following sample script:
+
+    bash'
+  - scripts
+  - GM12878_bwa_1.bam
+  - bash
+  - You can install the tool
+  - but do not do any additional operations.You can install the tool
+  - but do not do any additional operations.Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - file names
+  - etc
+  path: .opencode/knowledge/tasks/task-0001-2-run-sort-bam-sh.md
+  origin_source: run-sort-bam.sh
+  origin_page: 6
+  source_entry_index: 1
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-sort-bam
+- id: task-0002
+  title: '3. run-bam2pairs.sh:'
+  summary: '3. run-bam2pairs.sh: Bam to pairs conversion module for Hi-C data, based
+    on samtools, bgzip and pairix. Input : any paired-end bam file Output : a chromosome-block-sorted
+    and bgzipped pairs pairs file that contains al...'
+  keywords:
+  - run-bam2pairs
+  - run-bam2pairs.sh
+  - 3. run-bam2pairs.sh
+  - '3. run-bam2pairs.sh:
+
+    Bam to pairs conversion module for Hi-C data'
+  - based on samtools
+  - 'bgzip and pairix.
+
+    Input : any paired-end bam file
+
+    Output : a chromosome-block-sorted and bgzipped pairs pairs file that contains
+    all the mapped read pairs in the bam file'
+  - 'along with its index (.bsorted.pairs.gz and .bsorted.pairs.gz.px2)
+
+    Usage
+
+    Run the following in the container.
+
+    run-bam2pairs.sh <input_bam> <output_prefix>
+
+    # input_bam : input bam file.
+
+    # output_prefix : prefix of the output pairs file.
+
+    Set parameters according to the example:
+
+    Suppose the input file is'
+  - output
+  - GM12878_bwa_sorted_1.bam and
+  - GM12878_bwa_sorted_2.bam
+  - the target is
+  - GM12878_bwa_sorted_pairs
+  - and
+  - 'Generate the following sample script:
+
+    bash'
+  - scripts
+  - GM12878_bwa_sorted_1.bam
+  - bash
+  - You can install the tool
+  - but do not do any additional operations.You can install the tool
+  - but do not do any additional operations.Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - samtools
+  path: .opencode/knowledge/tasks/task-0002-3-run-bam2pairs-sh.md
+  origin_source: run-bam2pairs.sh
+  origin_page: 7
+  source_entry_index: 2
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-bam2pairs
+- id: task-0003
+  title: '1. run-bwa-mem.sh:'
+  summary: '1. run-bwa-mem.sh: Alignment module for Hi-C data, based on bwa-mem. Input
+    : a pair of Hi-C fastq files Output : a bam file (Lossless, not sorted by coordinate)
+    Usage Run the following in the container. run-bwa-mem.sh...'
+  keywords:
+  - run-bwa-mem-sh-by-hic-workflow
+  - run-bwa-mem.sh by hic workflow
+  - 1. run-bwa-mem.sh
+  - '1. run-bwa-mem.sh:
+
+    Alignment module for Hi-C data'
+  - 'based on bwa-mem.
+
+    Input : a pair of Hi-C fastq files
+
+    Output : a bam file (Lossless'
+  - 'not sorted by coordinate)
+
+    Usage
+
+    Run the following in the container.
+
+    run-bwa-mem.sh <fastq1> <fastq2> <bwaIndex> <outdir> <output_prefix> <nThreads>
+
+    # fastq1'
+  - 'fastq2 : input fastq files'
+  - 'either gzipped or not
+
+    # bwaIndex : tarball for bwa index'
+  - 'tgz.
+
+    # outdir : output directory
+
+    # output_prefix : prefix of the output bam file.
+
+    # nThreads : number of threads'
+  - The script is invoked in the
+  - script
+  - path as bash
+  - run-bwa-mem.sh. Set parameters according to the example:I want to output under
+  - output
+  - '003'
+  - Reference file path for
+  - data
+  - hg38.bwaindex.tgz
+  - no need to extract the reference file
+  - and the first pair are
+  - 4DNFI15H1RVG.fastq.gz and
+  - 4DNFIZHUKESO.fastq.gz
+  - the second pair are for
+  - 4DNFIKVDGNJN.fastq.gz and
+  - 4DNFIEQ58J6G.fastq.gz
+  - the target is the first pair result is bwa_1.bam
+  - the second pair result is bwa.2.bam. the generated script is
+  - bash
+  - scripts
+  - run-bwa-mem.sh
+  - 4DNFI15H1RVG.fastq.gz
+  - bwa_1 64
+  - 4DN
+  - BWA
+  path: .opencode/knowledge/tasks/task-0003-1-run-bwa-mem-sh.md
+  origin_source: run-bwa-mem.sh by hic workflow
+  origin_page: 8
+  source_entry_index: 3
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-bwa-mem-sh-by-hic-workflow
+- id: task-0004
+  title: 2. run-pairsam-parse-sort.sh
+  summary: '2. run-pairsam-parse-sort.sh Runs pairsam parse and sort on a bwa-produced
+    bam file and produces a sorted pairsam file Input: a bam file Output: a pairsam
+    file Usage Run the following in the container run-pairsam-pars...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 2. run-pairsam-parse-sort.sh
+  - '2. run-pairsam-parse-sort.sh
+
+    Runs pairsam parse and sort on a bwa-produced bam file and produces a sorted pairsam
+    file
+
+    Input: a bam file
+
+    Output: a pairsam file
+
+    Usage
+
+    Run the following in the container
+
+    run-pairsam-parse-sort.sh <input_bam> <chromsizes> <outdir> <outprefix> <nthread>
+    <compress_program>
+
+    # input_bam : an input bam file.
+
+    # chromsizes : a chromsize file
+
+    # outdir : output directory
+
+    # outprefix : prefix of output files
+
+    # nthread : number of threads to use'
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - output
+  - aligned
+  - a1.bam
+  - and
+  - abc.bam
+  - the target is
+  - '003'
+  - pairsam_fix1.sam.pairs.gz and
+  - pairsam_fix2.sam.pairs.gz
+  - hg38.chrom.sizes
+  - is the a chromsize file. Generate the following sample script
+  - bash
+  - scripts
+  - run-pairsam-parse-sort.sh
+  - pairsam_fix1 64 lz4c
+  - pairsam_fix2 64 lz4c
+  - You can install the tool
+  - but do not do any additional operations.and 64 indicate the number of threads.Please
+    follow the example to generate rather than copy and paste completely
+  - e
+  - BWA
+  path: .opencode/knowledge/tasks/task-0004-2-run-pairsam-parse-sort-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 9
+  source_entry_index: 4
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0005
+  title: 3. run-pairsam-merge.sh
+  summary: '3. run-pairsam-merge.sh Merges a list of pairsam files Input: a list of
+    pairsam files Output: a merged pairsam file Usage Run the following in the container
+    run-pairsam-merge.sh <outprefix> <nthreads> <input_pairsam1>...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 3. run-pairsam-merge.sh
+  - '3. run-pairsam-merge.sh
+
+    Merges a list of pairsam files
+
+    Input: a list of pairsam files
+
+    Output: a merged pairsam file
+
+    Usage
+
+    Run the following in the container
+
+    run-pairsam-merge.sh <outprefix> <nthreads> <input_pairsam1> [<input_pairsam2>
+    [<input_pairsam3> [...]]]
+
+    # outprefix : prefix of output files
+
+    # nthreads : number of threads to use'
+  - '# input_pairsam : an input pairsam file'
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - output
+  - '003'
+  - pairsam_fix1.sam.pairs.gz
+  - and
+  - pairsam_fix2.sam.pairs.gz
+  - the target is
+  - out.merged.sam.pairs.gz . Generate the following sample script
+  - bash
+  - scripts
+  - run-pairsam-merge.sh
+  - out 64 '
+  - pairsam_fix2.sam.pairs.gz'
+  - You can install the tool
+  - but do not do any additional operations.Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - file names
+  - etc.and 64 indicate the number of threads
+  path: .opencode/knowledge/tasks/task-0005-3-run-pairsam-merge-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 10
+  source_entry_index: 5
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0006
+  title: 4. run-pairsam-markasdup.sh
+  summary: '4. run-pairsam-markasdup.sh Takes a pairsam file in and creates a pairsam
+    file with duplicate reads marked * Input: a pairsam file * Output: a duplicate-marked
+    pairsam file Usage Run the following in the container run...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 4. run-pairsam-markasdup.sh
+  - '4. run-pairsam-markasdup.sh
+
+    Takes a pairsam file in and creates a pairsam file with duplicate reads marked
+
+    * Input: a pairsam file
+
+    * Output: a duplicate-marked pairsam file
+
+    Usage
+
+    Run the following in the container
+
+    run-pairsam-markasdup.sh <input_pairsam>
+
+    # input_pairsam : an input pairsam file.
+
+    # outprefix : prefix of output files'
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - output
+  - '003'
+  - out.merged.sam.pairs.gz
+  - the target is
+  - out1
+  - Generate the following sample script
+  - bash
+  - scripts
+  - run-pairsam-markasdup.sh
+  - You can install the tool
+  - but do not do any additional operations.Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - file names
+  - etc.and 64 indicate the number of threads
+  path: .opencode/knowledge/tasks/task-0006-4-run-pairsam-markasdup-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 11
+  source_entry_index: 6
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0007
+  title: 5. run-pairsam-filter.sh
+  summary: '5. run-pairsam-filter.sh Takes in a pairsam file and creates a lossless,
+    annotated bam file and a filtered pairs file. Input: a pairsam file Output: an
+    annotated bam file and a filtered pairs file Usage Run the follow...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 5. run-pairsam-filter.sh
+  - '5. run-pairsam-filter.sh
+
+    Takes in a pairsam file and creates a lossless'
+  - 'annotated bam file and a filtered pairs file.
+
+    Input: a pairsam file
+
+    Output: an annotated bam file and a filtered pairs file
+
+    Usage
+
+    Run the following in the container
+
+    run-pairsam-filter.sh <input_pairsam> <outprefix> <chromsizes>
+
+    # input_pairsam : an input pairsam file.
+
+    # outprefix : prefix of output files
+
+    # chromsizes : a chromsize file'
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - sample_data
+  - outlala.merged.sam.pairs.gz
+  - the target is
+  - out
+  - out12345.dedup.pairs.gz and
+  - out12345.lossless.bam
+  - home
+  - agent
+  - POPGENAGENT
+  - data
+  - hg38.chrom.sizes is the a chromsize file. Generate the following sample script
+  - bash
+  - scripts
+  - run-pairsam-filter.sh
+  - out12345
+  - hg38.chrom.sizes
+  - You can install the tool
+  - but do not do any additional operations.Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - file names
+  - etc
+  path: .opencode/knowledge/tasks/task-0007-5-run-pairsam-filter-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 12
+  source_entry_index: 7
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0008
+  title: 6. run-merge-pairs.sh
+  summary: '6. run-merge-pairs.sh Alignment module for Hi-C data, based on merge-pairs.
+    Input : a set of pairs files, with their associated indices Output : a merged
+    pairs file and its index Usage Run the following in the contain...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 6. run-merge-pairs.sh
+  - '6. run-merge-pairs.sh
+
+    Alignment module for Hi-C data'
+  - based on merge-pairs
+  - 'Input : a set of pairs files'
+  - 'with their associated indices
+
+    Output : a merged pairs file and its index
+
+    Usage
+
+    Run the following in the container.
+
+    run-merge-pairs.sh <output_prefix> <pairs1> <pairs2> [<pairs3> [...]]'
+  - '# output_prefix : prefix of the output pairs file.
+
+    # pairs1'
+  - pairs2
+  - input pairs files
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - out
+  - out12345.dedup.pairs.gz
+  - the target is
+  - out321.pairs.gz. Generate the following sample script
+  - bash
+  - scripts
+  - run-merge-pairs.sh
+  - out321
+  - You can install the tool
+  - but do not do any additional operations. Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - file names
+  - etc
+  path: .opencode/knowledge/tasks/task-0008-6-run-merge-pairs-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 13
+  source_entry_index: 8
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0009
+  title: 7. run-cooler.sh
+  summary: '7. run-cooler.sh Runs cooler to create an unnormalized matrix .cool file,
+    taking in a (4dn-style) pairs file Input : a pairs file (.gz, along with .px2),
+    chrom.size file Output : a contact matrix file (.cool) Usage Ru...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 7. run-cooler.sh
+  - '7. run-cooler.sh
+
+    Runs cooler to create an unnormalized matrix .cool file'
+  - 'taking in a (4dn-style) pairs file
+
+    Input : a pairs file (.gz'
+  - along with .px2)
+  - 'chrom.size file
+
+    Output : a contact matrix file (.cool)
+
+    Usage
+
+    Run the following in the container.
+
+    run-cooler.sh <input_pairs> `<chromsize>` `<binsize>` `<ncores>` <output_prefix>
+    <max_split>
+
+    run-cooler.sh <input_pairs> <chromsize> <binsize> <ncores> <output_prefix> <max_split>
+
+    # input_pairs : a pairs file
+
+    # chromsize : a chromsize file
+
+    # binsize : binsize in bp
+
+    # ncores : number of cores to use
+
+    # output_prefix : prefix of the output cool file
+
+    # max_split : max_split argument for cooler (e.g. 2 which is default for cooler)'
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - home
+  - agent
+  - POPGENAGENT
+  - sample_data
+  - outlala.ff.pairs.gz
+  - the target is
+  - out
+  - out3
+  - data
+  - hg38.chrom.sizes is the a chromsize file. Generate the following sample script
+  - bash
+  - scripts
+  - run-cooler.sh
+  - hg38.chrom.sizes
+  - '1000'
+  - '32'
+  - '2'
+  - You can install the tool
+  - but do not do any additional operations.Please
+  - cooler
+  path: .opencode/knowledge/tasks/task-0009-7-run-cooler-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 14
+  source_entry_index: 9
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0010
+  title: 8. run-cooler-balance.sh
+  summary: '8. run-cooler-balance.sh Runs cooler to create a normalized matrix file,
+    taking in an unnormalized .cool file Input: a cool file (.cool) Output : a cool
+    file (.cool) Usage Run the following in the container. run-coole...'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 8. run-cooler-balance.sh
+  - '8. run-cooler-balance.sh
+
+    Runs cooler to create a normalized matrix file'
+  - 'taking in an unnormalized .cool file
+
+    Input: a cool file (.cool)
+
+    Output : a cool file (.cool)
+
+    Usage
+
+    Run the following in the container.
+
+    run-cooler-balance.sh <input_cool> <max_iter> <output_prefix> <chunksize>
+
+    # input_cool : a cool file (without normalization vector)
+
+    # max_iter : maximum number of iterations
+
+    # output_prefix : prefix of the output cool file
+
+    # chunksize : chunksize argument for cooler (e.g. 10000000 which is default for
+    cooler)'
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - output
+  - '003'
+  - cool_prefix.cool
+  - the target is
+  - cool_prefix_normalized.cool
+  - home
+  - agent
+  - POPGENAGENT
+  - data
+  - hg38.chrom.sizes is the a chromsize file. Generate the following sample script
+  - bash
+  - scripts
+  - run-cooler-balance.sh
+  - cool_prefix.cool 1000
+  - cool_prefix_normalized 10000000
+  - You can install the tool
+  - but do not do any additional operations.Please follow the example to generate
+    rather than copy and paste completely
+  - especially for folder names
+  - file names
+  - etc.and 64 indicate the number of threads
+  - cooler
+  path: .opencode/knowledge/tasks/task-0010-8-run-cooler-balance-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 15
+  source_entry_index: 10
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0011
+  title: 9. run-cool2multirescool.sh
+  summary: '9. run-cool2multirescool.sh Runs cooler coarsegrain to create multi-res
+    cool file from a .cool file. Input : a cool file (.cool) Output : a multires.cool
+    file (.multires.cool) Usage Run the following in the container....'
+  keywords:
+  - run-pairsam-parse-sort-sh-by-hic-workflow
+  - run-pairsam-parse-sort.sh by hic workflow
+  - 9. run-cool2multirescool.sh
+  - '9. run-cool2multirescool.sh
+
+    Runs cooler coarsegrain to create multi-res cool file from a .cool file.
+
+    Input : a cool file (.cool)
+
+    Output : a multires.cool file (.multires.cool)
+
+    Usage
+
+    Run the following in the container.
+
+    run-cool2multirescool.sh -i <input_cool> [-p <ncores>] [-o <output_prefix>] [-c
+    <chunksize>] [-j] [-u custom_res] [-B]
+
+    # input_cool : a (single-res) cool file with the highest resolution you want in
+    the multi-res cool file
+
+    # -p ncores: number of cores to use (default: 1)
+
+    # -o output_prefix: prefix of the output multires.cool file (default: out)
+
+    # -c chunksize : chunksize argument of cooler (e.g. default: 10000000)
+
+    # -j : juicer resolutions (default: use HiGlass resolutions)
+
+    # -u custom_res : custom resolutions separated by commas (e.g. 100000'
+  - '200000'
+  - '500000). The minimum of this set must match min_res (-r).
+
+    # -B : no balancing'
+  - normalizations
+  - 'Set parameters according to the example:
+
+    Suppose the input file is'
+  - output
+  - '003'
+  - cool_prefix_normalized.cool
+  - the target is
+  - multirescool_prefix.mcool. Generate the following sample script
+  - bash
+  - scripts
+  - run-cool2multirescool.sh -i
+  - cool_prefix_normalized.cool -p 8 -o
+  - multirescool_prefix -c
+  - cooler
+  path: .opencode/knowledge/tasks/task-0011-9-run-cool2multirescool-sh.md
+  origin_source: run-pairsam-parse-sort.sh by hic workflow
+  origin_page: 16
+  source_entry_index: 11
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: run-pairsam-parse-sort-sh-by-hic-workflow
+- id: task-0012
+  title: '1. **BWA-backtrack**: Optimized for short reads up to 100 bp.'
+  summary: '1. **BWA-backtrack**: Optimized for short reads up to 100 bp.'
+  keywords:
+  - bwa
+  - BWA-MEM
+  - '1. **BWA-backtrack**: Optimized for short reads up to 100 bp'
+  - BWA
+  path: .opencode/knowledge/tasks/task-0012-1-bwa-backtrack-optimized-for-short-reads-up-to-100-bp.md
+  origin_source: BWA-MEM
+  origin_page: 17
+  source_entry_index: 12
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bwa
+- id: task-0013
+  title: '2. **BWA-SW**: Optimized for longer sequences (70 bp to 1 Mbps), supports
+    long reads and split al...'
+  summary: '2. **BWA-SW**: Optimized for longer sequences (70 bp to 1 Mbps), supports
+    long reads and split alignment.'
+  keywords:
+  - bwa
+  - BWA-MEM
+  - '2. **BWA-SW**: Optimized for longer sequences (70 bp to 1 Mbps)'
+  - supports long reads and split al
+  - supports long reads and split alignment
+  - BWA
+  path: .opencode/knowledge/tasks/task-0013-2-bwa-sw-optimized-for-longer-sequences-70-bp-to-1-mbps-supports-long-reads-and-split-al.md
+  origin_source: BWA-MEM
+  origin_page: 17
+  source_entry_index: 12
+  source_subindex: 2
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bwa
+- id: task-0014
+  title: '3. **BWA-MEM**: The newest algorithm in the BWA suite, recommended for high-quality
+    reads. It is...'
+  summary: '3. **BWA-MEM**: The newest algorithm in the BWA suite, recommended for
+    high-quality reads. It is both fast and accurate, with support for read lengths
+    from 70 bp to 1 Mbps. BWA-MEM also performs well for reads between...'
+  keywords:
+  - samtools
+  - BWA-MEM
+  - '3. **BWA-MEM**: The newest algorithm in the BWA suite'
+  - recommended for high-quality reads. It is
+  - recommended for high-quality reads. It is both fast and accurate
+  - with support for read lengths from 70 bp to 1 Mbps. BWA-MEM also performs well
+    for reads between 70 and 100 bp
+  - Among these
+  - '**BWA-MEM** is widely used due to its balance of speed and accuracy'
+  - making it suitable for various downstream applications
+  - such as whole-genome variant calling. It supports long reads
+  - split alignment
+  - and chimeric reads
+  - and outputs standard SAM files that are compatible with tools like samtools and
+    GATK
+  - Before running BWA-MEM
+  - you must build an FM-index of the reference genome using the `bwa index` command.
+    Once the index is created
+  - you can align reads to the reference genome with the `bwa mem` sub-command
+  - '## Installation'
+  - BWA
+  path: .opencode/knowledge/tasks/task-0014-3-bwa-mem-the-newest-algorithm-in-the-bwa-suite-recommended-for-high-quality-reads-it-is.md
+  origin_source: BWA-MEM
+  origin_page: 17
+  source_entry_index: 12
+  source_subindex: 3
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: samtools
+- id: task-0015
+  title: '1. **Download the BWA package**: Obtain the source code from the official
+    repository.'
+  summary: '1. **Download the BWA package**: Obtain the source code from the official
+    repository.'
+  keywords:
+  - bwa
+  - BWA-MEM
+  - '1. **Download the BWA package**: Obtain the source code from the official repository'
+  - BWA
+  path: .opencode/knowledge/tasks/task-0015-1-download-the-bwa-package-obtain-the-source-code-from-the-official-repository.md
+  origin_source: BWA-MEM
+  origin_page: 17
+  source_entry_index: 12
+  source_subindex: 4
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bwa
+- id: task-0016
+  title: '2. **Compile and install**: Typically, you will use a C compiler (e.g.,
+    GCC). The official docume...'
+  summary: '2. **Compile and install**: Typically, you will use a C compiler (e.g.,
+    GCC). The official documentation provides detailed build instructions. 3. **Finalize
+    installation**: Make sure your environment variables or syst...'
+  keywords:
+  - samtools
+  - BWA-MEM
+  - '2. **Compile and install**: Typically'
+  - you will use a C compiler (e.g
+  - GCC). The official docume
+  - 'GCC). The official documentation provides detailed build instructions.
+
+    3. **Finalize installation**: Make sure your environment variables or system PATH
+    are set correctly so you can call `bwa` directly'
+  - '## Quick Start'
+  - 1. **Indexing the reference genome**
+  - '```bash
+
+    bwa index reference.fa
+
+    ```'
+  - This command builds the required FM-index for the reference genome `reference.fa`
+  - 2. **Running the alignment**
+  - '```bash
+
+    bwa mem reference.fa reads.fq > alignment.sam
+
+    ```'
+  - Aligns the reads in `reads.fq` to the reference `reference.fa` and writes the
+    alignment in SAM format to `alignment.sam`
+  - '## Examples of Popular Commands'
+  - Below are five common BWA-MEM usage examples
+  - 1. **Indexing a reference genome with a custom prefix**
+  - '```bash
+
+    bwa index -p ref_index reference.fa
+
+    ```'
+  - Generates an index for `reference.fa` with the prefix `ref_index`
+  - 2. **Single-end read alignment**
+  - '```bash
+
+    bwa mem ref_index reads.fq > aligned_reads.sam
+
+    ```'
+  - Aligns single-end reads in `reads.fq` to the reference indexed by `ref_index`
+    and outputs the result to `aligned_reads.sam`
+  - 3. **Paired-end read alignment**
+  - '```bash
+
+    bwa mem'
+  - BWA
+  path: .opencode/knowledge/tasks/task-0016-2-compile-and-install-typically-you-will-use-a-c-compiler-e-g-gcc-the-official-docume.md
+  origin_source: BWA-MEM
+  origin_page: 17
+  source_entry_index: 12
+  source_subindex: 5
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: samtools
+- id: task-0017
+  title: samtools – Utilities for the Sequence Alignment/Map (SAM) format
+  summary: '# samtools – Utilities for the Sequence Alignment/Map (SAM) format ##
+    NAME **samtools** – A suite of programs for manipulating alignments in the SAM
+    (Sequence Alignment/Map), BAM, and CRAM formats. ## SYNOPSIS (Select...'
+  keywords:
+  - samtools
+  - samtools – Utilities for the Sequence Alignment
+  - Map (SAM) format
+  - '# samtools – Utilities for the Sequence Alignment'
+  - '## NAME
+
+    **samtools** – A suite of programs for manipulating alignments in the SAM (Sequence
+    Alignment'
+  - Map)
+  - BAM
+  - and CRAM formats
+  - '## SYNOPSIS (Selected Examples)'
+  - '```bash
+
+    samtools addreplacerg -r ''ID:fish'' -r ''LB:1334'' -r ''SM:alpha'' -o output.bam
+    input.bam
+
+    samtools ampliconclip -b bed.file input.bam
+
+    samtools ampliconstats primers.bed in.bam
+
+    samtools bedcov aln.sorted.bam
+
+    samtools calmd in.sorted.bam ref.fasta
+
+    samtools cat out.bam in1.bam in2.bam in3.bam
+
+    samtools collate -o aln.name_collated.bam aln.sorted.bam
+
+    samtools consensus -o out.fasta in.bam
+
+    samtools coverage aln.sorted.bam
+
+    samtools cram-size -v -o out.size in.cram
+
+    samtools depad input.bam
+
+    samtools depth aln.sorted.bam
+
+    samtools dict -a GRCh38 -s "Homo sapiens" ref.fasta
+
+    samtools faidx ref.fasta
+
+    samtools fasta input.bam > output.fasta
+
+    samtools fastq input.bam > output.fastq
+
+    samtools fixmate in.namesorted.sam out.bam
+
+    samtools flags PAIRED'
+  - UNMAP
+  - 'MUNMAP
+
+    samtools flagstat aln.sorted.bam
+
+    samtools fqidx ref.fastq
+
+    samtools head in.bam
+
+    samtools idxstats aln.sorted.bam
+
+    samtools import input.fastq > output.bam
+
+    samtools index aln.sorted.bam
+
+    samtools markdup in.algnsort'
+  path: .opencode/knowledge/tasks/task-0017-samtools-utilities-for-the-sequence-alignment-map-sam-format.md
+  origin_source: samtools
+  origin_page: 18
+  source_entry_index: 13
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: samtools
+- id: task-0018
+  title: Synopsis
+  summary: '## Synopsis This tutorial demonstrates how to explore, process, and manipulate
+    SAM/BAM files using **samtools**. We will walk through installing samtools, creating
+    a demo directory, converting between SAM and BAM form...'
+  keywords:
+  - samtools
+  - Synopsis
+  - '## Synopsis
+
+    This tutorial demonstrates how to explore'
+  - process
+  - and manipulate SAM
+  - BAM files using **samtools**. We will walk through installing samtools
+  - creating a demo directory
+  - converting between SAM and BAM formats
+  - sorting
+  - indexing
+  - and selectively viewing alignments
+  - '## Installing samtools
+
+    ```bash
+
+    cd ~
+
+    mkdir src'
+  - '# optional if you do not already have a src directory
+
+    cd ~'
+  - src
+  - git clone https
+  - github.com
+  - 'htslib
+
+    git clone https'
+  - 'cd samtools
+
+    make
+
+    cp samtools ~'
+  - bin
+  - '# move the samtools binary to your PATH
+
+    ```'
+  - '## Setup
+
+    1. **Create** a new directory from your home directory'
+  - '```bash'
+  - cd ~
+  - mkdir samtools-demo
+  - cd samtools-demo
+  - '```
+
+    2. **Download** the sample SAM file and decompress'
+  - curl https
+  - s3.amazonaws.com
+  - samtools-tutorial
+  - sample.sam.gz > sample.sam.gz
+  - gzip -d sample.sam.gz
+  - '```'
+  - '## samtools help
+
+    Typing `samtools` alone displays the available subcommands. Examples:
+
+    ```bash
+
+    samtools view
+
+    samtools sort
+
+    samtools depth
+
+    ```'
+  - '## Converting SAM to BAM (`samtools view`)
+
+    1. **Convert** the SAM file to BAM'
+  - samtools view -S -b sample.sam > sample.bam
+  - 'Here:
+
+    '
+  path: .opencode/knowledge/tasks/task-0018-synopsis.md
+  origin_source: samtools
+  origin_page: 19
+  source_entry_index: 14
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: samtools
+- id: task-0019
+  title: FASTQ to BAM/CRAM
+  summary: '## FASTQ to BAM/CRAM Modern sequencing instruments typically produce *unaligned*
+    data in FASTQ format. We can store unaligned data in BAM or CRAM to include valuable
+    metadata (e.g., headers, auxiliary tags), but the f...'
+  keywords:
+  - samtools
+  - FASTQ to BAM
+  - CRAM
+  - '## FASTQ to BAM'
+  - 'CRAM
+
+    Modern sequencing instruments typically produce *unaligned* data in FASTQ format.
+    We can store unaligned data in BAM or CRAM to include valuable metadata (e.g'
+  - headers
+  - auxiliary tags)
+  - but the focus here is on producing a **sorted
+  - aligned** BAM or CRAM file
+  - '## Two Main Approaches
+
+    1. **Alignment'
+  - 'mapping** to a known reference.
+
+    2. **De-novo assembly** (not covered in detail here)'
+  - '## Example Workflow for Alignment'
+  - This pipeline takes paired FASTQ reads
+  - aligns them to a reference using Minimap2
+  - and produces a sorted
+  - duplicate-marked BAM or CRAM
+  - '### Steps Overview
+
+    1. **Map'
+  - 'align**
+
+    2. **Fix mate-pair issues** (e.g'
+  - 'with `samtools fixmate`)
+
+    3. **Mark duplicates (part 1)** – add tags needed for later duplication marking
+
+    4. **Sort** to positional order
+
+    5. **Mark duplicates (part 2)** – final marking of duplicates
+
+    6. **Convert** to final file format (BAM or CRAM)'
+  - '### Step 1: Mapping
+
+    ```bash
+
+    minimap2 -t 8 -a -x sr C.Elegans.fa \'
+  - 'SRR065390_1.fastq SRR065390_2.fastq -o CE.sam
+
+    ```
+
+    - `-t 8`: uses 8 threads.
+
+    - `-a`: output in SAM.
+
+    - `-x sr`: sets Minimap2 presets for paired-end short reads.
+
+    - Output is name-collated (read pairs are together)'
+  - whi
+  path: .opencode/knowledge/tasks/task-0019-fastq-to-bam-cram.md
+  origin_source: samtools
+  origin_page: 20
+  source_entry_index: 15
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: samtools
+- id: task-0020
+  title: WGS/WES Mapping to Variant Calls
+  summary: '# WGS/WES Mapping to Variant Calls ## Overview Typical DNA sequence analysis
+    involves three main phases: **Mapping**, **Improvement**, and **Variant Calling**.
+    Below is a common workflow illustrating these steps for W...'
+  keywords:
+  - samtools
+  - WGS
+  - WES Mapping to Variant Calls
+  - '# WGS'
+  - '## Overview
+
+    Typical DNA sequence analysis involves three main phases: **Mapping**'
+  - '**Improvement**'
+  - and **Variant Calling**. Below is a common workflow illustrating these steps for
+    Whole Genome Sequencing (WGS) or Whole Exome Sequencing (WES)
+  - '## 1. Mapping'
+  - 1. **Reference Preparation**
+  - '```bash'
+  - bwa index <ref.fa>
+  - '```'
+  - Prepares a Burrows–Wheeler Transform (BWT) index
+  - required for BWA
+  - 2. **Aligning Reads with BWA-MEM**
+  - bwa mem -R '@RG\tID:foo\tSM:bar\tLB:library1' <ref.fa> <read1.fq> <read2.fq> >
+    lane.sam
+  - The `-R` flag attaches read-group metadata (e.g
+  - sample name
+  - library). This data is crucial for downstream tools
+  - Output is in SAM format
+  - 3. **Fixmate**
+  - samtools fixmate -O bam <lane.sam> <lane_fixmate.bam>
+  - Cleans up pairing flags
+  - ensuring consistent FLAG and mate info
+  - 4. **Sort**
+  - samtools sort -O bam -o <lane_sorted.bam> -T <
+  - tmp
+  - lane_temp> <lane_fixmate.bam>
+  - Converts name-collated BAM to coordinate-sorted BAM for downstream steps
+  - '## 2. Improvement'
+  - '### 2.1 Indel Realignment (GATK)'
+  - Misalignment around INDELs can cause false
+  - BWA
+  path: .opencode/knowledge/tasks/task-0020-wgs-wes-mapping-to-variant-calls.md
+  origin_source: samtools
+  origin_page: 21
+  source_entry_index: 16
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: samtools
+- id: task-0021
+  title: Quick Guide to DiffBind
+  summary: '## Quick Guide to DiffBind **DiffBind** is an R/Bioconductor package for
+    analyzing differential binding (peaks) in ChIP-seq or ATAC-seq data. Below is
+    a concise workflow: --- ### 1. Installation & Setup ```r if (!requ...'
+  keywords:
+  - deseq2
+  - Diffbind
+  - Quick Guide to DiffBind
+  - '## Quick Guide to DiffBind'
+  - '**DiffBind** is an R'
+  - Bioconductor package for analyzing differential binding (peaks) in ChIP-seq or
+    ATAC-seq data. Below is a concise workflow
+  - '### 1. Installation & Setup
+
+    ```r
+
+    if (!requireNamespace("BiocManager"'
+  - quietly=TRUE))
+  - install.packages("BiocManager")
+  - BiocManager::install("DiffBind")
+  - 'library(DiffBind)
+
+    ```'
+  - '### 2. Prepare Input Files'
+  - '**SampleSheet.csv**: Each row describes one sample'
+  - including columns
+  - '`SampleID`'
+  - '`Tissue`'
+  - '`Factor`'
+  - '`Condition`'
+  - '`Replicate`'
+  - '`bamReads`'
+  - '`bamControl` (paths to BAM files)'
+  - '`Peaks` (path to called peak file)'
+  - '`PeakCaller` (e.g'
+  - MACS2)
+  - 'Example:
+
+    ```csv
+
+    SampleID'
+  - Tissue
+  - Factor
+  - Condition
+  - Replicate
+  - bamReads
+  - bamControl
+  - Peaks
+  - 'PeakCaller
+
+    S1'
+  - MCF7
+  - ER
+  - Responsive
+  - '1'
+  - S1.bam
+  - S1_input.bam
+  - S1_peaks.bed
+  - 'macs2
+
+    S2'
+  - '2'
+  - S2.bam
+  - S2_input.bam
+  - S2_peaks.bed
+  - 'macs2
+
+    ...
+
+    ```'
+  - '### 3. Read & Merge Peaks
+
+    ```r
+
+    # Read metadata from CSV and merge overlapping peaks
+
+    dbObj <- dba(sampleSheet = "SampleSheet.csv")
+
+    plot(dbObj)'
+  - '# Heatmap of sample correlations
+
+    ```'
+  - '### 4. Count Reads in Peaks
+
+    ```r
+
+    # Counts reads from BAM files in merged peak regions
+
+    # bUseSummarizeOverlaps=TRUE uses a more standa'
+  - DESeq2
+  path: .opencode/knowledge/tasks/task-0021-quick-guide-to-diffbind.md
+  origin_source: Diffbind
+  origin_page: 22
+  source_entry_index: 17
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-r-package
+  tool: deseq2
+- id: task-0022
+  title: 'Instructions for using the STAR tool: Below is a more concise overview of
+    STAR usage (sections 1....'
+  summary: 'Instructions for using the STAR tool: Below is a more concise overview
+    of STAR usage (sections 1.2 through 14.25), preserving all key instructions. ---
+    ## 1.2 Basic Work Flow **STAR** involves two main steps: 1. **Gen...'
+  keywords:
+  - star
+  - STAR
+  - 'Instructions for using the STAR tool: Below is a more concise overview of STAR
+    usage (sections 1'
+  - 'Instructions for using the STAR tool: Below is a more concise overview of STAR
+    usage (sections 1.2 through 14.25)'
+  - preserving all key instructions
+  - '## 1.2 Basic Work Flow'
+  - '**STAR** involves two main steps'
+  - 1. **Generating genome indexes**
+  - 'Input: reference genome FASTA (one or more) and (optional but recommended) annotation
+    GTF'
+  - 'Output: STAR-specific index files stored in a user-defined directory'
+  - 2. **Mapping reads to the genome**
+  - 'Input: the STAR index folder plus RNA-seq reads (FASTA'
+  - FASTQ)
+  - 'Output: alignment files (SAM'
+  - BAM)
+  - splice junctions
+  - unmapped reads
+  - logs
+  - etc
+  - '## 2. Generating Genome Indexes'
+  - '### 2.1 Basic Options'
+  - 'Example:
+
+    ```
+
+    STAR \'
+  - runThreadN <threads> \
+  - runMode genomeGenerate \
+  - genomeDir
+  - path
+  - to
+  - genomeDir \
+  - genomeFastaFiles
+  - genome.fa [more FASTAs...] \
+  - sjdbGTFfile
+  - annotations.gtf \
+  - 'sjdbOverhang <ReadLength - 1>
+
+    ```
+
+    - **--runThreadN**: number of threads.
+
+    - **--runMode genomeGenerate**: tells STAR to build the genome index.
+
+    - **--genomeDir**: output folder for index files.
+
+    - **--genomeFastaFiles**: one or more uncompressed FASTA files.
+
+    - **--sjdbGTFfile**: optional but strongly recommend'
+  path: .opencode/knowledge/tasks/task-0022-instructions-for-using-the-star-tool-below-is-a-more-concise-overview-of-star-usage-sections-1.md
+  origin_source: STAR
+  origin_page: 23
+  source_entry_index: 18
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: star
+- id: task-0023
+  title: Instructions for using the STAR-fusion:## STAR-Fusion Usage Guide
+  summary: Instructions for using the STAR-fusion:## STAR-Fusion Usage Guide This
+    document consolidates notes on running **STAR-Fusion** for fusion transcript detection,
+    either starting directly from FASTQ files or using an exis...
+  keywords:
+  - star-fusion
+  - STAR-Fusion
+  - Instructions for using the STAR-fusion:## STAR-Fusion Usage Guide
+  - This document consolidates notes on running **STAR-Fusion** for fusion transcript
+    detection
+  - either starting directly from FASTQ files or using an existing STAR alignment
+    (Kickstart mode). It also covers important parameters
+  - output format
+  - and integration with **FusionInspector**
+  - '### 1. Running STAR-Fusion'
+  - STAR-Fusion can be run in **two primary ways**
+  - 1. **Starting from FASTQ files (typical)**
+  - '**Paired-end FASTQ**'
+  - '```bash'
+  - STAR-Fusion \
+  - genome_lib_dir
+  - path
+  - to
+  - CTAT_resource_lib \
+  - left_fq reads_1.fq \
+  - right_fq reads_2.fq \
+  - output_dir star_fusion_outdir
+  - '```'
+  - '**Single-end FASTQ**'
+  - Here
+  - '`CTAT_resource_lib` is the path to the STAR-Fusion-compatible reference. STAR-Fusion
+    internally runs the STAR aligner with recommended fusion-related parameters'
+  - 2. **Using an existing STAR alignment (Kickstart mode)**
+  - If you have already aligned reads with STAR and have a `Chimeric.out.junction`
+    file
+  - you can feed that
+  - STAR
+  path: .opencode/knowledge/tasks/task-0023-instructions-for-using-the-star-fusion-star-fusion-usage-guide.md
+  origin_source: STAR-Fusion
+  origin_page: 24
+  source_entry_index: 19
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: star-fusion
+- id: task-0024
+  title: GO/KEGG enrichment analysis First, install the required packages.
+  summary: 'GO/KEGG enrichment analysis First, install the required packages. #source("https://bioconductor.org/biocLite.R")
+    #biocLite("DOSE") #biocLite("topGO") #biocLite("clusterProfiler") #biocLite("pathview")
+    Load the package...'
+  keywords:
+  - clusterprofiler
+  - GO
+  - KEGG enrichment analysis
+  - KEGG enrichment analysis First
+  - install the required packages
+  - '#source("https'
+  - bioconductor.org
+  - 'biocLite.R")
+
+    #biocLite("DOSE")
+
+    #biocLite("topGO")
+
+    #biocLite("clusterProfiler")
+
+    #biocLite("pathview")'
+  - Load the packages
+  - 'library(DOSE)
+
+    library(org.Hs.eg.db)
+
+    library(topGO)
+
+    library(clusterProfiler)
+
+    library(pathview)'
+  - Import the data. The raw data is a gene list with one column (with a header)
+  - data <- read.table("gene.list"
+  - 'header=TRUE)
+
+    data$GeneName <- as.character(data$GeneName)'
+  - Convert gene names using org.Hs.eg.db
+  - transID = bitr(data$GeneName
+  - fromType = "SYMBOL"
+  - toType = c("ENSEMBL"
+  - '"ENTREZID")'
+  - 'OrgDb = "org.Hs.eg.db"
+
+    )'
+  - Create folders to store the results
+  - 'dir.create("GO")
+
+    dir.create("KEGG")'
+  - GO_CC annotation
+  - CC <- enrichGO(transID$ENTREZID
+  - '"org.Hs.eg.db"'
+  - keyType = "ENTREZID"
+  - ont = "CC"
+  - pvalueCutoff = 0.05
+  - pAdjustMethod = "BH"
+  - 'qvalueCutoff = 0.1
+
+    )
+
+    CC <- setReadable(CC'
+  - OrgDb = org.Hs.eg.db)
+  - svg(file = "
+  - GO_CC_Dotplot.svg"
+  - 'bg = "transparent")
+
+    dotplot(CC'
+  - showCategory = 12
+  - colorBy = "pvalue"
+  - font.size = 8
+  - 'title = "GO_CC") # + theme(axis.text.y = element_text(angle = 45))
+
+    dev.off()'
+  - GO_CC_Barplot.svg"
+  - bg = "transparent"
+  - clusterProfiler
+  path: .opencode/knowledge/tasks/task-0024-go-kegg-enrichment-analysis-first-install-the-required-packages.md
+  origin_source: GO/KEGG enrichment analysis
+  origin_page: 25
+  source_entry_index: 20
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: clusterprofiler
+- id: task-0025
+  title: CHIP-seq Functional enrichment analysis
+  summary: CHIP-seq Functional enrichment analysis Once we have obtained the annotated
+    nearest genes, we can perform functional enrichment analysis to identify predominant
+    biological themes among these genes by incorporating bio...
+  keywords:
+  - clusterprofiler
+  - CHIP-seq Functional enrichment
+  - CHIP-seq Functional enrichment analysis
+  - 'CHIP-seq Functional enrichment analysis
+
+    Once we have obtained the annotated nearest genes'
+  - we can perform functional enrichment analysis to identify predominant biological
+    themes among these genes by incorporating biological knowledge provided by biological
+    ontologies. For instance
+  - Gene Ontology (GO) (Ashburner et al. 2000) annotates genes to biological processes
+  - molecular functions
+  - and cellular components in a directed acyclic graph structure
+  - Kyoto Encyclopedia of Genes and Genomes (KEGG) (Kanehisa et al. 2004) annotates
+    genes to pathways
+  - Disease Ontology (DO) (Schriml et al. 2011) annotates genes with human disease
+    association
+  - and Reactome (Croft et al. 2013) annotates genes to pathways and reactions
+  - ChIPseeker also provides a function
+  - seq2gene
+  - for linking genomic regions to genes in a many-to-many mapping. It considers the
+    host gene (exon
+  - intron)
+  - promoter region
+  - and flanking gene from intergenic regions that may be under cis-regulation. This
+    function is designed to link both coding and non-coding genomic regions to coding
+    genes and facilitate functional analysis
+  - Enrichment analysis is a widely used approach to identify biological themes. Several
+    Bioconductor packag
+  - clusterProfiler
+  path: .opencode/knowledge/tasks/task-0025-chip-seq-functional-enrichment-analysis.md
+  origin_source: CHIP-seq Functional enrichment
+  origin_page: 26
+  source_entry_index: 21
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: clusterprofiler
+- id: task-0026
+  title: DESeq2 Differential Expression Analysis Tutorial
+  summary: '# DESeq2 Differential Expression Analysis Tutorial DESeq2 is an R package
+    designed for normalization, visualization, and differential expression analysis
+    of high-dimensional count data. It uses empirical Bayes techniq...'
+  keywords:
+  - deseq2
+  - DESeq2
+  - DESeq2 Differential Expression Analysis Tutorial
+  - '# DESeq2 Differential Expression Analysis Tutorial'
+  - DESeq2 is an R package designed for normalization
+  - visualization
+  - and differential expression analysis of high-dimensional count data. It uses empirical
+    Bayes techniques to estimate log₂ fold changes and dispersion priors
+  - and then calculates their posterior values. Originally released in 2014 by Professor
+    Michael Love from the University of North Carolina
+  - DESeq2 continues to be updated and is one of the most widely used tools for differential
+    expression analysis
+  - '## 1. Installation'
+  - '### In R'
+  - Run the following commands in the R console or RStudio (for R version 4.2 and
+    above)
+  - '```r
+
+    if (!require("BiocManager"'
+  - quietly = TRUE))
+  - install.packages("BiocManager")
+  - 'BiocManager::install("DESeq2")
+
+    ```'
+  - '### In a conda Environment'
+  - Use the following command
+  - '```bash
+
+    conda install -c bioconda bioconductor-deseq2
+
+    ```'
+  - '## 2. Workflow Overview'
+  - This tutorial covers the following steps
+  - 1. **Data Import and Preprocessing**
+  - Load the count matrix (e.g
+  - '`gene_count_matrix.csv`)'
+  - Perform data cleaning
+  - such as fixing gene names with extra information and removing invalid rows
+  - Filter out genes with low expression
+  path: .opencode/knowledge/tasks/task-0026-deseq2-differential-expression-analysis-tutorial.md
+  origin_source: DESeq2
+  origin_page: 27
+  source_entry_index: 22
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: deseq2
+- id: task-0027
+  title: SortMeRNA Usage Documentation
+  summary: '# SortMeRNA Usage Documentation SortMeRNA is a tool designed for detecting
+    and filtering out rRNA reads from sequencing libraries. It supports both single-end
+    and paired-end data, and automatically recognizes file for...'
+  keywords:
+  - star
+  - SortMeRNA
+  - SortMeRNA Usage Documentation
+  - '# SortMeRNA Usage Documentation'
+  - SortMeRNA is a tool designed for detecting and filtering out rRNA reads from sequencing
+    libraries. It supports both single-end and paired-end data
+  - and automatically recognizes file formats and compression (e.g. plain fasta
+  - fastq or gzipped files)
+  - '## 1. Installation'
+  - '### Using conda'
+  - Install SortMeRNA with the following command
+  - '```bash
+
+    conda install sortmerna
+
+    ```'
+  - Verify the installation by checking the version
+  - '```bash
+
+    $ sortmerna --version
+
+    SortMeRNA version 4.3.2
+
+    Build Date: Apr'
+  - '2 2021
+
+    ```'
+  - '## 2. Basic Usage'
+  - The only required options are `--ref` and `--reads`. Options can be specified
+    using a single dash (e.g. `-ref` and `-reads`). File extensions are optional because
+    the format and compression are automatically recognized
+  - '### Example Commands'
+  - '**Single Reference and Single Reads File**'
+  - '```bash
+
+    sortmerna --ref REF_PATH --reads READS_PATH
+
+    ```'
+  - '**Multiple References**'
+  - '```bash
+
+    sortmerna --ref REF_PATH_1 --ref REF_PATH_2 --ref REF_PATH_3 --reads READS_PATH
+
+    ```'
+  - '**Paired-End Reads**'
+  - '```bash
+
+    sortmerna --ref REF_PATH_1 --ref REF_PATH_2 --ref REF_PATH_3 --reads READS_PATH_1
+    --reads READS_PATH_2
+
+    ```'
+  - '## 3. Example: Identifying'
+  - STAR
+  path: .opencode/knowledge/tasks/task-0027-sortmerna-usage-documentation.md
+  origin_source: SortMeRNA
+  origin_page: 28
+  source_entry_index: 23
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: star
+- id: task-0028
+  title: 'GeneFEAST run.yml Configuration Instructions must include:Step1: Use shell
+    command to create the...'
+  summary: 'GeneFEAST run.yml Configuration Instructions must include:Step1: Use shell
+    command to create the run.yml file. Description: You can create the configuration
+    file using shell redirection with `cat << ''EOF'' > run.yml`,...'
+  keywords:
+  - genefeast-run-yml-config
+  - GeneFEAST_run.yml_config
+  - 'GeneFEAST run.yml Configuration Instructions must include:Step1: Use shell command
+    to create the'
+  - 'GeneFEAST run.yml Configuration Instructions must include:Step1: Use shell command
+    to create the run.yml file. Description: You can create the configuration file
+    using shell redirection with `cat << ''EOF'' > run.yml`'
+  - followed by the structured YAML content
+  - 'and then closed with `EOF`. This approach allows easy inline editing in terminal
+    or scripts. Step2: Fill in configuration content. Description: The configuration
+    consists of FEA result references'
+  - gene-of-interest (GOI) files
+  - optional keyword annotations
+  - and tooltips options. The following fields must be specified
+  - FEAs
+  - 'id: "mmc2_3h"'
+  - 'goi_file: "'
+  - GeneFEAST
+  - mmc2_goi_3h.csv"
+  - 'fea_file: "'
+  - GO_BP_3h_0.0001_4GF_basic.csv"
+  - 'id: "mmc2_24h"'
+  - mmc2_goi_24h.csv"
+  - GO_BP_24h_0.0001_4GF_basic.csv"
+  - 'SEARCH_WORDS:
+
+    - Covid 19
+
+    - sars-cov-2'
+  - EA_FILE
+  - mmc2_3h_24h_extra_annotations.txt
+  - 'TOOLTIPS: True'
+  - Description of Fields
+  - 'id: A unique identifier for each FEA dataset'
+  - 'such as "mmc2_3h" or "mmc2_24h".
+
+    - goi_file: Path to the CSV file containing the gene-of-interest list.
+
+    - fea_file: Path to the functional enrichment analysis result CSV file'
+  path: .opencode/knowledge/tasks/task-0028-genefeast-run-yml-configuration-instructions-must-include-step1-use-shell-command-to-create-the.md
+  origin_source: GeneFEAST_run.yml_config
+  origin_page: 29
+  source_entry_index: 24
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: genefeast-run-yml-config
+- id: task-0029
+  title: 'MAFin Usage Instructions must include:Step1: Navigate to Output Directory.
+    Description: Before ex...'
+  summary: 'MAFin Usage Instructions must include:Step1: Navigate to Output Directory.
+    Description: Before executing the MAFin command, change the working directory
+    to the expected output path using `cd`. MAFin will write output...'
+  keywords:
+  - mafin-execution
+  - MAFin_execution
+  - 'MAFin Usage Instructions must include:Step1: Navigate to Output Directory. Description:
+    Before ex'
+  - 'MAFin Usage Instructions must include:Step1: Navigate to Output Directory. Description:
+    Before executing the MAFin command'
+  - change the working directory to the expected output path using `cd`. MAFin will
+    write output files to the current working directory. If your MAF input file is
+    specified using a relative path (e.g
+  - '`'
+  - data
+  - xxx`)
+  - adjust it relative to your new working directory
+  - such as `
+  - 'xxx`. Step2: Run MAFin command. Description: Execute the MAFin tool with the
+    desired parameters. The command-line must specify exactly one search type (`--regexes`'
+  - '`--kmers`'
+  - or `--jaspar_file`). Additional options include strand orientation
+  - number of processes
+  - and report format. Example Command
+  - '```bash
+
+    MAFin'
+  - sample.maf \
+  - regexes "CTGCCCGCA" "AGT" \
+  - search_in reference \
+  - reverse_complement no \
+  - processes 4 \
+  - 'detailed_report
+
+    ```'
+  - 'Expected Output: All result files will be written to the current directory'
+  - 'including:
+
+    - `regex_search_motif_hits.bed`
+
+    - `ref_genome_regex_search_AGT_motif_hits.json`
+
+    - `ref_genome_regex_search_AGT_motif_hits.csv` (if `--detailed_report` is used)'
+  - 'Command-Line Arguments:
+
+    - `maf_file` (Required): Path'
+  - MAFin
+  path: .opencode/knowledge/tasks/task-0029-mafin-usage-instructions-must-include-step1-navigate-to-output-directory-description-before-ex.md
+  origin_source: MAFin_execution
+  origin_page: 30
+  source_entry_index: 25
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: mafin-execution
+- id: task-0030
+  title: 'Transcriptome Annotation Comparison (Gencode vs Chess) using rnalib must
+    include:Step1: Set test...'
+  summary: 'Transcriptome Annotation Comparison (Gencode vs Chess) using rnalib must
+    include:Step1: Set test data directory. Description: Define the global test data
+    path for rnalib by monkey-patching `rna.__RNALIB_TESTDATA__`. G...'
+  keywords:
+  - rnalib-annotation-workflow
+  - rnalib_annotation_workflow
+  - 'Transcriptome Annotation Comparison (Gencode vs Chess) using rnalib must include:Step1:
+    Set test'
+  - 'Transcriptome Annotation Comparison (Gencode vs Chess) using rnalib must include:Step1:
+    Set test data directory. Description: Define the global test data path for rnalib
+    by monkey-patching `rna.__RNALIB_TESTDATA__`. Generate necessary resources if
+    missing by calling `rna.testdata.create_testdata`. Python code snippet'
+  - 'cat << ''EOF'' > setup_testdata.py
+
+    import rnalib as rna
+
+    rna.__RNALIB_TESTDATA__ = "rnalib_testdata'
+  - '"
+
+    rna.testdata.create_testdata(rna.__RNALIB_TESTDATA'
+  - (rna.testdata.test_resources
+  - 'rna.testdata.large_test_resources))
+
+    EOF'
+  - 'Step2: Load transcriptome data. Description: Instantiate `rna.Transcriptome`
+    objects for Gencode and Chess annotations using canonical GRCh38 chromosomes and
+    gene-type filtering (''protein_coding''). Use latest gene symbols via `gene_name_alias_file`.
+    Example code'
+  - 'cat << ''EOF'' > load_transcriptomes.py
+
+    import rnalib as rna
+
+    alias_txt = rna.get_resource("gene_aliases")
+
+    gencode_gff = rna.get_resource("full_gencode_gff")
+
+    chess_gff = rna.get_resource("full_chess_gtf")'
+  - txfilter = rna.TranscriptFilter(). \
+  - include_gene_types({'protein_coding'}). \
+  - include_chromosomes(rna.CANONICAL_CHROMOSOMES['GRCh38'])
+  - t_gc = rna.Transcriptome(
+  - annotation_g
+  path: .opencode/knowledge/tasks/task-0030-transcriptome-annotation-comparison-gencode-vs-chess-using-rnalib-must-include-step1-set-test.md
+  origin_source: rnalib_annotation_workflow
+  origin_page: 31
+  source_entry_index: 26
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: rnalib-annotation-workflow
+- id: task-0031
+  title: 'miRNA Annotation Comparison (MirGeneDB vs FlyBase) using rnalib must include:Step1:
+    Load transcri...'
+  summary: 'miRNA Annotation Comparison (MirGeneDB vs FlyBase) using rnalib must include:Step1:
+    Load transcriptome data from MirGeneDB and FlyBase. Description: Instantiate transcriptomes
+    for MirGeneDB and FlyBase annotations. Ex...'
+  keywords:
+  - rnalib-annotation-workflow
+  - rnalib_annotation_workflow
+  - 'miRNA Annotation Comparison (MirGeneDB vs FlyBase) using rnalib must include:Step1:
+    Load transcri'
+  - 'miRNA Annotation Comparison (MirGeneDB vs FlyBase) using rnalib must include:Step1:
+    Load transcriptome data from MirGeneDB and FlyBase. Description: Instantiate transcriptomes
+    for MirGeneDB and FlyBase annotations. Example snippet'
+  - 'cat << ''EOF'' > load_mirna_transcriptomes.py
+
+    import rnalib as rna'
+  - t_mg = rna.Transcriptome(
+  - annotation_gff=rna.get_resource("mirgendb_dme_gff")
+  - annotation_flavour='mirgenedb')
+  - with tempfile.TemporaryDirectory() as tmpdir
+  - 'res = {"flybase_full": {'
+  - '"uri": "https'
+  - ftp.flybase.net
+  - releases
+  - FB2023_06
+  - dmel_r6.55
+  - gtf
+  - dmel-all-r6.55.gtf.gz"
+  - '"filename": "dmel-all-r6.55.gtf.gz"}}'
+  - rna.testdata.create_testdata(tmpdir
+  - res)
+  - t_fb = rna.Transcriptome(
+  - annotation_gff=rna.get_resource("flybase_full"
+  - tmpdir
+  - 'annotation_flavour=''flybase'')
+
+    EOF'
+  - 'Step2: Exact and overlap-based annotation mapping. Description: Map MirGeneDB
+    and FlyBase annotations based on exact location and overlap using rnalib iterators.
+    Example code snippet'
+  - 'cat << ''EOF'' > mirna_annotation_mapping.py
+
+    import rnalib as rna'
+  - '# Exact mapping
+
+    mapping_exact = {name: t_mg_mir.get(mir'
+  - None) for mir
+  - name in t_fb_mir.items()}
+  - '# Overlap mapping
+
+    mappin'
+  path: .opencode/knowledge/tasks/task-0031-mirna-annotation-comparison-mirgenedb-vs-flybase-using-rnalib-must-include-step1-load-transcri.md
+  origin_source: rnalib_annotation_workflow
+  origin_page: 32
+  source_entry_index: 27
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: rnalib-annotation-workflow
+- id: task-0032
+  title: 'import scanpy as sc; import nichepca as npc; # Run nichePCA on raw counts
+    with default normalizat...'
+  summary: 'import scanpy as sc; import nichepca as npc; # Run nichePCA on raw counts
+    with default normalization pipeline (norm -> log1p -> agg -> pca); npc.wf.nichepca(adata,
+    knn=25); # Use nichePCA result for neighbor graph and...'
+  keywords:
+  - scanpy
+  - NichePCA_tutorial
+  - import scanpy as sc
+  - import nichepca as npc
+  - '# Run nichePCA on raw counts with default normalizat'
+  - '# Run nichePCA on raw counts with default normalization pipeline (norm -> log1p
+    -> agg -> pca)'
+  - npc.wf.nichepca(adata
+  - knn=25)
+  - '# Use nichePCA result for neighbor graph and Leiden clustering'
+  - sc.pp.neighbors(adata
+  - use_rep="X_npca")
+  - sc.tl.leiden(adata
+  - resolution=0.5)
+  - '# If analyzing multiple samples'
+  - specify the sample key
+  - knn=25
+  - sample_key="sample")
+  - '# If cell type labels exist'
+  - run nichePCA using cell-type defined niches
+  - obs_key='cell_type')
+  - '# Customize the normalization pipeline'
+  - e.g
+  - skip median normalization
+  - pipeline=["log1p"
+  - '"agg"'
+  - '"pca"])'
+  - '# Apply PCA before aggregation step'
+  - pipeline=["norm"
+  - '"log1p"'
+  - '"pca"'
+  - '"agg"])'
+  - '# Run nichePCA without PCA step'
+  - '# Higher knn values (e.g'
+  - 25) work well in brain data
+  - lower knn values (e.g
+  - 10) suit kidney data
+  - '# Install the latest version via GitHub'
+  - pip install git+https
+  - github.com
+  - imsb-uke
+  - nichepca.git@main
+  - '# Example: testing Leiden clustering with multiple resolutions'
+  - import numpy as np
+  - import
+  - Scanpy
+  path: .opencode/knowledge/tasks/task-0032-import-scanpy-as-sc-import-nichepca-as-npc-run-nichepca-on-raw-counts-with-default-normalizat.md
+  origin_source: NichePCA_tutorial
+  origin_page: 33
+  source_entry_index: 28
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: scanpy
+- id: task-0033
+  title: 'Tutorial for wgatools: wgatools is a cross-platform and ultrafast toolkit
+    for manipulating Whole...'
+  summary: 'Tutorial for wgatools: wgatools is a cross-platform and ultrafast toolkit
+    for manipulating Whole Genome Alignment files (MAF, PAF, CHAIN formats). Basic
+    usage starts with ''wgatools <COMMAND>'' and each command supports...'
+  keywords:
+  - nichepca-tutorial
+  - NichePCA_tutorial
+  - 'Tutorial for wgatools: wgatools is a cross-platform and ultrafast toolkit for
+    manipulating Whole'
+  - 'Tutorial for wgatools: wgatools is a cross-platform and ultrafast toolkit for
+    manipulating Whole Genome Alignment files (MAF'
+  - PAF
+  - 'CHAIN formats). Basic usage starts with ''wgatools <COMMAND>'' and each command
+    supports ''-h'' for help. Common conversions include: ''wgatools maf2paf test.maf
+    > test.paf'''
+  - 'or reverse with ''wgatools paf2maf test.paf --target target.fa --query query.fa
+    > test.maf''. Piping is supported: ''cat test.maf'
+  - wgatools maf2paf
+  - wgatools paf2maf -g target.fa -q query.fa > test.maf'. For visualizations
+  - '''wgatools dotplot -f paf test.paf > out.html'' generates base-level dotplots'
+  - 'or use ''-m overview'' for summary plots: ''wgatools dotplot test.maf -m overview
+    > overview.html''. Extract specific genomic regions from MAF using indexed access:
+    ''wgatools maf-index test.maf'' and ''wgatools maf-ext test.maf -r chr1:1-100''.
+    To browse MAF interactively in terminal: ''wgatools tview test.maf''. Variant
+    calling from MAF or PAF (with genome fasta) is supported: ''wgatools call test.maf
+    -s -l0'' or ''wgatools call test.paf -s -l0 --target target.fa --query query.fa
+    -f paf''. Splitting large MAF blocks by length: ''wgatools chunk -l 100 test.maf
+    -o chunked.maf''. Generate alignment statistics'
+  path: .opencode/knowledge/tasks/task-0033-tutorial-for-wgatools-wgatools-is-a-cross-platform-and-ultrafast-toolkit-for-manipulating-whole.md
+  origin_source: NichePCA_tutorial
+  origin_page: 34
+  source_entry_index: 29
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: nichepca-tutorial
+- id: task-0034
+  title: 'Squidpy:# Step 1: Load the example dataset'
+  summary: 'Squidpy:# Step 1: Load the example dataset adata = sq.datasets.slideseqv2()
+    # Step 2: Preprocess the data sc.pp.filter_genes(adata, min_cells=3) sc.pp.normalize_total(adata)
+    sc.pp.log1p(adata) sc.pp.highly_variable_ge...'
+  keywords:
+  - seurat
+  - Squidpy
+  - 'Squidpy:# Step 1: Load the example dataset'
+  - 'Squidpy:# Step 1: Load the example dataset
+
+    adata = sq.datasets.slideseqv2()'
+  - '# Step 2: Preprocess the data
+
+    sc.pp.filter_genes(adata'
+  - 'min_cells=3)
+
+    sc.pp.normalize_total(adata)
+
+    sc.pp.log1p(adata)
+
+    sc.pp.highly_variable_genes(adata'
+  - flavor="seurat"
+  - 'n_top_genes=2000)
+
+    adata = adata['
+  - adata.var.highly_variable]
+  - '# Step 3: Calculate spatial neighbors
+
+    sq.gr.spatial_neighbors(adata)'
+  - '# Step 4: Calculate neighborhood enrichment
+
+    sq.gr.nhood_enrichment(adata'
+  - cluster_key="cluster")
+  - '# Step 5: Visualize the neighborhood enrichment results
+
+    sq.pl.nhood_enrichment(adata'
+  - '# Step 6: Calculate Ripley’s K statistic
+
+    sq.gr.ripley(adata'
+  - cluster_key="cluster"
+  - mode="K"
+  - 'max_dist=500)
+
+    sq.pl.ripley(adata'
+  - mode="K")
+  - '# Step 7: Calculate ligand - receptor interactions
+
+    sq.gr.ligrec(adata'
+  - n_perms=100
+  - clusters=["Polydendrocytes"
+  - '"Oligodendrocytes"])
+
+    sq.pl.ligrec(adata'
+  - source_groups="Oligodendrocytes"
+  - target_groups=["Polydendrocytes"]
+  - pvalue_threshold=0.05
+  - swap_axes=True)
+  - '# Step 8: Calculate spatial autocorrelation
+
+    sq.gr.spatial_autocorr(adata'
+  - 'mode="moran")
+
+    print(adata.uns["moranI"].head(10))'
+  - Seurat
+  path: .opencode/knowledge/tasks/task-0034-squidpy-step-1-load-the-example-dataset.md
+  origin_source: Squidpy
+  origin_page: 35
+  source_entry_index: 30
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: seurat
+- id: task-0035
+  title: 'Scanpy:# Step 1: Load the example dataset'
+  summary: 'Scanpy:# Step 1: Load the example dataset adata = sc.datasets.pbmc3k()
+    # Step 2: Preprocess the data sc.pp.filter_genes(adata, min_cells=3) sc.pp.normalize_total(adata)
+    sc.pp.log1p(adata) sc.pp.highly_variable_genes(a...'
+  keywords:
+  - seurat
+  - Scanpy
+  - 'Scanpy:# Step 1: Load the example dataset'
+  - 'Scanpy:# Step 1: Load the example dataset
+
+    adata = sc.datasets.pbmc3k()'
+  - '# Step 2: Preprocess the data
+
+    sc.pp.filter_genes(adata'
+  - 'min_cells=3)
+
+    sc.pp.normalize_total(adata)
+
+    sc.pp.log1p(adata)
+
+    sc.pp.highly_variable_genes(adata'
+  - flavor="seurat"
+  - 'n_top_genes=2000)
+
+    adata = adata['
+  - adata.var.highly_variable]
+  - '# Step 3: Calculate spatial neighbors
+
+    sc.pp.neighbors(adata)'
+  - '# Step 4: Calculate neighborhood enrichment
+
+    sc.tl.neighborhood_enrichment(adata'
+  - cluster_key="louvain")
+  - '# Step 5: Visualize the neighborhood enrichment results
+
+    sc.pl.neighborhood_enrichment(adata'
+  - '# Step 6: Calculate Ripley’s K statistic
+
+    sc.tl.ripley(adata'
+  - cluster_key="louvain"
+  - mode="K"
+  - 'max_dist=500)
+
+    sc.pl.ripley(adata'
+  - mode="K")
+  - '# Step 7: Calculate ligand - receptor interactions
+
+    sc.tl.ligrec(adata'
+  - n_perms=100
+  - clusters=["CD14+ Monocytes"
+  - '"CD4+ T cells"])
+
+    sc.pl.ligrec(adata'
+  - source_groups="CD4+ T cells"
+  - target_groups=["CD14+ Monocytes"]
+  - pvalue_threshold=0.05
+  - swap_axes=True)
+  - '# Step 8: Calculate spatial autocorrelation
+
+    sc.tl.spatial(adata)
+
+    print(adata.uns["spatial"].head(10))'
+  - Seurat
+  path: .opencode/knowledge/tasks/task-0035-scanpy-step-1-load-the-example-dataset.md
+  origin_source: Scanpy
+  origin_page: 36
+  source_entry_index: 31
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: seurat
+- id: task-0036
+  title: spaceranger:spaceranger is a set of analysis pipelines that process 10x Genomics
+    Visium data with...
+  summary: spaceranger:spaceranger is a set of analysis pipelines that process 10x
+    Genomics Visium data with brightfield or fluorescence microscope images, allowing
+    users to map the whole transcriptome in a variety of tissues. T...
+  keywords:
+  - spaceranger
+  - spaceranger:spaceranger is a set of analysis pipelines that process 10x Genomics
+    Visium data with
+  - spaceranger:spaceranger is a set of analysis pipelines that process 10x Genomics
+    Visium data with brightfield or fluorescence microscope images
+  - allowing users to map the whole transcriptome in a variety of tissues. This tool
+    has been installed
+  - just use spaceranger command dierectly
+  - do not download spaceranger repeatly.e.g
+  - spaceranger count --id=Visium_FFPE_Mouse_Brain_RUN1
+  - create-bam=false
+  - transcriptome=
+  - path
+  - to
+  - refdata-gex-mm10-2020-A
+  - —-probe-set=
+  - adult_mouse_brain_FFPE
+  - Visium_FFPE_Mouse_Brain_probe_set.csv
+  - fastqs=
+  - Visium_FFPE_Mouse_Brain_fastqs
+  - image=
+  - Visium_FFPE_Mouse_Brain_image.jpg
+  - slide=V11J26-127
+  - area=B1
+  path: .opencode/knowledge/tasks/task-0036-spaceranger-spaceranger-is-a-set-of-analysis-pipelines-that-process-10x-genomics-visium-data-with.md
+  origin_source: spaceranger
+  origin_page: 37
+  source_entry_index: 32
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: spaceranger
+- id: task-0037
+  title: To install this package run one of the following:conda install bioconda::rmats
+    conda install bioc...
+  summary: 'To install this package run one of the following:conda install bioconda::rmats
+    conda install bioconda/label/cf201901::rmats ,rMATS: rMATS (replicate Multivariate
+    Analysis of Transcript Splicing) is a computational too...'
+  keywords:
+  - samtools
+  - rMATS
+  - To install this package run one of the following:conda install bioconda::rmats
+    conda install bioc
+  - To install this package run one of the following:conda install bioconda::rmats
+    conda install bioconda
+  - label
+  - cf201901::rmats
+  - 'rMATS: rMATS (replicate Multivariate Analysis of Transcript Splicing) is a computational
+    tool designed for detecting differential alternative splicing events from RNA-Seq
+    data with biological replicates. It quantifies splicing variations by computing
+    inclusion levels and applying a likelihood-ratio test for statistical significance'
+  - '### Supported Alternative Splicing Events:
+
+    - **Skipped exon (SE)** - Exon skipping events.
+
+    - **Alternative 5'' splice site (A5SS)** - Variable splice site at the 5'' end.
+
+    - **Alternative 3'' splice site (A3SS)** - Variable splice site at the 3'' end.
+
+    - **Mutually exclusive exons (MXE)** - Selection between two alternative exons.
+
+    - **Retained intron (RI)** - Intron retention events'
+  - '### Dependencies:
+
+    - Python (>=3.6.12 or 2.7.15)
+
+    - Cython (0.29.21 or 0.29.15 for Python 2)
+
+    - numpy (>=1.16.6)
+
+    - BLAS'
+  - 'LAPACK
+
+    - GNU Scientific Library (GSL 2.5)
+
+    - GCC (>=5.4.0)
+
+    - gfortran (Fortran 77)
+
+    - CMake (3.15.4)
+
+    - PAIRADISE (optional)
+
+    - Samtools (optional)
+
+    - STAR (optional)'
+  - '### Installation & Setup:
+
+    ```bash
+
+    # Build rMATS with required dependencies
+
+    '
+  - STAR
+  path: .opencode/knowledge/tasks/task-0037-to-install-this-package-run-one-of-the-following-conda-install-bioconda-rmats-conda-install-bioc.md
+  origin_source: rMATS
+  origin_page: 38
+  source_entry_index: 33
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: samtools
+- id: task-0038
+  title: 'To install this package run one of the following:'
+  summary: 'To install this package run one of the following: conda install -c bioconda
+    bedtools BEDTools: BEDTools is a powerful suite of utilities for comparing, manipulating,
+    and analyzing genomic intervals in the popular BED,...'
+  keywords:
+  - bedtools
+  - BEDTools
+  - To install this package run one of the following
+  - 'To install this package run one of the following:
+
+    conda install -c bioconda bedtools'
+  - 'BEDTools: BEDTools is a powerful suite of utilities for comparing'
+  - manipulating
+  - and analyzing genomic intervals in the popular BED
+  - GFF
+  - and VCF formats. It is widely used for a variety of tasks including interval manipulation
+  - intersection analysis
+  - and genomic file format conversion. BEDTools supports many types of genomic file
+    formats
+  - allowing users to easily perform complex analyses on genomic data
+  - '### Supported Operations:
+
+    - **Intersect**: Find common regions between multiple files.
+
+    - **Merge**: Combine overlapping or adjacent intervals into a single interval.
+
+    - **Closest**: Find the closest feature from a set of intervals.
+
+    - **Subtract**: Subtract one set of intervals from another.
+
+    - **Shuffle**: Randomly shuffle intervals while preserving their length.
+
+    - **Map**: Map a set of intervals to another file to extract values.
+
+    - **Split**: Split intervals into smaller chunks based on specific criteria'
+  - '### Dependencies:
+
+    - Python (>=3.6)
+
+    - GCC (>=5.4.0)
+
+    - CMake (>=3.10.2)'
+  - '### Installation & Setup:
+
+    ```bash
+
+    # Install BEDTools using conda
+
+    conda install -c bioconda bedtools
+
+    ```'
+  - '### Usage:
+
+    #### *'
+  path: .opencode/knowledge/tasks/task-0038-to-install-this-package-run-one-of-the-following.md
+  origin_source: BEDTools
+  origin_page: 39
+  source_entry_index: 34
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: bedtools
+- id: task-0039
+  title: 'To install Bowtie2, run one of the following commands:'
+  summary: 'To install Bowtie2, run one of the following commands: ### Installation
+    Instructions: ```bash # Install Bowtie2 using conda conda install -c bioconda
+    bowtie2 # Or install via package manager on Linux sudo apt-get inst...'
+  keywords:
+  - bowtie2
+  - Bowtie2
+  - To install Bowtie2
+  - run one of the following commands
+  - '### Installation Instructions:
+
+    ```bash
+
+    # Install Bowtie2 using conda
+
+    conda install -c bioconda bowtie2'
+  - '# Or install via package manager on Linux
+
+    sudo apt-get install bowtie2
+
+    ```'
+  - '### Bowtie2 Overview:
+
+    Bowtie2 is a fast and efficient aligner that aligns short reads to a reference
+    genome. It can handle paired-end and single-end read files in FASTQ format'
+  - and produces output in the widely used SAM format. It is optimized for aligning
+    short DNA reads with high accuracy
+  - '### Supported Features:
+
+    - **Single-End Read Alignment**: Aligns single-end reads to a reference genome.
+
+    - **Paired-End Read Alignment**: Aligns paired-end reads to a reference genome.
+
+    - **Output in SAM format**: SAM format is widely used for storing sequence alignments.
+
+    - **Multithreading support**: Bowtie2 supports multithreading to speed up the
+    alignment process'
+  - '### Installation & Setup:
+
+    ```bash
+
+    # Install Bowtie2 using conda
+
+    conda install -c bioconda bowtie2
+
+    ```'
+  - '### Basic Usage:
+
+    #### **Aligning single-end reads**
+
+    ```bash
+
+    bowtie2 -x reference_genome -U reads.fastq -S output.sam
+
+    ```
+
+    #### **Aligning paired-end reads**
+
+    ```bash
+
+    bowtie2 -x reference_genome -1 rea'
+  path: .opencode/knowledge/tasks/task-0039-to-install-bowtie2-run-one-of-the-following-commands.md
+  origin_source: Bowtie2
+  origin_page: 40
+  source_entry_index: 35
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: bowtie2
+- id: task-0040
+  title: To run PureCLIP in basic mode, it requires BAM and BAI files, the reference
+    genome and a specifie...
+  summary: 'To run PureCLIP in basic mode, it requires BAM and BAI files, the reference
+    genome and a specified output file: ```bash pureclip -i aligned.prepro.R2.bam
+    -bai aligned.prepro.R2.bam.bai -g ref.hg19.fa -iv ''chr1;chr2;ch...'
+  keywords:
+  - pureclip
+  - To run PureCLIP in basic mode
+  - it requires BAM and BAI files
+  - the reference genome and a specifie
+  - the reference genome and a specified output file
+  - '```bash
+
+    pureclip -i aligned.prepro.R2.bam -bai aligned.prepro.R2.bam.bai -g ref.hg19.fa
+    -iv ''chr1'
+  - chr2
+  - chr3
+  - ''' -nt 10 -o PureCLIP.crosslink_sites.bed
+
+    ```'
+  - With `-iv` the chromosomes (or transcripts) can be specified that will be used
+    to learn the parameters of PureCLIP’s HMM. This reduces the memory consumption
+    and runtime
+  - '### Input Control Mode
+
+    To run PureCLIP with input control data'
+  - ''' -nt 10 -o PureCLIP.crosslink_sites
+
+    ```'
+  - '### CL-Motif Scores
+
+    To address crosslinking sequence bias'
+  - CL-motif scores can be incorporated
+  - '#### Compute CL-Motif Scores:
+
+    ```bash
+
+    wget -O motifs.txt https'
+  - raw.githubusercontent.com
+  - skrakau
+  - PureCLIP_data
+  - master
+  - common_CL-motifs
+  - 'dreme.w10.k4.txt
+
+    wget -O motifs.xml https'
+  - 'dreme.w10.k4.xml
+
+    compute_CLmotif_scores.sh ref.hg19.fa aligned.prepro.R2.bam motifs.xml motifs.txt
+    fimo_clmotif_occurences.bed
+
+    ```'
+  - '#### Run PureCLIP with CL-Motif:
+
+    ```bash
+
+    pureclip -i aligned.pr'
+  path: .opencode/knowledge/tasks/task-0040-to-run-pureclip-in-basic-mode-it-requires-bam-and-bai-files-the-reference-genome-and-a-specifie.md
+  origin_source: pureclip
+  origin_page: 41
+  source_entry_index: 36
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: pureclip
+- id: task-0041
+  title: 'ribotricer: Accurate detection of short and long active ORFs using Ribo-seq
+    data'
+  summary: 'ribotricer: Accurate detection of short and long active ORFs using Ribo-seq
+    data ribotricer is a tool that helps in detecting actively translating open reading
+    frames (ORFs) from Ribo-seq data. It works by assessing t...'
+  keywords:
+  - ribotricer
+  - 'ribotricer: Accurate detection of short and long active ORFs using Ribo-seq data'
+  - ribotricer is a tool that helps in detecting actively translating open reading
+    frames (ORFs) from Ribo-seq data. It works by assessing the periodicity of candidate
+    ORFs. To run ribotricer
+  - the following files are required
+  - '1. **Genome annotation file** in GTF format (handles variations of GTFs including
+    GENCODE and Ensembl)
+
+    2. **Reference genome file** in FASTA format
+
+    3. **Alignment file** in BAM format'
+  - '### Installation
+
+    To install ribotricer using conda'
+  - execute
+  - '```bash
+
+    conda create -n ribotricer_env -c bioconda ribotricer
+
+    conda activate ribotricer_env
+
+    ribotricer --help
+
+    ```'
+  - Alternatively
+  - to install locally
+  - download the source code and run
+  - '```bash
+
+    make install
+
+    ```'
+  - '### Workflow
+
+    1. **Preparing candidate ORFs**'
+  - Run ribotricer to find all candidate ORFs from the GTF and FASTA files
+  - '```bash'
+  - ribotricer prepare-orfs --gtf {GTF} --fasta {FASTA} --prefix {RIBOTRICER_INDEX_PREFIX}
+  - '```'
+  - 'This generates a file with candidate ORFs: `{PREFIX}_candidate_orfs.tsv`'
+  - 2. **Detecting translating ORFs**
+  - Detect active translation from BAM file
+  - ribotricer detect-orfs --bam {BAM}
+  path: .opencode/knowledge/tasks/task-0041-ribotricer-accurate-detection-of-short-and-long-active-orfs-using-ribo-seq-data.md
+  origin_source: ribotricer
+  origin_page: 42
+  source_entry_index: 37
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: ribotricer
+- id: task-0042
+  title: 1. Genome Index Generation
+  summary: '### 1. Genome Index Generation To use STAR, you first need to generate
+    genome indexes from reference genome FASTA and annotation GTF files: ```bash STAR
+    --runThreadN 8 \ --runMode genomeGenerate \ --genomeDir /path/to...'
+  keywords:
+  - star
+  - STAR
+  - 1. Genome Index Generation
+  - '### 1. Genome Index Generation
+
+    To use STAR'
+  - you first need to generate genome indexes from reference genome FASTA and annotation
+    GTF files
+  - '```bash
+
+    STAR --runThreadN 8 \'
+  - runMode genomeGenerate \
+  - genomeDir
+  - path
+  - to
+  - genomeDir \
+  - genomeFastaFiles
+  - genome.fa \
+  - sjdbGTFfile
+  - annotations.gtf \
+  - 'sjdbOverhang 99
+
+    ```'
+  - '**Option explanations:**
+
+    - `--runThreadN`: Number of threads to use. Should match the available CPU cores.
+
+    - `--runMode genomeGenerate`: Tells STAR to generate genome indices.
+
+    - `--genomeDir`: Directory where the genome index will be saved. Must be created
+    beforehand and have write permission.
+
+    - `--genomeFastaFiles`: Reference genome file(s) in FASTA format.
+
+    - `--sjdbGTFfile`: Gene annotations in GTF format (optional but highly recommended).
+
+    - `--sjdbOverhang`: ReadLength - 1. For example'
+  - for 100 bp reads
+  - use 99
+  - Make sure the chromosome names in the GTF and FASTA files match exactly (e.g.
+    both use `chr1`
+  - '`chr2`'
+  - etc.)
+  - '### 2. Read Mapping
+
+    After index generation'
+  - map reads using the following command
+  - readFilesIn
+  - read1.fq
+  - read2.fq
+  path: .opencode/knowledge/tasks/task-0042-1-genome-index-generation.md
+  origin_source: STAR
+  origin_page: 43
+  source_entry_index: 38
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: star
+- id: task-0043
+  title: 'Small RNA sequencing and miRNA prediction workflow consists of the following
+    key steps:'
+  summary: 'Small RNA sequencing and miRNA prediction workflow consists of the following
+    key steps: Step 1: Quality Control and Trimming Description: Perform quality control
+    on raw sequencing reads, remove low-quality reads, and...'
+  keywords:
+  - featurecounts
+  - workflow
+  - Small RNA sequencing and miRNA prediction workflow consists of the following key
+    steps
+  - 'Step 1: Quality Control and Trimming
+
+    Description: Perform quality control on raw sequencing reads'
+  - remove low-quality reads
+  - 'and trim sequencing adapters.
+
+    Commands'
+  - fastqc
+  - data
+  - '*.fastq.gz -o'
+  - output
+  - '010'
+  - qc_reports
+  - fastp -i
+  - C1.fastq.gz -o
+  - trimmed_C1.fastq.gz
+  - 'Step 2: Genome Alignment
+
+    Description: Build index from genome and align reads with Bowtie1. Convert to
+    sorted BAM.
+
+    Commands'
+  - bowtie-build
+  - genome.fa
+  - genome_index
+  - bowtie -S -p 16
+  - trimmed_C1.fastq.gz >
+  - C1.sam
+  - samtools view -bS
+  - samtools sort -o
+  - aligned_C1.bam
+  - samtools index
+  - 'aligned_C1.bam
+
+    Checkpoint: Use `samtools flagstat` to verify alignments are not empty'
+  - 'Step 3: miRNA Quantification
+
+    Description: Use featureCounts with a SAF annotation file.
+
+    Commands'
+  - python convert_fasta_to_saf.py -i
+  - miRBase_mature.fasta -o
+  - miRBase_mature.saf
+  - featureCounts -T 4 -F SAF -a
+  - miRBase_mature.saf -o
+  - miRNA_expression_matrix.txt
+  - 'aligned_C1.bam
+
+    Checkpoint: Ensur'
+  - FastQC
+  - samtools
+  - featureCounts
+  path: .opencode/knowledge/tasks/task-0043-small-rna-sequencing-and-mirna-prediction-workflow-consists-of-the-following-key-steps.md
+  origin_source: workflow
+  origin_page: 44
+  source_entry_index: 39
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: featurecounts
+- id: task-0044
+  title: 'Step 3: miRNA Quantification'
+  summary: 'Step 3: miRNA Quantification Description: Quantify miRNA expression using
+    featureCounts and SAF-format annotation derived from known miRNA sequences. Input
+    Required: Aligned BAM files, miRNA annotation in SAF format....'
+  keywords:
+  - featurecounts
+  - workflow
+  - 'Step 3: miRNA Quantification'
+  - 'Step 3: miRNA Quantification
+
+    Description: Quantify miRNA expression using featureCounts and SAF-format annotation
+    derived from known miRNA sequences.
+
+    Input Required: Aligned BAM files'
+  - 'miRNA annotation in SAF format.
+
+    Expected Output: Expression matrix (miRNA counts).
+
+    Tools Used: featureCounts.
+
+    Commands'
+  - '```bash'
+  - '# Convert FASTA to SAF'
+  - python
+  - scripts
+  - convert_fasta_to_saf.py -i
+  - data
+  - miRBase_mature.fasta -o
+  - miRBase_mature.saf
+  - '# Run featureCounts'
+  - featureCounts -F SAF -T 4 -a
+  - miRBase_mature.saf -o
+  - output
+  - '010'
+  - miRNA_expression_matrix.txt
+  - aligned_C1.bam
+  - '```
+
+    **Checkpoint:** Check that `miRNA_expression_matrix.txt` has non-zero counts'
+  - featureCounts
+  path: .opencode/knowledge/tasks/task-0044-step-3-mirna-quantification.md
+  origin_source: workflow
+  origin_page: 45
+  source_entry_index: 40
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: featurecounts
+- id: task-0045
+  title: If miRBase_mature.fasta is available, convert it to SAF format using the
+    provided script. Command...
+  summary: 'If miRBase_mature.fasta is available, convert it to SAF format using the
+    provided script. Command: `python ./scripts/convert_fasta_to_saf.py -i ./data/miRBase_mature.fasta
+    -o ./data/miRBase_mature.saf`. Alternatively,...'
+  keywords:
+  - featurecounts
+  - task
+  - If miRBase_mature.fasta is available
+  - convert it to SAF format using the provided script. Command
+  - 'convert it to SAF format using the provided script. Command: `python'
+  - scripts
+  - convert_fasta_to_saf.py -i
+  - data
+  - miRBase_mature.fasta -o
+  - miRBase_mature.saf`. Alternatively
+  - 'the user may prepare SAF manually before running featureCounts. Required SAF
+    fields are: GeneID'
+  - Chr
+  - Start
+  - End
+  - Strand
+  - featureCounts
+  path: .opencode/knowledge/tasks/task-0045-if-mirbase-mature-fasta-is-available-convert-it-to-saf-format-using-the-provided-script-command.md
+  origin_source: task
+  origin_page: 46
+  source_entry_index: 41
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: featurecounts
+- id: task-0046
+  title: 'Tool: STAR'
+  summary: 'Tool: STAR Purpose: Align 3′ end-seq reads to a reference genome with
+    high precision. Input: Trimmed FASTQ file and genome index Output: Sorted BAM
+    file Command Example: STAR --runThreadN 4 --genomeDir ./genome_index...'
+  keywords:
+  - star
+  - task
+  - 'Tool: STAR'
+  - 'Tool: STAR
+
+    Purpose: Align 3′ end-seq reads to a reference genome with high precision.
+
+    Input: Trimmed FASTQ file and genome index
+
+    Output: Sorted BAM file
+
+    Command Example'
+  - STAR --runThreadN 4 --genomeDir
+  - genome_index --readFilesIn trimmed.fastq.gz --readFilesCommand zcat --outFileNamePrefix
+  - output
+  - sample --outSAMtype BAM SortedByCoordinate
+  - STAR
+  path: .opencode/knowledge/tasks/task-0046-tool-star.md
+  origin_source: task
+  origin_page: 47
+  source_entry_index: 42
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: star
+- id: task-0047
+  title: 'Tool: bedtools genomecov'
+  summary: 'Tool: bedtools genomecov Purpose: Generate base-level coverage profile
+    from BAM file to infer PAS sites. Input: BAM file Output: Coverage profile Command
+    Example: bedtools genomecov -ibam aligned.bam -d > coverage.txt'
+  keywords:
+  - bedtools
+  - task
+  - 'Tool: bedtools genomecov'
+  - 'Tool: bedtools genomecov
+
+    Purpose: Generate base-level coverage profile from BAM file to infer PAS sites.
+
+    Input: BAM file
+
+    Output: Coverage profile
+
+    Command Example'
+  - bedtools genomecov -ibam aligned.bam -d > coverage.txt
+  path: .opencode/knowledge/tasks/task-0047-tool-bedtools-genomecov.md
+  origin_source: task
+  origin_page: 48
+  source_entry_index: 43
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bedtools
+- id: task-0048
+  title: 'Tool: filter_pas_peaks.py'
+  summary: 'Tool: filter_pas_peaks.py Purpose: Custom Python script to detect PAS
+    peaks from coverage profile. Automatically selects regions with local maxima at
+    3′ ends. Input: Coverage profile (text) Output: PAS_sites.bed Comma...'
+  keywords:
+  - task
+  - 'Tool: filter_pas_peaks.py'
+  - 'Tool: filter_pas_peaks.py
+
+    Purpose: Custom Python script to detect PAS peaks from coverage profile. Automatically
+    selects regions with local maxima at 3′ ends.
+
+    Input: Coverage profile (text)
+
+    Output: PAS_sites.bed
+
+    Command Example'
+  - python filter_pas_peaks.py --input coverage.txt --output PAS_sites.bed
+  path: .opencode/knowledge/tasks/task-0048-tool-filter-pas-peaks-py.md
+  origin_source: task
+  origin_page: 49
+  source_entry_index: 44
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: task
+- id: task-0049
+  title: 'Tool: bedtools genomecov'
+  summary: 'Tool: bedtools genomecov Purpose: Generate base-level coverage profile
+    from BAM file to infer PAS sites. Input: BAM file Output: Coverage profile Command
+    Example: bedtools genomecov -ibam aligned.bam -d > coverage.txt'
+  keywords:
+  - bedtools
+  - task
+  - 'Tool: bedtools genomecov'
+  - 'Tool: bedtools genomecov
+
+    Purpose: Generate base-level coverage profile from BAM file to infer PAS sites.
+
+    Input: BAM file
+
+    Output: Coverage profile
+
+    Command Example'
+  - bedtools genomecov -ibam aligned.bam -d > coverage.txt
+  path: .opencode/knowledge/tasks/task-0049-tool-bedtools-genomecov.md
+  origin_source: task
+  origin_page: 50
+  source_entry_index: 45
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bedtools
+- id: task-0050
+  title: 'Tool: extract_3p_end'
+  summary: 'Tool: extract_3p_end Purpose: Extract the last 20 bases (3′ end) from
+    each read in a trimmed FASTQ file without using a reference genome. Input: Trimmed
+    FASTQ file Output: FASTA file containing 3′ end sequences Note:...'
+  keywords:
+  - extract-3p-end
+  - extract_3p_end
+  - 'Tool: extract_3p_end'
+  - 'Tool: extract_3p_end
+
+    Purpose: Extract the last 20 bases (3′ end) from each read in a trimmed FASTQ
+    file without using a reference genome.
+
+    Input: Trimmed FASTQ file
+
+    Output: FASTA file containing 3′ end sequences
+
+    Note: This is an internal logic operation for extracting sequence tails'
+  - not a script call
+  path: .opencode/knowledge/tasks/task-0050-tool-extract-3p-end.md
+  origin_source: extract_3p_end
+  origin_page: 51
+  source_entry_index: 46
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: extract-3p-end
+- id: task-0051
+  title: 'Tool: featureCounts'
+  summary: 'Tool: featureCounts Purpose: Count reads mapped to genomic features such
+    as genes or exons for isoform or gene expression quantification. Input: Sorted
+    and indexed BAM file, GTF annotation file Output: Read count matr...'
+  keywords:
+  - featurecounts
+  - featureCounts
+  - 'Tool: featureCounts'
+  - 'Tool: featureCounts
+
+    Purpose: Count reads mapped to genomic features such as genes or exons for isoform
+    or gene expression quantification.
+
+    Input: Sorted and indexed BAM file'
+  - 'GTF annotation file
+
+    Output: Read count matrix
+
+    Command Example: featureCounts -a annotation.gtf -o counts.txt aligned.bam
+
+    Note: Supports long-read BAM input as long as it''s properly aligned and sorted'
+  path: .opencode/knowledge/tasks/task-0051-tool-featurecounts.md
+  origin_source: featureCounts
+  origin_page: 52
+  source_entry_index: 47
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: featurecounts
+- id: task-0052
+  title: 'The single-cell data marker gene identification workflow includes the following
+    steps: Step 1: Da...'
+  summary: 'The single-cell data marker gene identification workflow includes the
+    following steps: Step 1: Data Reading and Initialization, reading .h5ad or 10x
+    Genomics matrix.mtx files using scanpy.read_10x_mtx or scanpy.read_h...'
+  keywords:
+  - scanpy
+  - single-cell data marker gene identification
+  - 'The single-cell data marker gene identification workflow includes the following
+    steps: Step 1: Da'
+  - 'The single-cell data marker gene identification workflow includes the following
+    steps: Step 1: Data Reading and Initialization'
+  - reading .h5ad or 10x Genomics matrix.mtx files using scanpy.read_10x_mtx or scanpy.read_h5ad
+    to generate an AnnData object containing the raw gene expression matrix (rows=genes
+  - columns=cells) and metadata
+  - 'Step 2: Quality Control (QC)'
+  - filtering low-quality cells based on mitochondrial gene percentage (≤20%)
+  - total UMIs (≥500)
+  - and detected genes using scanpy.pp.calculate_qc_metrics
+  - scanpy.pp.filter_cells
+  - outputting filtered high-quality data
+  - 'Step 3: Normalization and Highly Variable Gene Selection'
+  - standardizing QC-processed data via scanpy.pp.normalize_total
+  - scanpy.pp.log1p
+  - and scanpy.pp.highly_variable_genes to obtain a normalized expression matrix and
+    a list of highly variable genes (HVGs)
+  - 'Step 4: Dimensionality Reduction and Visualization'
+  - performing PCA dimensionality reduction using scanpy.tl.pca
+  - constructing a KNN neighborhood graph with scanpy.pp.neighbors
+  - output an AnnData object with dimension-reduced results
+  - 'Step 5: Clustering Analysis'
+  - applying Leiden algorithm via scanpy.tl.leiden and UMAP
+  - t-SNE visualization with scanpy.tl.umap base
+  - Scanpy
+  path: .opencode/knowledge/tasks/task-0052-the-single-cell-data-marker-gene-identification-workflow-includes-the-following-steps-step-1-da.md
+  origin_source: single-cell data marker gene identification
+  origin_page: 53
+  source_entry_index: 48
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: scanpy
+- id: task-0053
+  title: Single-cell full-process analysis with top marker genes includes Data Reading
+    and Initialization,...
+  summary: Single-cell full-process analysis with top marker genes includes Data Reading
+    and Initialization, Quality Control (QC), Normalization and Highly Variable Gene
+    Selection, Dimensionality Reduction and Visualization, Clu...
+  keywords:
+  - scanpy
+  - Single cell full-process analysis with top marker genes
+  - Single-cell full-process analysis with top marker genes includes Data Reading
+    and Initialization
+  - Quality Control (QC)
+  - Normalization and Highly Variable Gene Selection
+  - Dimensionality Reduction and Visualization
+  - Clustering Analysis
+  - Whole-Cell Differential Expression Analysis
+  - Result Filtering and Top Marker Gene Extraction
+  - Cell Type Annotation & Functional Enrichment Analysis
+  - Purity Analysis
+  - Functional Heterogeneity Analysis
+  - 'Regulatory Network Analysis includes the following steps: Step 1: Data Reading
+    and Initialization'
+  - reading .h5ad or 10x Genomics matrix.mtx files using scanpy.read_10x_mtx or scanpy.read_h5ad
+    to generate an AnnData object containing the raw gene expression matrix (rows=genes
+  - columns=cells) and metadata
+  - 'Step 2: Quality Control (QC)'
+  - filtering low-quality cells based on mitochondrial gene percentage (≤20%)
+  - total UMIs (≥500)
+  - and detected genes using scanpy.pp.calculate_qc_metrics
+  - scanpy.pp.filter_cells
+  - outputting filtered high-quality data
+  - 'Step 3: Normalization and Highly Variable Gene Selection'
+  - standardizing QC-processed data via scanpy.pp.normalize_total
+  - scanpy.pp.log1p
+  - and scanpy.pp.highly_variable_genes to obtain a normalized expression matrix
+  - Scanpy
+  path: .opencode/knowledge/tasks/task-0053-single-cell-full-process-analysis-with-top-marker-genes-includes-data-reading-and-initialization.md
+  origin_source: Single cell full-process analysis with top marker genes
+  origin_page: 54
+  source_entry_index: 49
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-conda
+  tool: scanpy
+- id: task-0054
+  title: 'Single-cell perform clustering analysis includes the following steps: Step
+    1: Data Reading and In...'
+  summary: 'Single-cell perform clustering analysis includes the following steps:
+    Step 1: Data Reading and Initialization, reading .h5ad or 10x Genomics matrix.mtx
+    files using scanpy.read_10x_mtx or scanpy.read_h5ad to generate a...'
+  keywords:
+  - scanpy
+  - Single-cell perform clustering analysis
+  - 'Single-cell perform clustering analysis includes the following steps: Step 1:
+    Data Reading and In'
+  - 'Single-cell perform clustering analysis includes the following steps: Step 1:
+    Data Reading and Initialization'
+  - reading .h5ad or 10x Genomics matrix.mtx files using scanpy.read_10x_mtx or scanpy.read_h5ad
+    to generate an AnnData object containing the raw gene expression matrix (rows=genes
+  - columns=cells) and metadata
+  - 'Step 2: Quality Control (QC)'
+  - filtering low-quality cells based on mitochondrial gene percentage (≤20%)
+  - total UMIs (≥500)
+  - and detected genes using scanpy.pp.calculate_qc_metrics
+  - scanpy.pp.filter_cells
+  - outputting filtered high-quality data
+  - 'Step 3: Normalization and Highly Variable Gene Selection'
+  - standardizing QC-processed data via scanpy.pp.normalize_total
+  - scanpy.pp.log1p
+  - and scanpy.pp.highly_variable_genes to obtain a normalized expression matrix and
+    a list of highly variable genes (HVGs)
+  - 'Step 4: Dimensionality Reduction and Visualization'
+  - performing PCA dimensionality reduction using scanpy.tl.pca
+  - constructing a KNN neighborhood graph with scanpy.pp.neighbors
+  - output an AnnData object with dimension-reduced results
+  - 'Step 5: Clustering Analysis'
+  - applying Leiden algorithm via scanpy.tl.leiden and UMAP
+  - t-SNE visualization with scanpy.tl.umap based on dimension-re
+  - Scanpy
+  path: .opencode/knowledge/tasks/task-0054-single-cell-perform-clustering-analysis-includes-the-following-steps-step-1-data-reading-and-in.md
+  origin_source: Single-cell perform clustering analysis
+  origin_page: 55
+  source_entry_index: 50
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: scanpy
+- id: task-0055
+  title: Before performing nanopore data process (except for modification identification,
+    for example, ide...
+  summary: Before performing nanopore data process (except for modification identification,
+    for example, identifying methylation) from nanopore files. If basecalling file
+    (fastq/bam) is not supplied, firstly using basecaller.sh...
+  keywords:
+  - dorado
+  - Before performing nanopore data process (except for modification identification
+  - for example
+  - ide
+  - identifying methylation) from nanopore files. If basecalling file (fastq
+  - bam) is not supplied
+  - 'firstly using basecaller.sh command to do simplex basecalling to generate basecalling
+    file before other steps.
+
+    Input : a file folder containing nanopore files in fast5'
+  - 'pod5 format and a reference genome fa file
+
+    Output : a bam file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - 'basecaller.sh <pod5dir> <out>
+
+    # pod5dir: Path of a file folder containing nanopore files in fast5'
+  - 'pod5 format.
+
+    # out : name of output bam file'
+  path: .opencode/knowledge/tasks/task-0055-before-performing-nanopore-data-process-except-for-modification-identification-for-example-ide.md
+  origin_source: dorado
+  origin_page: 56
+  source_entry_index: 51
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: dorado
+- id: task-0056
+  title: To extract signal from nanopore files. Each step of the process has been
+    organized into specific...
+  summary: To extract signal from nanopore files. Each step of the process has been
+    organized into specific executable scripts. The bash tool is used. All the scripts
+    are in the folder ./scripts/. The steps must be generated in...
+  keywords:
+  - nanopore-extract-signal
+  - nanopore extract signal
+  - To extract signal from nanopore files. Each step of the process has been organized
+    into specific
+  - To extract signal from nanopore files. Each step of the process has been organized
+    into specific executable scripts. The bash tool is used. All the scripts are in
+    the folder
+  - scripts
+  - The steps must be generated in strict order
+  path: .opencode/knowledge/tasks/task-0056-to-extract-signal-from-nanopore-files-each-step-of-the-process-has-been-organized-into-specific.md
+  origin_source: nanopore extract signal
+  origin_page: 57
+  source_entry_index: 52
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: nanopore-extract-signal
+- id: task-0057
+  title: '1. map_fastq2_ref.sh:'
+  summary: '1. map_fastq2_ref.sh: Map combined fastq file to reference genome(fa file).
+    Generates sam file. Input : a combined nanopore fastq file and a reference genome
+    fa file Output : a sam file Usage Run the following in the...'
+  keywords:
+  - map-fastq2-ref
+  - map_fastq2_ref.sh
+  - 1. map_fastq2_ref.sh
+  - '1. map_fastq2_ref.sh:
+
+    Map combined fastq file to reference genome(fa file). Generates sam file.
+
+    Input : a combined nanopore fastq file and a reference genome fa file
+
+    Output : a sam file'
+  - 'Usage
+
+    Run the following in the container.
+
+    '
+  - scripts
+  - 'map_fastq2_ref.sh <fq> <output_sam> <ref> <nThreads>
+
+    # fq : input fastq file.
+
+    # output_sam : name of output sam file.
+
+    # ref : reference genome fa file
+
+    # nThreads : number of threads'
+  path: .opencode/knowledge/tasks/task-0057-1-map-fastq2-ref-sh.md
+  origin_source: map_fastq2_ref.sh
+  origin_page: 58
+  source_entry_index: 53
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: map-fastq2-ref
+- id: task-0058
+  title: '2. indexbam.sh:'
+  summary: '2. indexbam.sh: index bam and generate statistics - coverage, error rate,
+    number of reads. Input: a sam file Output: a sorted bam file Usage Run the following
+    in the container ./scripts/indexbam.sh <nthread> <input_sa...'
+  keywords:
+  - indexbam
+  - indexbam.sh
+  - 2. indexbam.sh
+  - '2. indexbam.sh:
+
+    index bam and generate statistics - coverage'
+  - error rate
+  - 'number of reads.
+
+    Input: a sam file
+
+    Output: a sorted bam file
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - 'indexbam.sh <nthread> <input_sam> <outputbam>
+
+    # nthread : number of threads to use
+
+    # input_sam : an input sam file
+
+    # outputbam : name of output bam file'
+  path: .opencode/knowledge/tasks/task-0058-2-indexbam-sh.md
+  origin_source: indexbam.sh
+  origin_page: 59
+  source_entry_index: 54
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: indexbam
+- id: task-0059
+  title: '3. eventalign.sh:'
+  summary: '3. eventalign.sh: index fast5 to fastq with nanopolish index tool and
+    run nanopolish for fastq files to compute an improved consensus sequence from
+    the draft genome assembly produced by minimap2, thus, get the signal....'
+  keywords:
+  - eventalign
+  - eventalign.sh
+  - 3. eventalign.sh
+  - '3. eventalign.sh:
+
+    index fast5 to fastq with nanopolish index tool and run nanopolish for fastq files
+    to compute an improved consensus sequence from the draft genome assembly produced
+    by minimap2'
+  - thus
+  - 'get the signal.
+
+    Input: a combined nanopore fastq file'
+  - 'a file folder containing nanopore files in fast5 format and a reference genome
+    fa file
+
+    Output: a summary file in format sum and a output txt file
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - 'eventalign.sh <fq> <fast5dir> <sortedBam> <ref> <npsummary> <nThreads> <np_out>
+
+    # fq: a combined fastq file.
+
+    # fast5dir: Path of a file folder containing nanopore files in fast5 format.
+
+    # sortedBam: a sorted bam file.
+
+    # ref : reference genome fa file
+
+    # nThreads : number of threads.
+
+    # npsummary : name of merged summary file .
+
+    # np_out : name of output txt file'
+  path: .opencode/knowledge/tasks/task-0059-3-eventalign-sh.md
+  origin_source: eventalign.sh
+  origin_page: 60
+  source_entry_index: 55
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: eventalign
+- id: task-0060
+  title: 'IF you: Please use this data to identify methylation from nanopore files.
+    Each step of the proces...'
+  summary: 'IF you: Please use this data to identify methylation from nanopore files.
+    Each step of the process has been organized into specific executable scripts(2
+    steps). The bash tool is used. All the scripts are in the folder...'
+  keywords:
+  - nanopore-methylation-identification
+  - nanopore methylation identification
+  - 'IF you: Please use this data to identify methylation from nanopore files. Each
+    step of the proces'
+  - 'IF you: Please use this data to identify methylation from nanopore files. Each
+    step of the process has been organized into specific executable scripts(2 steps).
+    The bash tool is used. All the scripts are in the folder'
+  - scripts
+  - The steps must be generated in strict order
+  path: .opencode/knowledge/tasks/task-0060-if-you-please-use-this-data-to-identify-methylation-from-nanopore-files-each-step-of-the-proces.md
+  origin_source: nanopore methylation identification
+  origin_page: 61
+  source_entry_index: 56
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: nanopore-methylation-identification
+- id: task-0061
+  title: '1. methy_iden.sh:'
+  summary: '1. methy_iden.sh: Do modified basecalling from nanopore pod5 files. Input
+    : a file folder containing nanopore files in fast5/pod5 format and a reference
+    genome fa file Output : a bam file. Usage Run the following in t...'
+  keywords:
+  - methy-iden
+  - methy_iden.sh
+  - 1. methy_iden.sh
+  - Do modified basecalling from nanopore pod5 files
+  - 'Input : a file folder containing nanopore files in fast5'
+  - 'pod5 format and a reference genome fa file
+
+    Output : a bam file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - 'methy_iden.sh <pod5dir> <ref> <out>
+
+    # pod5dir: Path of a file folder containing nanopore files in fast5'
+  - 'pod5 format.
+
+    # ref : reference genome fa file
+
+    # out : name of output bam file'
+  path: .opencode/knowledge/tasks/task-0061-1-methy-iden-sh.md
+  origin_source: methy_iden.sh
+  origin_page: 62
+  source_entry_index: 57
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: methy-iden
+- id: task-0062
+  title: '2. basecall_sum.sh:'
+  summary: '2. basecall_sum.sh: output a tab-separated file with read level sequencing
+    information from the bam file. Input : basecaller’s output bam file Output : a
+    summary tsv file. Usage Run the following in the container ./sc...'
+  keywords:
+  - basecall-sum
+  - basecall_sum.sh
+  - 2. basecall_sum.sh
+  - output a tab-separated file with read level sequencing information from the bam
+    file
+  - 'Input : basecaller’s output bam file'
+  - 'Output : a summary tsv file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - basecall_sum.sh <bam> <out>
+  - '# bam : basecaller’s output bam file.
+
+    # out : name of output tsv file'
+  path: .opencode/knowledge/tasks/task-0062-2-basecall-sum-sh.md
+  origin_source: basecall_sum.sh
+  origin_page: 63
+  source_entry_index: 58
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: basecall-sum
+- id: task-0063
+  title: 'IF you: Please use this data to do complete quantitative analysis for nanopore
+    files. Each step o...'
+  summary: 'IF you: Please use this data to do complete quantitative analysis for
+    nanopore files. Each step of the process has been organized into specific executable
+    scripts(13 steps). The bash tool is used. All the scripts are...'
+  keywords:
+  - nanopore-complete-quantitative-analysis
+  - nanopore complete quantitative analysis
+  - 'IF you: Please use this data to do complete quantitative analysis for nanopore
+    files. Each step o'
+  - 'IF you: Please use this data to do complete quantitative analysis for nanopore
+    files. Each step of the process has been organized into specific executable scripts(13
+    steps). The bash tool is used. All the scripts are in the folder'
+  - scripts
+  - The steps must be generated in strict order
+  path: .opencode/knowledge/tasks/task-0063-if-you-please-use-this-data-to-do-complete-quantitative-analysis-for-nanopore-files-each-step-o.md
+  origin_source: nanopore complete quantitative analysis
+  origin_page: 64
+  source_entry_index: 59
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: nanopore-complete-quantitative-analysis
+- id: task-0064
+  title: '1. basecaller.sh:'
+  summary: '1. basecaller.sh: do simplex basecalling. Input : a file folder containing
+    nanopore files in fast5/pod5 format Output : a bam file. Usage Run the following
+    in the container ./scripts/basecaller.sh <pod5dir> <out> # po...'
+  keywords:
+  - basecaller
+  - basecaller.sh
+  - 1. basecaller.sh
+  - '1. basecaller.sh:
+
+    do simplex basecalling'
+  - 'Input : a file folder containing nanopore files in fast5'
+  - 'pod5 format
+
+    Output : a bam file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - 'basecaller.sh <pod5dir> <out>
+
+    # pod5dir: Path of a file folder containing nanopore files in fast5'
+  - 'pod5 format.
+
+    # out : name of output bam file'
+  path: .opencode/knowledge/tasks/task-0064-1-basecaller-sh.md
+  origin_source: basecaller.sh
+  origin_page: 65
+  source_entry_index: 60
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: basecaller
+- id: task-0065
+  title: '2. basecall_sum.sh:'
+  summary: '2. basecall_sum.sh: output a tab-separated file with read level sequencing
+    information from the bam file generated during basecalling. Input : basecaller’s
+    output bam file Output : a summary tsv file. Usage Run the fo...'
+  keywords:
+  - basecall-sum
+  - basecall_sum.sh
+  - 2. basecall_sum.sh
+  - '2. basecall_sum.sh:
+
+    output a tab-separated file with read level sequencing information from the bam
+    file generated during basecalling'
+  - 'Input : basecaller’s output bam file'
+  - 'Output : a summary tsv file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - basecall_sum.sh <bam> <out>
+  - '# bam : basecaller’s output bam file.
+
+    # out : name of output tsv file'
+  path: .opencode/knowledge/tasks/task-0065-2-basecall-sum-sh.md
+  origin_source: basecall_sum.sh
+  origin_page: 66
+  source_entry_index: 61
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: basecall-sum
+- id: task-0066
+  title: '3. bam2fq.sh:'
+  summary: '3. bam2fq.sh: transfer bam file to fastq format. Input : basecaller’s
+    output bam file Output : a fastq file. Usage Run the following in the container
+    ./scripts/bam2fq.sh <numcore> <bam> <out> # numcore : number of thr...'
+  keywords:
+  - bam2fq
+  - bam2fq.sh
+  - 3. bam2fq.sh
+  - 'transfer bam file to fastq format.
+
+    Input : basecaller’s output bam file'
+  - 'Output : a fastq file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - bam2fq.sh <numcore> <bam> <out>
+  - '# numcore : number of threads
+
+    # bam : basecaller’s output bam file.
+
+    # out : name of output fastq file'
+  path: .opencode/knowledge/tasks/task-0066-3-bam2fq-sh.md
+  origin_source: bam2fq.sh
+  origin_page: 67
+  source_entry_index: 62
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bam2fq
+- id: task-0067
+  title: '4. raw_plot.sh:'
+  summary: '4. raw_plot.sh: plot QC imformation from the basecall fastq file(raw_plot).
+    Input : basecall fastq file Output : sevaral png file and a report html file containing
+    QC imformation. Usage Run the following in the contai...'
+  keywords:
+  - raw-plot
+  - raw_plot.sh
+  - 4. raw_plot.sh
+  - 'plot QC imformation from the basecall fastq file(raw_plot).
+
+    Input : basecall fastq file'
+  - 'Output : sevaral png file and a report html file containing QC imformation.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - raw_plot.sh <fastq> <outdir>
+  - '# fastq : basecall fastq file.
+
+    # outdir : directory to store QC imformation files'
+  path: .opencode/knowledge/tasks/task-0067-4-raw-plot-sh.md
+  origin_source: raw_plot.sh
+  origin_page: 68
+  source_entry_index: 63
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: raw-plot
+- id: task-0068
+  title: '5. filter.sh:'
+  summary: '5. filter.sh: filter low_quality reads in basecall fastq file. Input :
+    basecall fastq file Output : a filtered fastq file. Usage Run the following in
+    the container ./scripts/filter.sh <fastq> <out> # fastq : basecall...'
+  keywords:
+  - filter
+  - filter.sh
+  - 5. filter.sh
+  - 'filter low_quality reads in basecall fastq file.
+
+    Input : basecall fastq file'
+  - 'Output : a filtered fastq file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - filter.sh <fastq> <out>
+  - '# fastq : basecall fastq file.
+
+    # out : name of filtered fastq file'
+  path: .opencode/knowledge/tasks/task-0068-5-filter-sh.md
+  origin_source: filter.sh
+  origin_page: 68
+  source_entry_index: 64
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: filter
+- id: task-0069
+  title: '6. host_removal.sh:'
+  summary: '6. host_removal.sh: remove host gene in filtered fastq file. Input : filtered
+    fastq file Output : a bam file. Usage Run the following in the container ./scripts/host_removal.sh
+    <fa> <fastq> <out> # fa: host gene fasta...'
+  keywords:
+  - host-removal
+  - host_removal.sh
+  - 6. host_removal.sh
+  - 'remove host gene in filtered fastq file.
+
+    Input : filtered fastq file'
+  - 'Output : a bam file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - host_removal.sh <fa> <fastq> <out>
+  - '# fa'
+  - 'host gene fasta file.
+
+    # fastq : filtered fastq file.
+
+    # out : name of output bam file'
+  path: .opencode/knowledge/tasks/task-0069-6-host-removal-sh.md
+  origin_source: host_removal.sh
+  origin_page: 69
+  source_entry_index: 65
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: host-removal
+- id: task-0070
+  title: '7. bam2fq.sh:'
+  summary: '7. bam2fq.sh: transfer bam file to fastq format. Input : host-gene-removal
+    bam file Output : a fastq file. Usage Run the following in the container ./scripts/bam2fq.sh
+    <numcore> <bam> <out> # numcore : number of threa...'
+  keywords:
+  - bam2fq
+  - bam2fq.sh
+  - 7. bam2fq.sh
+  - 'transfer bam file to fastq format.
+
+    Input : host-gene-removal bam file'
+  - 'Output : a fastq file.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - bam2fq.sh <numcore> <bam> <out>
+  - '# numcore : number of threads
+
+    # bam : host-gene-removal bam file.
+
+    # out : name of output fastq file'
+  path: .opencode/knowledge/tasks/task-0070-7-bam2fq-sh.md
+  origin_source: bam2fq.sh
+  origin_page: 70
+  source_entry_index: 66
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: bam2fq
+- id: task-0071
+  title: '8. filtered_plot.sh:'
+  summary: '8. filtered_plot.sh: plot QC imformation from the host-gene-removal fastq
+    file(filtered_plot). Input : host-gene-removal fastq file Output : sevaral png
+    file and a report html file containing QC imformation. Usage Run...'
+  keywords:
+  - filtered-plot
+  - filtered_plot.sh
+  - 8. filtered_plot.sh
+  - 'plot QC imformation from the host-gene-removal fastq file(filtered_plot).
+
+    Input : host-gene-removal fastq file'
+  - 'Output : sevaral png file and a report html file containing QC imformation.
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - filtered_plot.sh <fastq> <outdir>
+  - '# fastq : host-gene-removal fastq file.
+
+    # outdir : directory to store QC imformation files'
+  path: .opencode/knowledge/tasks/task-0071-8-filtered-plot-sh.md
+  origin_source: filtered_plot.sh
+  origin_page: 71
+  source_entry_index: 67
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: filtered-plot
+- id: task-0072
+  title: '9. map_fastq2_ref.sh:'
+  summary: '9. map_fastq2_ref.sh: Map host-gene-removal fastq file to reference genome(fa
+    file). Generates sam file. Input : a host-gene-removal fastq file and a reference
+    genome fa file Output : a sam file Usage Run the followin...'
+  keywords:
+  - map-fastq2-ref
+  - map_fastq2_ref.sh
+  - 9. map_fastq2_ref.sh
+  - '9. map_fastq2_ref.sh:
+
+    Map host-gene-removal fastq file to reference genome(fa file). Generates sam file.
+
+    Input : a'
+  - 'host-gene-removal fastq file and a reference genome fa file
+
+    Output : a sam file'
+  - 'Usage
+
+    Run the following in the container.
+
+    '
+  - scripts
+  - 'map_fastq2_ref.sh <fq> <output_sam> <ref> <nThreads>
+
+    # fq'
+  - 'host-gene-removal fastq file.
+
+    # output_sam : name of output sam file.
+
+    # ref : reference genome fa file
+
+    # nThreads : number of threads'
+  path: .opencode/knowledge/tasks/task-0072-9-map-fastq2-ref-sh.md
+  origin_source: map_fastq2_ref.sh
+  origin_page: 72
+  source_entry_index: 68
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: map-fastq2-ref
+- id: task-0073
+  title: '10. indexbam.sh:'
+  summary: '10. indexbam.sh: index bam and generate statistics - coverage, error rate,
+    number of reads. Input: a sam file Output: a sorted bam file Usage Run the following
+    in the container ./scripts/indexbam.sh <nthread> <input_s...'
+  keywords:
+  - indexbam
+  - indexbam.sh
+  - 10. indexbam.sh
+  - '10. indexbam.sh:
+
+    index bam and generate statistics - coverage'
+  - error rate
+  - 'number of reads.
+
+    Input: a sam file
+
+    Output: a sorted bam file
+
+    Usage
+
+    Run the following in the container
+
+    '
+  - scripts
+  - 'indexbam.sh <nthread> <input_sam> <outputbam>
+
+    # nthread : number of threads to use
+
+    # input_sam : an input sam file
+
+    # outputbam : name of output bam file'
+  path: .opencode/knowledge/tasks/task-0073-10-indexbam-sh.md
+  origin_source: indexbam.sh
+  origin_page: 73
+  source_entry_index: 69
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: indexbam
+- id: task-0074
+  title: '11. alignment_stats.sh:'
+  summary: '11. alignment_stats.sh: Get the alignment_stats report. Input : the sorted
+    bam file Output : a alignment_stats txt file Usage Run the following in the container.
+    ./scripts/alignment_stats.sh <bam> <out> # bam : the so...'
+  keywords:
+  - alignment-stats
+  - alignment_stats.sh
+  - 11. alignment_stats.sh
+  - '11. alignment_stats.sh:
+
+    Get the alignment_stats report.
+
+    Input : the sorted bam file
+
+    Output : a alignment_stats txt file'
+  - 'Usage
+
+    Run the following in the container.
+
+    '
+  - scripts
+  - alignment_stats.sh <bam> <out>
+  - '# bam'
+  - 'the sorted bam file.
+
+    # out : name of alignment_stats report txt file.
+
+    # ref : reference genome fa file
+
+    # nThreads : number of threads'
+  path: .opencode/knowledge/tasks/task-0074-11-alignment-stats-sh.md
+  origin_source: alignment_stats.sh
+  origin_page: 74
+  source_entry_index: 70
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: alignment-stats
+- id: task-0075
+  title: '12. quantififation.sh:'
+  summary: '12. quantififation.sh: Generate transcripts and gene_abundance tsv file
+    from the sorted bam file. Input : the sorted bam file Output : a transcripts gtf
+    file and a gene_abundance tsv file. Usage Run the following in t...'
+  keywords:
+  - quantififation
+  - quantififation.sh
+  - 12. quantififation.sh
+  - '12. quantififation.sh:
+
+    Generate transcripts and'
+  - 'gene_abundance tsv file from the sorted bam file.
+
+    Input : the sorted bam file
+
+    Output : a transcripts gtf file and a gene_abundance tsv file'
+  - 'Usage
+
+    Run the following in the container.
+
+    '
+  - scripts
+  - quantififation.sh <bam> <transcripts_gtf> <out>
+  - '# bam'
+  - the sorted bam file
+  - '# transcripts_gtf'
+  - 'name of output transcripts gtf file.
+
+    # out : name of output gene_abundance tsv file'
+  path: .opencode/knowledge/tasks/task-0075-12-quantififation-sh.md
+  origin_source: quantififation.sh
+  origin_page: 75
+  source_entry_index: 71
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: quantififation
+- id: task-0076
+  title: '13. result_sum.sh:'
+  summary: '13. result_sum.sh: make a new diroctory to store all the readable result.
+    Input : path to raw_plot dir, filterd_plot dir, alignment_stats report txt file,
+    gene_abundance tsv file and basecall summary tsv file, a new d...'
+  keywords:
+  - result-sum
+  - result_sum.sh
+  - 13. result_sum.sh
+  - make a new diroctory to store all the readable result
+  - 'Input : path to raw_plot dir'
+  - filterd_plot dir
+  - alignment_stats report txt file
+  - gene_abundance tsv file and basecall summary tsv file
+  - a new diroctory path
+  - 'Usage
+
+    Run the following in the container.
+
+    '
+  - scripts
+  - 'result_sum.sh <dir1> <dir2> <alignment_stats> <gene_abundance> <basecall> <report_dir>
+
+    # dir1 : path to raw_plot QC imformation dir'
+  - '# dir2 : path to filtered_plot QC imformation dir
+
+    # alignment_stats : path to alignment_stats report txt file.
+
+    # gene_abundance : path to gene_abundance tsv file.
+
+    # basecall : path to'
+  - 'basecall summary tsv file. .
+
+    # report_dir : path of new diroctory to store the results'
+  path: .opencode/knowledge/tasks/task-0076-13-result-sum-sh.md
+  origin_source: result_sum.sh
+  origin_page: 76
+  source_entry_index: 72
+  source_subindex: 1
+  source_file: doc/Task_Knowledge.json
+  status: active
+  canonical_exec_skill: exec-task
+  tool: result-sum

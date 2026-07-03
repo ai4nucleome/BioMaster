@@ -1,0 +1,56 @@
+[
+  {
+    "id": "data-preparation",
+    "title": "Data Preparation",
+    "tags": [
+      "data-preparation",
+      "metadata"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "gam-fitting",
+    "title": "GAM Fitting",
+    "tags": [
+      "gam",
+      "mgcv",
+      "smooth-fitting",
+      "condition-comparison",
+      "fdr"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "statistical-testing-diagnostics",
+    "title": "Statistical Testing & Diagnostics",
+    "tags": [
+      "diagnostics",
+      "tradeSeq",
+      "hypothesis-testing",
+      "concurvity"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "changepoint-detection",
+    "title": "Changepoint Detection",
+    "tags": [
+      "changepoint-detection",
+      "segmented",
+      "ruptures",
+      "breakpoint"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "prediction-visualization",
+    "title": "Prediction & Visualization",
+    "tags": [
+      "prediction",
+      "visualization",
+      "confidence-intervals",
+      "model-comparison"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,64 @@
+[
+  {
+    "id": "preparation-binarization",
+    "title": "Preparation & Binarization",
+    "tags": [
+      "binarization",
+      "input-preparation",
+      "chip-seq"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "model-learning",
+    "title": "Model Learning",
+    "tags": [
+      "hmm",
+      "learnmodel",
+      "state-count-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "state-interpretation",
+    "title": "State Interpretation",
+    "tags": [
+      "emission-matrix",
+      "state-annotation",
+      "roadmap-states"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "functional-enrichment",
+    "title": "Functional Enrichment",
+    "tags": [
+      "enrichment",
+      "overlap-enrichment",
+      "neighborhood-enrichment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "alternative-segmentation-approaches",
+    "title": "Alternative Segmentation Approaches",
+    "tags": [
+      "segway",
+      "episegmix",
+      "full-stack",
+      "epilogos",
+      "ideas"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "troubleshooting-validation",
+    "title": "Troubleshooting & Validation",
+    "tags": [
+      "troubleshooting",
+      "failure-modes",
+      "validation"
+    ],
+    "enabled": true
+  }
+]

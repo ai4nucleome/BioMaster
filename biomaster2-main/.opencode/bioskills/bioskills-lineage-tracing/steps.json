@@ -1,0 +1,63 @@
+[
+  {
+    "id": "barcode-processing-character-matrix-construction",
+    "title": "Barcode Processing & Character Matrix Construction",
+    "tags": [
+      "barcode-calling",
+      "allele-filtering",
+      "character-matrix"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "character-matrix-qc",
+    "title": "Character Matrix QC",
+    "tags": [
+      "qc",
+      "missing-data",
+      "filtering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "lineage-tree-reconstruction",
+    "title": "Lineage Tree Reconstruction",
+    "tags": [
+      "tree-reconstruction",
+      "greedy-solver",
+      "ilp-solver",
+      "neighbor-joining"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "tree-quality-assessment-visualization",
+    "title": "Tree Quality Assessment & Visualization",
+    "tags": [
+      "tree-critique",
+      "bootstrap",
+      "visualization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "clonal-dynamics-with-cospar",
+    "title": "Clonal Dynamics with CoSpar",
+    "tags": [
+      "transition-map",
+      "fate-probability",
+      "clone-dynamics"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "integration-with-scrna-seq-clonal-expansion",
+    "title": "Integration with scRNA-seq & Clonal Expansion",
+    "tags": [
+      "integration",
+      "clonal-expansion",
+      "differential-expression"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,61 @@
+[
+  {
+    "id": "sparsity-assessment-format-conversion",
+    "title": "Sparsity Assessment & Format Conversion",
+    "tags": [
+      "sparsity",
+      "csr",
+      "csc",
+      "conversion",
+      "memory"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "sparse-persistence-i-o",
+    "title": "Sparse Persistence & I/O",
+    "tags": [
+      "io",
+      "npz",
+      "anndata",
+      "h5ad",
+      "10x",
+      "mtx"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "sparse-operations-subsetting",
+    "title": "Sparse Operations & Subsetting",
+    "tags": [
+      "operations",
+      "filtering",
+      "subsetting",
+      "log-transform",
+      "arithmetic"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "sparse-normalization",
+    "title": "Sparse Normalization",
+    "tags": [
+      "normalization",
+      "cpm",
+      "log1p",
+      "sparsity-monitoring"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "large-scale-backed-processing",
+    "title": "Large-Scale Backed Processing",
+    "tags": [
+      "backed-mode",
+      "chunking",
+      "large-data",
+      "memory"
+    ],
+    "enabled": true
+  }
+]

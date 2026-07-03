@@ -1,0 +1,50 @@
+[
+  {
+    "id": "build-spatial-graph",
+    "title": "Build Spatial Graph",
+    "tags": [
+      "spatial-graph",
+      "spatial-neighbors"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "interaction-enrichment-statistical-testing",
+    "title": "Interaction Enrichment & Statistical Testing",
+    "tags": [
+      "nhood-enrichment",
+      "co-occurrence",
+      "ripley",
+      "interaction-matrix",
+      "permutation-test"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "neighborhood-composition-hotspots",
+    "title": "Neighborhood Composition & Hotspots",
+    "tags": [
+      "neighborhood-composition",
+      "hotspots"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "spatial-clustering",
+    "title": "Spatial Clustering",
+    "tags": [
+      "leiden",
+      "spatial-clustering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-export",
+    "title": "Visualization & Export",
+    "tags": [
+      "visualization",
+      "export"
+    ],
+    "enabled": true
+  }
+]

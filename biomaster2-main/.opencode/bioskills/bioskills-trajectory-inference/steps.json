@@ -1,0 +1,70 @@
+[
+  {
+    "id": "input-preparation-preprocessing",
+    "title": "Input Preparation & Preprocessing",
+    "tags": [
+      "input-prep",
+      "version-check",
+      "velocyto",
+      "format-conversion"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dimensionality-reduction-clustering",
+    "title": "Dimensionality Reduction & Clustering",
+    "tags": [
+      "preprocessing",
+      "pca",
+      "umap",
+      "clustering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "trajectory-graph-construction",
+    "title": "Trajectory Graph Construction",
+    "tags": [
+      "principal-graph",
+      "mst",
+      "principal-curves",
+      "paga"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "pseudotime-ordering-root-selection",
+    "title": "Pseudotime Ordering & Root Selection",
+    "tags": [
+      "pseudotime",
+      "root-selection",
+      "ordering",
+      "dpt"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "rna-velocity-estimation",
+    "title": "RNA Velocity Estimation",
+    "tags": [
+      "rna-velocity",
+      "scvelo",
+      "stochastic",
+      "dynamical",
+      "velocity-graph"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "branch-point-gene-dynamics-analysis",
+    "title": "Branch Point & Gene Dynamics Analysis",
+    "tags": [
+      "branch-points",
+      "gene-dynamics",
+      "morans-i",
+      "tradeseq",
+      "rank-velocity-genes"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,27 @@
+---
+name: pipeline-scrnaseq-tumor
+description: Define tumor scRNA-seq pipeline family and phase-1 demo target.
+compatibility: opencode
+metadata:
+  layer: pipeline
+  pipeline: tumor_scrnaseq
+  discipline: scrnaseq
+  domain: tumor
+  status: active
+---
+
+# Tumor scRNA-seq Pipeline Family
+
+## Supported analyses
+- tumor heterogeneity and state trajectory (phase 1 MVP)
+- tumor microenvironment cell communication (future)
+- immune infiltration and treatment response (future)
+
+## Phase 1 target
+`tumor_scrnaseq_heterogeneity` with demo dataset `maynard2020_3k`.
+
+## Tool chain
+Scanpy, inferCNVpy, Palantir, cNMF, reporting.
+
+## Boundaries
+Routing only — no command execution.

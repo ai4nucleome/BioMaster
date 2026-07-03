@@ -1,0 +1,50 @@
+[
+  {
+    "id": "dimensionality-reduction-pca",
+    "title": "Dimensionality Reduction (PCA)",
+    "tags": [
+      "pca",
+      "dimensionality-reduction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "neighbor-graph-construction",
+    "title": "Neighbor Graph Construction",
+    "tags": [
+      "neighbors",
+      "knn-graph"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "clustering",
+    "title": "Clustering",
+    "tags": [
+      "leiden",
+      "louvain",
+      "clustering",
+      "resolution"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "embedding-visualization",
+    "title": "Embedding & Visualization",
+    "tags": [
+      "umap",
+      "tsne",
+      "visualization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "graph-abstraction-paga",
+    "title": "Graph Abstraction (PAGA)",
+    "tags": [
+      "paga",
+      "trajectory"
+    ],
+    "enabled": true
+  }
+]

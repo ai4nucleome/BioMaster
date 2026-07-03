@@ -1,0 +1,67 @@
+[
+  {
+    "id": "input-parsing-project-setup",
+    "title": "Input Parsing & Project Setup",
+    "tags": [
+      "input-parsing",
+      "project-setup",
+      "validation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "innovation-literature-analysis",
+    "title": "Innovation & Literature Analysis",
+    "tags": [
+      "literature-analysis",
+      "innovation-assessment",
+      "gap-analysis"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "research-proposal-generation",
+    "title": "Research Proposal Generation",
+    "tags": [
+      "proposal-generation",
+      "research-planning"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "figure-design",
+    "title": "Figure Design",
+    "tags": [
+      "figure-design",
+      "visualization-planning"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "manuscript-text-drafting",
+    "title": "Manuscript Text Drafting",
+    "tags": [
+      "manuscript-drafting",
+      "scientific-writing"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "presentation-summary-generation",
+    "title": "Presentation & Summary Generation",
+    "tags": [
+      "presentation",
+      "summary-generation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "iterative-refinement",
+    "title": "Iterative Refinement",
+    "tags": [
+      "iterative-refinement",
+      "reviewer-feedback"
+    ],
+    "enabled": true
+  }
+]

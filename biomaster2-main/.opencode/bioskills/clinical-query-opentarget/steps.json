@@ -1,0 +1,47 @@
+[
+  {
+    "id": "api-setup-query-helper",
+    "title": "API Setup & Query Helper",
+    "tags": [
+      "api",
+      "graphql",
+      "http",
+      "setup"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "entity-search-resolution",
+    "title": "Entity Search & Resolution",
+    "tags": [
+      "search",
+      "target-resolution",
+      "disease-resolution",
+      "efo",
+      "ensembl"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "target-disease-associations",
+    "title": "Target-Disease Associations",
+    "tags": [
+      "associations",
+      "target-disease",
+      "scoring",
+      "evidence"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "drug-clinical-trial-lookup",
+    "title": "Drug & Clinical Trial Lookup",
+    "tags": [
+      "drugs",
+      "clinical-trials",
+      "mechanism-of-action",
+      "target-validation"
+    ],
+    "enabled": true
+  }
+]
