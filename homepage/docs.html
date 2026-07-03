@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Docs | BioMaster</title>
+    <meta name="description" content="BioMaster installation, documentation, and repository links.">
+    <link rel="icon" href="assets/biomaster.svg">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body data-page="docs">
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html"><img src="assets/biomaster.svg" alt="BioMaster logo"><span>BioMaster</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button>
+        <nav class="nav-links" data-nav-menu>
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="paper.html" data-nav="paper">Paper</a>
+          <a href="system.html" data-nav="system">System</a>
+          <a href="benchmark.html" data-nav="benchmark">Benchmark</a>
+          <a href="team.html" data-nav="team">Team</a>
+          <a href="docs.html" data-nav="docs">Docs</a>
+          <a class="contact-link" href="mailto:jfeng496@connect.hkust-gz.edu.cn,hsu638@connect.hkust-gz.edu.cn">Contact</a>
+          <a class="repo-link" href="https://github.com/ai4nucleome/BioMaster">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">Docs</p>
+            <h1>Install, configure, and extend BioMaster.</h1>
+            <p class="lead">Start from the public repository, install dependencies, and update the knowledge bases when adding workflows or tools.</p>
+            <div class="hero-actions">
+              <a class="button primary" href="https://github.com/ai4nucleome/BioMaster">GitHub</a>
+              <a class="button" href="https://biomaster.readthedocs.io/en/latest/">ReadTheDocs</a>
+            </div>
+          </div>
+          <img class="logo-mark" src="assets/biomaster.svg" alt="">
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container content">
+          <p class="section-kicker">Quick start</p>
+          <h2>Installation</h2>
+          <p>The repository README recommends a Conda environment and the tracked requirements file.</p>
+          <div class="code-block">
+            <pre>git clone https://github.com/ai4nucleome/BioMaster.git
+cd BioMaster
+
+conda create -n agent python=3.12
+conda activate agent
+
+pip install -r requirements.txt</pre>
+          </div>
+
+          <h2>Knowledge bases</h2>
+          <div class="grid two">
+            <article class="card subtle">
+              <h3>Plan RAG update</h3>
+              <p>Add workflow-level knowledge when introducing a new analysis workflow. Records should describe steps, required inputs, expected outputs, and recommended tools.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Execute RAG update</h3>
+              <p>Add tool-level knowledge when introducing scripts, command-line tools, parameters, installation notes, and troubleshooting guidance.</p>
+            </article>
+          </div>
+
+          <h2>Useful links</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Resource</th>
+                  <th>Link</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Source code</td>
+                  <td><a href="https://github.com/ai4nucleome/BioMaster">github.com/ai4nucleome/BioMaster</a></td>
+                  <td>Main implementation, README, scripts, and examples.</td>
+                </tr>
+                <tr>
+                  <td>Documentation</td>
+                  <td><a href="https://biomaster.readthedocs.io/en/latest/">biomaster.readthedocs.io</a></td>
+                  <td>Project documentation referenced by the README.</td>
+                </tr>
+                <tr>
+                  <td>bioRxiv paper</td>
+                  <td><a href="https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract">10.1101/2025.01.23.634608</a></td>
+                  <td>Manuscript abstract and citation entry.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="notice">Linux has been tested for direct installation according to the project README. Windows and macOS compatibility should be verified before claiming support.</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>This static homepage is dependency-free and can be served by GitHub Pages.</p>
+        <a href="index.html">Back to Home</a>
+      </div>
+    </footer>
+    <button class="back-to-top" type="button" aria-label="Back to top" data-back-to-top>^</button>
+    <script src="assets/script.js"></script>
+  </body>
+</html>

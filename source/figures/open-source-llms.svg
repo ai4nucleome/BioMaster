@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1234" height="1324" viewBox="0 0 1234 1324">
+<rect x="0" y="0" width="1234" height="1324" fill="#ffffff" stroke="none"/>
+<line x1="22" y1="18" x2="1212" y2="18" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Data</text>
+<text x="342.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Task</text>
+<text x="618.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">GPT-120b</text>
+<text x="750.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Qwen3-235b</text>
+<text x="882.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Qwen3-30b</text>
+<text x="1014.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Kimi-K2</text>
+<text x="1146.0" y="58" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700" text-anchor="middle">Deepseek-R1</text>
+<line x1="22" y1="80" x2="1212" y2="80" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="148.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 148.0)">ChIP-seq</text>
+<text x="140" y="110.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Peak calling</text>
+<text x="618.0" y="110.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="110.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="110.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="110.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="110.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="154.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Motif discovery</text>
+<text x="618.0" y="154.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="154.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="882.0" y="154.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="154.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="154.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="198.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Functional enrichment</text>
+<text x="618.0" y="198.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="750.0" y="198.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="198.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="198.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="198.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="132" y1="224" x2="1212" y2="224" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="290.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 290.0)">WGS/WES</text>
+<text x="140" y="252.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Somatic SV calling</text>
+<text x="618.0" y="252.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="252.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="882.0" y="252.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="252.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="252.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="140" y="296.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Somatic SNV + Indel calling</text>
+<text x="618.0" y="296.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="296.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="296.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="296.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="296.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="340.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">DEG analysis (WGS)</text>
+<text x="618.0" y="340.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="340.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="340.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="340.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="340.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="132" y1="366" x2="1212" y2="366" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="432.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 432.0)">scRNA-seq</text>
+<text x="140" y="394.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">DEG identification</text>
+<text x="618.0" y="394.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="394.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="394.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="394.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="394.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="438.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Marker gene identification</text>
+<text x="618.0" y="438.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="438.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="438.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="438.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="438.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="482.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Cell clustering</text>
+<text x="618.0" y="482.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="482.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="482.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="482.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="482.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="132" y1="508" x2="1212" y2="508" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="618.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 618.0)">RNA-seq</text>
+<text x="140" y="536.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">RNA editing</text>
+<text x="618.0" y="536.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="536.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="536.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="536.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="536.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="580.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Fusion gene detection</text>
+<text x="618.0" y="580.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="580.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="580.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="580.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="580.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="624.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">DEG analysis</text>
+<text x="618.0" y="624.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="624.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="624.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="624.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="624.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="668.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Top downregulated genes</text>
+<text x="618.0" y="668.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="668.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="882.0" y="668.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="668.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="668.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="712.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Isoform quantification</text>
+<text x="618.0" y="712.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="750.0" y="712.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="712.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="712.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="712.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="132" y1="738" x2="1212" y2="738" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="804.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 804.0)">ST</text>
+<text x="140" y="766.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Neighborhood enrichment</text>
+<text x="618.0" y="766.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="766.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="766.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="766.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="766.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="140" y="810.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Clustering</text>
+<text x="618.0" y="810.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="810.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="810.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="810.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="810.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="854.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Ligand–receptor interactions</text>
+<text x="618.0" y="854.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="854.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="854.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="854.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="854.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="132" y1="880" x2="1212" y2="880" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="946.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 946.0)">Hi-C</text>
+<text x="140" y="908.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Mapping &amp; Sorting &amp; Conversion</text>
+<text x="618.0" y="908.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="908.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="908.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="908.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="908.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="952.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Pair parsing and cleaning</text>
+<text x="618.0" y="952.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="952.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="952.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="952.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="952.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="996.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">Contact matrix generation</text>
+<text x="618.0" y="996.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="996.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="996.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="996.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="996.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="132" y1="1022" x2="1212" y2="1022" stroke="#000000" stroke-width="1.2"/>
+<text x="77.0" y="1154.0" fill="#333333" font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle" transform="rotate(-90 77.0 1154.0)">Other types</text>
+<text x="140" y="1050.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">DNase I hypersensitive sites (DNase-seq)</text>
+<text x="618.0" y="1050.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="1050.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="1050.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="1050.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="1050.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="1094.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">RIP-seq (RBP-bound enriched genes)</text>
+<text x="618.0" y="1094.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="1094.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="1094.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="1094.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="1094.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="1138.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">CLIP-seq (protein–RNA crosslink sites)</text>
+<text x="618.0" y="1138.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="1138.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="1138.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="1138.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="1138.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="1182.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">TSS identification (GAGE-seq)</text>
+<text x="618.0" y="1182.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="1182.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="1182.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="1182.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1146.0" y="1182.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="1226.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">PCA-based spatial domain (NichePCA)</text>
+<text x="618.0" y="1226.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="1226.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="1226.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✕</text>
+<text x="1014.0" y="1226.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="1226.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="140" y="1270.0" fill="#111111" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="400" text-anchor="start">MAF motif via regex/K-mers/PWMs (MAFin)</text>
+<text x="618.0" y="1270.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="750.0" y="1270.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="882.0" y="1270.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1014.0" y="1270.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<text x="1146.0" y="1270.0" fill="#000000" font-family="Helvetica, Arial, sans-serif" font-size="20" font-weight="800" text-anchor="middle">✓</text>
+<line x1="22" y1="1300" x2="1212" y2="1300" stroke="#000000" stroke-width="1.2"/>
+</svg>

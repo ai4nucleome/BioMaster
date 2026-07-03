@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Paper | BioMaster</title>
+    <meta name="description" content="Paper summary, abstract, and citation for BioMaster.">
+    <link rel="icon" href="assets/biomaster.svg">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body data-page="paper">
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html"><img src="assets/biomaster.svg" alt="BioMaster logo"><span>BioMaster</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button>
+        <nav class="nav-links" data-nav-menu>
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="paper.html" data-nav="paper">Paper</a>
+          <a href="system.html" data-nav="system">System</a>
+          <a href="benchmark.html" data-nav="benchmark">Benchmark</a>
+          <a href="team.html" data-nav="team">Team</a>
+          <a href="docs.html" data-nav="docs">Docs</a>
+          <a class="contact-link" href="mailto:jfeng496@connect.hkust-gz.edu.cn,hsu638@connect.hkust-gz.edu.cn">Contact</a>
+          <a class="repo-link" href="https://github.com/ai4nucleome/BioMaster">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">Paper</p>
+            <h1>BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow</h1>
+            <p class="lead">A knowledge-guided multi-agent framework for planning, executing, debugging, and validating bioinformatics workflows.</p>
+            <div class="hero-actions">
+              <a class="button primary" href="https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract">bioRxiv</a>
+              <a class="button" href="#citation">Citation</a>
+            </div>
+          </div>
+          <img class="logo-mark" src="assets/biomaster.svg" alt="">
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container content">
+          <p class="section-kicker">Abstract</p>
+          <p>The growing volume and complexity of biological data have made bioinformatics workflows increasingly labor-intensive, error-prone, and difficult to scale. Large language model based agents offer potential for automation but often fail in complex, multi-step analyses due to limited robustness.</p>
+          <p>BioMaster integrates workflow planning, execution, error recovery, and output validation. Its dual retrieval-augmented design uses domain knowledge for tool selection, parameterization, and adaptation across tasks, while a dedicated Debug Agent supports real-time error detection and correction.</p>
+          <p>Across 49 bioinformatics tasks spanning 102 tools, BioMaster achieved a higher workflow completion rate than the baseline systems evaluated in the manuscript, particularly in complex, interdependent pipelines. The system supports proprietary and open-source language models for flexible deployment.</p>
+
+          <!-- <h2>Authors</h2>
+          <p>Houcheng Su, Junning Feng, Yawen Lu, Yucheng Xu, Jinming Yang, Haojie Lu, Jixin Yang, Xu Yang, Sirui Xie, Weicai Long, Chengrui Wang, Yusen Hou, Tingyu Zhu, and Yanlin Zhang.</p>
+          <p>Data Science and Analytics Thrust, Hong Kong University of Science and Technology (Guangzhou), and Guangdong Hospital of Traditional Chinese Medicine.</p> -->
+
+          <h2>Core contributions</h2>
+          <div class="grid three">
+            <article class="card subtle">
+              <h3>Multi-agent execution</h3>
+              <p>Four role-specific agents divide planning, command generation, debugging, and output validation.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Dual RAG design</h3>
+              <p>Plan RAG retrieves workflow-level methodology, while Execute RAG retrieves command-level tool knowledge.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Broad evaluation</h3>
+              <p>BioMaster is evaluated on 49 tasks across multiple omics modalities and 102 bioinformatics tools.</p>
+            </article>
+          </div>
+
+          <figure class="figure">
+            <img src="assets/overview.png" alt="BioMaster overview figure">
+            <figcaption>Overview figure from the BioMaster manuscript.</figcaption>
+          </figure>
+
+          <h2 id="citation">Citation</h2>
+          <div class="code-block">
+            <button class="copy-button" type="button" data-copy-citation="#bibtex">Copy</button>
+            <pre id="bibtex">@article{su2025biomaster,
+  title = {BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow},
+  author = {Su, Houcheng and Feng, Junning and Lu, Yawen and Xu, Yucheng and Yang, Jinming and Lu, Haojie and Yang, Jixin and Yang, Xu and Xie, Sirui and Long, Weicai and Wang, Chengrui and Hou, Yusen and Zhu, Tingyu and Zhang, Yanlin},
+  journal = {bioRxiv},
+  year = {2025},
+  doi = {10.1101/2025.01.23.634608}
+}</pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>BioMaster source code and documentation are publicly available from the project repository.</p>
+        <a href="https://github.com/ai4nucleome/BioMaster">GitHub Repository</a>
+      </div>
+    </footer>
+    <button class="back-to-top" type="button" aria-label="Back to top" data-back-to-top>^</button>
+    <script src="assets/script.js"></script>
+  </body>
+</html>

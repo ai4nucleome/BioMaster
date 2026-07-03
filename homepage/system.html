@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>System | BioMaster</title>
+    <meta name="description" content="BioMaster system architecture, agents, and dual RAG workflow.">
+    <link rel="icon" href="assets/biomaster.svg">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body data-page="system">
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html"><img src="assets/biomaster.svg" alt="BioMaster logo"><span>BioMaster</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button>
+        <nav class="nav-links" data-nav-menu>
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="paper.html" data-nav="paper">Paper</a>
+          <a href="system.html" data-nav="system">System</a>
+          <a href="benchmark.html" data-nav="benchmark">Benchmark</a>
+          <a href="team.html" data-nav="team">Team</a>
+          <a href="docs.html" data-nav="docs">Docs</a>
+          <a class="contact-link" href="mailto:jfeng496@connect.hkust-gz.edu.cn,hsu638@connect.hkust-gz.edu.cn">Contact</a>
+          <a class="repo-link" href="https://github.com/ai4nucleome/BioMaster">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">Architecture</p>
+            <h1>A crew of agents for biological data analysis.</h1>
+            <p class="lead">BioMaster decomposes a user objective into a checked workflow, then executes each step with retrieval support and bounded recovery.</p>
+          </div>
+          <img class="logo-mark" src="assets/biomaster.svg" alt="">
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <p class="section-kicker">Execution loop</p>
+          <h2 class="section-heading">Every step must be planned, executed, debugged, and checked before the workflow advances.</h2>
+          <div class="flow">
+            <article class="flow-step">
+              <span>1</span>
+              <h3>Plan Agent</h3>
+              <p>Retrieves workflow patterns from Plan RAG and creates a structured analysis plan.</p>
+            </article>
+            <article class="flow-step">
+              <span>2</span>
+              <h3>Task Agent</h3>
+              <p>Uses Execute RAG to write tool-specific commands and scripts for the current step.</p>
+            </article>
+            <article class="flow-step">
+              <span>3</span>
+              <h3>Debug Agent</h3>
+              <p>Parses runtime errors, retrieves troubleshooting knowledge, and retries corrected execution.</p>
+            </article>
+            <article class="flow-step">
+              <span>4</span>
+              <h3>Check Agent</h3>
+              <p>Verifies output existence, format, and completeness before downstream steps begin.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <p class="section-kicker">Dual retrieval</p>
+          <h2 class="section-heading">Plan RAG and Execute RAG solve different retrieval problems.</h2>
+          <div class="grid two">
+            <article class="card">
+              <h3>Plan RAG</h3>
+              <p>Stores high-level methodological knowledge such as workflow templates, analysis strategies, tool choices, input requirements, and expected outputs.</p>
+              <p>It is consulted during planning so the system can translate a natural language goal into a coherent multi-step workflow.</p>
+            </article>
+            <article class="card">
+              <h3>Execute RAG</h3>
+              <p>Stores low-level tool knowledge such as installation notes, command-line examples, parameters, configuration details, and troubleshooting hints.</p>
+              <p>It is consulted during execution and debugging so scripts are grounded in tool-specific evidence.</p>
+            </article>
+          </div>
+          <figure class="figure">
+            <img src="assets/overview.png" alt="BioMaster architecture diagram">
+            <figcaption>The dual-RAG architecture injects different knowledge at planning and execution time.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <p class="section-kicker">Implementation</p>
+          <h2 class="section-heading">Designed for long, multi-step workflows rather than one-shot command generation.</h2>
+          <div class="grid three">
+            <article class="card subtle">
+              <h3>Condensed memory</h3>
+              <p>Diagnostic history is summarized so later steps retain useful context without loading full logs.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Stepwise gates</h3>
+              <p>A workflow does not proceed until the current step has passed execution and output checks.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Model-agnostic design</h3>
+              <p>BioMaster can run with proprietary or open-source LLM backbones through configuration.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>BioMaster combines role-specific agents with retrieval knowledge for workflow-level and tool-level reasoning.</p>
+        <a href="benchmark.html">View benchmark results</a>
+      </div>
+    </footer>
+    <button class="back-to-top" type="button" aria-label="Back to top" data-back-to-top>^</button>
+    <script src="assets/script.js"></script>
+  </body>
+</html>

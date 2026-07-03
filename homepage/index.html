@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BioMaster | Automated Bioinformatics Workflows</title>
+    <meta name="description" content="BioMaster is a knowledge-guided multi-agent system for automated bioinformatics analysis workflows.">
+    <link rel="icon" href="assets/biomaster.svg">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body data-page="home">
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html">
+          <img src="assets/biomaster.svg" alt="BioMaster logo">
+          <span>BioMaster</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links" data-nav-menu>
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="paper.html" data-nav="paper">Paper</a>
+          <a href="system.html" data-nav="system">System</a>
+          <a href="benchmark.html" data-nav="benchmark">Benchmark</a>
+          <a href="team.html" data-nav="team">Team</a>
+          <a href="docs.html" data-nav="docs">Docs</a>
+          <a class="contact-link" href="mailto:jfeng496@connect.hkust-gz.edu.cn,hsu638@connect.hkust-gz.edu.cn">Contact</a>
+          <a class="repo-link" href="https://github.com/ai4nucleome/BioMaster">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="acceptance-note">Accepted by <em>Patterns</em></p>
+            <h1>BioMaster</h1>
+            <p class="hero-subtitle">Knowledge-guided bioinformatics workflow automation</p>
+            <p class="lead">A multi-agent system that turns natural language analysis goals into executable, checked, and recoverable bioinformatics workflows.</p>
+            <div class="hero-actions">
+              <a class="button primary" href="https://github.com/ai4nucleome/BioMaster">View Code</a>
+              <a class="button" href="paper.html">Read Paper</a>
+              <a class="star-box" href="https://github.com/ai4nucleome/BioMaster/stargazers" aria-label="View BioMaster GitHub stars">
+                <span>GitHub Stars</span>
+                <img src="https://img.shields.io/github/stars/ai4nucleome/BioMaster?style=social" alt="GitHub stars">
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="metric-band" aria-label="BioMaster key numbers">
+        <div class="metric-grid">
+          <div class="metric"><strong>47/49</strong><span>benchmark tasks completed end to end</span></div>
+          <div class="metric"><strong>95.9%</strong><span>workflow execution success rate</span></div>
+          <div class="metric"><strong>102</strong><span>bioinformatics tools covered</span></div>
+          <div class="metric"><strong>4</strong><span>specialized agents</span></div>
+          <div class="metric"><strong>2</strong><span>retrieval knowledge bases</span></div>
+        </div>
+      </section>
+
+<!-- 
+      <section class="section alt">
+        <div class="container">
+          <p class="section-kicker">System figure</p>
+          <h2 class="section-heading">A full workflow loop from natural language request to validated outputs.</h2>
+          <figure class="figure narrow-figure">
+            <img src="assets/overview.png" alt="BioMaster system overview diagram">
+            <figcaption>BioMaster architecture with Plan RAG, Execute RAG, Plan Agent, Task Agent, Debug Agent, and Check Agent.</figcaption>
+          </figure>
+        </div>
+      </section> -->
+
+      <section class="section home-tight-section">
+        <div class="container">
+          <p class="section-kicker">Why it matters</p>
+          <h2 class="section-heading">Bioinformatics workflows are hard to automate because the difficult part is not a single command.</h2>
+          <div class="grid three">
+            <article class="card subtle">
+              <h3>Fragmented tools</h3>
+              <p>Modern omics analyses combine many specialized packages, file formats, and parameter conventions.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Long dependencies</h3>
+              <p>Failures in early preprocessing steps can silently break downstream analyses unless outputs are checked step by step.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Changing knowledge</h3>
+              <p>New workflows and tools appear quickly, so BioMaster separates workflow knowledge from execution knowledge.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section home-tight-section">
+        <div class="container">
+          <p class="section-kicker">Overview</p>
+          <h2 class="section-heading">BioMaster coordinates planning, execution, debugging, and checking in one reproducible loop.</h2>
+          <p class="section-lede">The system combines role-based LLM agents with Plan RAG and Execute RAG so that workflow design and tool-level command generation are supported by different kinds of domain knowledge.</p>
+
+          <div class="grid four">
+            <article class="card number-card">
+              <strong>Plan</strong>
+              <h3>Workflow design</h3>
+              <p>Transforms a high-level biological objective into structured steps with expected inputs, outputs, and tools.</p>
+            </article>
+            <article class="card number-card">
+              <strong>Task</strong>
+              <h3>Script execution</h3>
+              <p>Generates and runs tool-specific commands by retrieving usage details from Execute RAG.</p>
+            </article>
+            <article class="card number-card">
+              <strong>Debug</strong>
+              <h3>Error recovery</h3>
+              <p>Inspects execution failures, retrieves troubleshooting guidance, and retries corrected commands.</p>
+            </article>
+            <article class="card number-card">
+              <strong>Check</strong>
+              <h3>Output validation</h3>
+              <p>Verifies that required files exist, are non-empty, and match the planned format before moving forward.</p>
+            </article>
+          </div>
+          <div class="section-actions">
+            <a class="button primary" href="system.html">Explore the System</a>
+            <a class="button" href="benchmark.html#supported-workflows">Supported Workflows</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>BioMaster is an open-source Python system for automated bioinformatics workflow execution.</p>
+        <a href="https://github.com/ai4nucleome/BioMaster">github.com/ai4nucleome/BioMaster</a>
+      </div>
+    </footer>
+    <button class="back-to-top" type="button" aria-label="Back to top" data-back-to-top>^</button>
+    <script src="assets/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Benchmark | BioMaster</title>
+    <meta name="description" content="BioMaster supported workflows and benchmark results across 49 bioinformatics tasks and 102 tools.">
+    <link rel="icon" href="assets/biomaster.svg">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body data-page="benchmark">
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html"><img src="assets/biomaster.svg" alt="BioMaster logo"><span>BioMaster</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button>
+        <nav class="nav-links" data-nav-menu>
+          <a href="index.html" data-nav="home">Home</a>
+          <a href="paper.html" data-nav="paper">Paper</a>
+          <a href="system.html" data-nav="system">System</a>
+          <a href="benchmark.html" data-nav="benchmark">Benchmark</a>
+          <a href="team.html" data-nav="team">Team</a>
+          <a href="docs.html" data-nav="docs">Docs</a>
+          <a class="contact-link" href="mailto:jfeng496@connect.hkust-gz.edu.cn,hsu638@connect.hkust-gz.edu.cn">Contact</a>
+          <a class="repo-link" href="https://github.com/ai4nucleome/BioMaster">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div>
+            <p class="eyebrow">Benchmark</p>
+            <h1>Workflow coverage and benchmark results.</h1>
+            <p class="lead">BioMaster supports diverse omics workflows and was evaluated on 49 tasks spanning 102 bioinformatics tools.</p>
+          </div>
+          <img class="logo-mark" src="assets/biomaster.svg" alt="">
+        </div>
+      </section>
+
+      <section class="section" id="supported-workflows">
+        <div class="container">
+          <p class="section-kicker">Supported workflows</p>
+          <h2 class="section-heading">A broad tool orchestration surface for bioinformatics analysis.</h2>
+          <div class="pill-list">
+            <span class="pill">RNA-seq</span>
+            <span class="pill">ChIP-seq</span>
+            <span class="pill">single-cell RNA-seq</span>
+            <span class="pill">spatial transcriptomics</span>
+            <span class="pill">Hi-C</span>
+            <span class="pill">WGS/WES</span>
+            <span class="pill">metagenomics</span>
+            <span class="pill">nanopore sequencing</span>
+            <span class="pill">DNA methylation</span>
+            <span class="pill">Ribo-seq</span>
+            <span class="pill">microRNA</span>
+            <span class="pill">proteomics</span>
+          </div>
+
+          <div class="grid three">
+            <article class="card">
+              <h3>Transcriptomics</h3>
+              <p>Differential expression, expression quantification, splicing analysis, APA, RNA editing, functional enrichment, and single-cell workflows.</p>
+            </article>
+            <article class="card">
+              <h3>Genome and epigenome</h3>
+              <p>WGS/WES variant analysis, ChIP-seq peak calling, motif discovery, DNA methylation analysis, and DNase-seq related workflows.</p>
+            </article>
+            <article class="card">
+              <h3>Spatial and 3D genome</h3>
+              <p>Spatial clustering, cell type annotation, ligand-receptor analysis, Hi-C mapping, pair processing, and contact matrix generation.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <p class="section-kicker">Task coverage</p>
+          <h2 class="section-heading">BioMaster completed 47 of 49 benchmark tasks end to end.</h2>
+          <div class="grid four">
+            <article class="card number-card">
+              <strong>47</strong>
+              <h3>BioMaster</h3>
+              <p>Completed 47 of 49 tasks, corresponding to a 95.9% execution success rate.</p>
+            </article>
+            <article class="card number-card">
+              <strong>24</strong>
+              <h3>SingleAgent</h3>
+              <p>Completed 24 of 49 tasks using a single merged knowledge base.</p>
+            </article>
+            <article class="card number-card">
+              <strong>13</strong>
+              <h3>AutoBA</h3>
+              <p>Completed 13 of 49 tasks under the same tool-level Execute KB setting.</p>
+            </article>
+            <article class="card number-card">
+              <strong>12</strong>
+              <h3>ChatGPT</h3>
+              <p>Completed 12 of 49 tasks without an external knowledge base.</p>
+            </article>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>System</th>
+                  <th>Completed tasks</th>
+                  <th>Success rate</th>
+                  <th>Key distinction</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>BioMaster</td>
+                  <td>47 / 49</td>
+                  <td>95.9%</td>
+                  <td>Multi-agent loop with Plan RAG, Execute RAG, Debug Agent, and Check Agent.</td>
+                </tr>
+                <tr>
+                  <td>SingleAgent</td>
+                  <td>24 / 49</td>
+                  <td>49.0%</td>
+                  <td>Single-agent baseline using merged planning and execution knowledge.</td>
+                </tr>
+                <tr>
+                  <td>AutoBA</td>
+                  <td>13 / 49</td>
+                  <td>26.5%</td>
+                  <td>Single-agent pipeline executor with tool-level knowledge.</td>
+                </tr>
+                <tr>
+                  <td>ChatGPT</td>
+                  <td>12 / 49</td>
+                  <td>24.5%</td>
+                  <td>General-purpose LLM baseline without external BioMaster knowledge bases.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <figure class="figure">
+            <img src="assets/task-coverage.png" alt="Task coverage comparison across systems">
+            <figcaption>Task coverage of BioMaster, AutoBA, and ChatGPT across bioinformatics workflows.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <p class="section-kicker">Multi-step workflows</p>
+          <h2 class="section-heading">Complex workflows expose the value of recovery and validation.</h2>
+          <p class="section-lede">The benchmark included representative long workflows such as Hi-C, single-cell RNA-seq, spatial transcriptomics, and WGS/WES. BioMaster showed stronger stepwise completion across full workflows.</p>
+          <figure class="figure">
+            <img src="assets/multistep-success.png" alt="Execution success across multi-step workflows">
+            <figcaption>Execution success rates across representative multi-step bioinformatics workflows.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <p class="section-kicker">Case studies</p>
+          <h2 class="section-heading">Representative outputs are comparable to manually implemented pipelines in selected analyses.</h2>
+          <div class="grid two">
+            <article class="card subtle">
+              <h3>Hi-C analysis</h3>
+              <p>BioMaster generated contact matrices visually consistent with manual workflows, with SCC values exceeding 0.99 across chromosomes in the reported evaluation.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Single-cell RNA-seq</h3>
+              <p>BioMaster recovered 12 transcriptionally distinct clusters in PBMC data with UMAP structures consistent with manual analysis.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Metagenomic profiling</h3>
+              <p>Taxonomic profiles and sample separation were highly concordant with manual pipelines in the representative Arabidopsis root microbiome analysis.</p>
+            </article>
+            <article class="card subtle">
+              <h3>Spatial transcriptomics</h3>
+              <p>Domain segmentation aligned with known mouse brain anatomy in the selected Visium case study.</p>
+            </article>
+          </div>
+          <figure class="figure">
+            <img src="assets/reliability.png" alt="Comparison of BioMaster and manually curated workflow outputs">
+            <figcaption>Comparison of results produced by BioMaster and manually curated pipelines across representative multi-omics workflows.</figcaption>
+          </figure>
+          <div class="notice">These comparisons are illustrative evaluations of selected analyses. BioMaster focuses on stabilizing workflow execution and does not replace biological interpretation.</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <p class="section-kicker">Open models</p>
+          <h2 class="section-heading">BioMaster can operate with open-source LLM backbones.</h2>
+          <p class="section-lede">The manuscript evaluates GPT-oss-120B, Qwen3-235B, Qwen3-30B, DeepSeek-R1, and Kimi-K2 across 26 representative tasks.</p>
+          <figure class="figure">
+            <img src="assets/open-source-llms.png" alt="BioMaster performance across open-source LLMs">
+            <figcaption>Performance across diverse bioinformatics tasks using different open-source large language models.</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>Benchmark results evaluate workflow execution success, not task-specific biological correctness.</p>
+        <a href="paper.html">Read paper details</a>
+      </div>
+    </footer>
+    <button class="back-to-top" type="button" aria-label="Back to top" data-back-to-top>^</button>
+    <script src="assets/script.js"></script>
+  </body>
+</html>
