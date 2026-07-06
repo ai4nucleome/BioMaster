@@ -16,7 +16,7 @@ APP_DIST="$ROOT/opencode/packages/app/dist"
 
 ACTION="status"
 HOSTNAME_BIND="${HOSTNAME_BIND:-127.0.0.1}"
-PORT="${FRONTEND_PORT:-${PORT:-4444}}"
+PORT="${PORT:-4096}"
 ALLOW_UNSAFE_REMOTE="${ALLOW_UNSAFE_REMOTE:-0}"
 
 usage() {
@@ -25,7 +25,7 @@ Usage:
   ./run.sh [action] [options]
 
 Actions:
-  local                 Start locally on 127.0.0.1:4444 (default safe mode)
+  local                 Start locally on 127.0.0.1:4096 (default safe mode)
   remote                Start on 0.0.0.0; requires --password unless --unsafe
   start                 Start with the selected host/port
   restart               Stop, then start
@@ -35,7 +35,7 @@ Actions:
 
 Options:
   --host <host>         Bind host, e.g. 127.0.0.1 or 0.0.0.0
-  --port <port>         Browser-facing server port (default: 4444)
+  --port <port>         Browser-facing server port (default: 4096)
   --password <value>    Basic auth password for remote access
   --unsafe             Allow 0.0.0.0 without a password (trusted networks only)
   -h, --help            Show this help
@@ -67,12 +67,8 @@ while [ "$#" -gt 0 ]; do
       HOSTNAME_BIND="${2:-}"
       shift 2
       ;;
-    --port|--frontend-port)
+    --port)
       PORT="${2:-}"
-      shift 2
-      ;;
-    --backend-port)
-      echo "warning: --backend-port is ignored; BioMaster now uses one server port" >&2
       shift 2
       ;;
     --password)

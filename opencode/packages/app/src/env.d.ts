@@ -1,7 +1,6 @@
 interface ImportMetaEnv {
   readonly VITE_OPENCODE_SERVER_HOST: string
   readonly VITE_OPENCODE_SERVER_PORT: string
-  readonly VITE_OPENCODE_FRONTEND_PORT: string
   readonly VITE_OPENCODE_SINGLE_PORT: string
   readonly VITE_OPENCODE_BACKEND_PROXY_TARGET: string
   readonly VITE_BIOMASTER_PROJECT_PATH: string

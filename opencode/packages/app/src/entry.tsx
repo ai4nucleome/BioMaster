@@ -51,15 +51,6 @@ const setStorage = (key: string, value: string | null) => {
   }
 }
 
-const removeStorage = (key: string) => {
-  if (typeof localStorage === "undefined") return
-  try {
-    localStorage.removeItem(key)
-  } catch {
-    return
-  }
-}
-
 const browserReachableServerUrl = (url: string | null) => {
   if (!url) return url
   try {
@@ -75,69 +66,13 @@ const browserReachableServerUrl = (url: string | null) => {
 const isSinglePortMode = () => import.meta.env.VITE_OPENCODE_SINGLE_PORT === "1"
 const biomasterProjectPath = () => import.meta.env.VITE_BIOMASTER_PROJECT_PATH
 
-const singlePortServerUrl = () => {
-  const frontendPort = import.meta.env.VITE_OPENCODE_FRONTEND_PORT
-  if (!frontendPort) return location.origin
-  const protocol = location.protocol || "http:"
-  const hostname = location.hostname || import.meta.env.VITE_OPENCODE_SERVER_HOST || "127.0.0.1"
-  return `${protocol}//${hostname}:${frontendPort}`
-}
+const singlePortServerUrl = () => location.origin
 const readDefaultServerUrl = () => {
   if (isSinglePortMode()) return singlePortServerUrl()
   return browserReachableServerUrl(getStorage(DEFAULT_SERVER_URL_KEY))
 }
 const writeDefaultServerUrl = (url: string | null) => {
   setStorage(DEFAULT_SERVER_URL_KEY, isSinglePortMode() ? singlePortServerUrl() : url)
-}
-
-const isStaleSinglePortServerUrl = (value: string) => {
-  try {
-    const parsed = new URL(value)
-    const hostname = parsed.hostname
-    const backendPort = import.meta.env.VITE_OPENCODE_SERVER_PORT || "4096"
-    return (
-      (hostname === "127.0.0.1" || hostname === "localhost" || hostname === location.hostname) &&
-      parsed.port === backendPort
-    )
-  } catch {
-    const backendPort = import.meta.env.VITE_OPENCODE_SERVER_PORT || "4096"
-    return new RegExp(`https?://(127\\.0\\.0\\.1|localhost)(:${backendPort})(/|$)`).test(value)
-  }
-}
-
-const clearStaleSinglePortServers = () => {
-  const key = "opencode.global.dat:server"
-  const raw = getStorage(key)
-  if (!raw) return
-  try {
-    const parsed = JSON.parse(raw) as {
-      list?: unknown[]
-      projects?: Record<string, unknown>
-      lastProject?: Record<string, unknown>
-    }
-    if (Array.isArray(parsed.list)) {
-      parsed.list = parsed.list.filter((item) => {
-        const url =
-          typeof item === "string"
-            ? item
-            : item && typeof item === "object" && "http" in item && item.http && typeof item.http === "object" && "url" in item.http
-              ? String(item.http.url)
-              : item && typeof item === "object" && "url" in item
-                ? String(item.url)
-                : ""
-        return !url || !isStaleSinglePortServerUrl(url)
-      })
-    }
-    for (const section of [parsed.projects, parsed.lastProject]) {
-      if (!section || typeof section !== "object") continue
-      for (const storedKey of Object.keys(section)) {
-        if (isStaleSinglePortServerUrl(storedKey)) delete section[storedKey]
-      }
-    }
-    setStorage(key, JSON.stringify(parsed))
-  } catch {
-    removeStorage(key)
-  }
 }
 
 const decodePathSegment = (value: string) => {
@@ -168,7 +103,6 @@ const clearStaleBioMasterState = () => {
   }
 
   writeDefaultServerUrl(singlePortServerUrl())
-  clearStaleSinglePortServers()
 
   const first = location.pathname.split("/").filter(Boolean)[0]
   const decoded = first ? decodePathSegment(first) : ""
@@ -230,8 +164,8 @@ const getCurrentUrl = () => {
   const envPort = import.meta.env.VITE_OPENCODE_SERVER_PORT
   const browserReachableHost = envHost === "0.0.0.0" ? location.hostname || "localhost" : envHost
   if (import.meta.env.DEV) return `http://${browserReachableHost ?? "localhost"}:${envPort ?? "4096"}`
-  // Production static builds are served from a plain file server (e.g. our
-  // static-serve.ts on 4444), which is NOT the opencode backend. When the API
+  // Production static builds can be served from a plain file server, which is
+  // NOT the opencode backend. When the API
   // host/port is provided at build time, point the SDK there instead of
   // `location.origin` (which would return index.html for every API call).
   if (envHost || envPort) return `http://${browserReachableHost ?? "localhost"}:${envPort ?? "4096"}`

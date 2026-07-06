@@ -165,7 +165,7 @@ Validated 185 BioSkills
 Open:
 
 ```text
-http://127.0.0.1:4444
+http://127.0.0.1:4096
 ```
 
 `./run.sh` starts one OpenCode server process. The same port serves the Web UI, API, SSE, WebSocket, and BioSkills routes, so there is no separate frontend/backend deployment to manage.
@@ -202,7 +202,7 @@ PY
 Open BioMaster with the actual server IP address:
 
 ```text
-http://<server-ip>:4444/?auth_token=<generated-token>
+http://<server-ip>:4096/?auth_token=<generated-token>
 ```
 
 For safety, `run.sh` refuses `--host 0.0.0.0` unless a password is provided. For trusted isolated networks only, override this with `--unsafe`.
@@ -266,10 +266,10 @@ On HPC or institutional servers, external ports may be blocked even when `./run.
 ./run.sh local
 
 # Local machine
-ssh -L 4444:127.0.0.1:4444 <user>@<server-ip>
+ssh -L 4096:127.0.0.1:4096 <user>@<server-ip>
 ```
 
-Then open `http://127.0.0.1:4444` locally.
+Then open `http://127.0.0.1:4096` locally.
 
 ### 7. Logs and process control
 
@@ -282,8 +282,8 @@ SERVER_LOG=logs/server.log ./run.sh local
 Useful launcher commands:
 
 ```bash
-./run.sh local                         # start locally on 127.0.0.1:4444
-./run.sh remote --password '<secret>'  # start remotely on 0.0.0.0:4444
+./run.sh local                         # start locally on 127.0.0.1:4096
+./run.sh remote --password '<secret>'  # start remotely on 0.0.0.0:4096
 ./run.sh restart --port 18080          # restart with a custom server port
 ./run.sh stop                          # stop BioMaster
 ./run.sh status                        # show process IDs and HTTP status
@@ -306,7 +306,7 @@ Common launcher options:
 - **`bun install` is very slow**: run `BUN_REGISTRY=https://registry.npmmirror.com BUN_NETWORK_CONCURRENCY=12 ./install.sh`. The installer passes the registry to `bun install` and uses `--frozen-lockfile` when `bun.lock` is present.
 - **`bun install` fails with `std::string_view` or old `node-gyp` errors**: run `./install.sh --clean`; the installer selects Node.js 22 and exports a modern `node-gyp`.
 - **`.opencode` dependency install fails**: confirm `.opencode/package.json` exists, then run `./install.sh --clean`.
-- **Browser shows a red disconnected indicator**: hard refresh the page, then confirm `./run.sh status` reports `server http=200` and `curl http://127.0.0.1:4444/global/health` returns healthy JSON.
+- **Browser shows a red disconnected indicator**: hard refresh the page, then confirm `./run.sh status` reports `server http=200` and `curl http://127.0.0.1:4096/global/health` returns healthy JSON.
 - **Remote browser cannot open the page**: confirm that the firewall or cluster gateway allows the BioMaster server port, or use the SSH tunnel workflow above.
 - **Health returns `401` when a password is set**: this indicates authentication is active. Use the BioMaster URL with the `auth_token` query parameter.
 - **BioMaster commands are missing**: make sure the selected project directory is the repository root and that `.opencode/commands/` exists in that root.
@@ -375,7 +375,7 @@ The repository root now contains `.opencode/`, so BioMaster commands and skills 
 ### BioMaster workflow interface
 
 1. Start OpenCode with `./run.sh local`.
-2. Open BioMaster at `http://127.0.0.1:4444` or `http://<server-ip>:4444`.
+2. Open BioMaster at `http://127.0.0.1:4096` or `http://<server-ip>:4096`.
 3. Select the BioMaster project directory when prompted:
 
    ```text
