@@ -14,7 +14,7 @@ This repository contains the BioMaster v0.5 deployment release.
 - Serial step loop: Execute -> Debug -> Check.
 - Canonical BioSkills source: `.opencode/bioskills/`.
 - Generated SQLite cache: `.opencode/knowledge/biomaster_skills.db`.
-- Single browser-facing deployment port through `./oc.sh`; backend API remains internal and is proxied by the frontend.
+- Single browser-facing deployment port through `./run.sh`; backend API remains internal and is proxied by the frontend.
 
 ## Release Check
 

@@ -133,9 +133,9 @@ cat <<EOF
 BioMaster installation completed.
 
 Start locally:
-  ./oc.sh restart
+  ./run.sh local
 
 Start on a remote server:
-  HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD=<password> ./oc.sh restart
+  ./run.sh remote --password '<strong-password>'
 
 EOF
