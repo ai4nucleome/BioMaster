@@ -3,6 +3,10 @@
 # Usage:
 #   ./install.sh          # install/update dependencies
 #   ./install.sh --clean  # remove dependency folders before installing
+#
+# Network options:
+#   BUN_REGISTRY=https://registry.npmmirror.com ./install.sh
+#   BUN_NETWORK_CONCURRENCY=12 ./install.sh
 
 set -euo pipefail
 
@@ -120,11 +124,23 @@ EOF
 
 install_bun_dependencies() {
   local dir="$1"
+  local registry="${BUN_REGISTRY:-${NPM_CONFIG_REGISTRY:-${NPM_REGISTRY:-}}}"
+  local network_concurrency="${BUN_NETWORK_CONCURRENCY:-16}"
+  local -a args=(install --network-concurrency "$network_concurrency")
+
+  if [ -f "$dir/bun.lock" ] || [ -f "$dir/bun.lockb" ]; then
+    args+=(--frozen-lockfile)
+  fi
+
+  if [ -n "$registry" ]; then
+    args+=(--registry "$registry")
+  fi
+
   log "Installing Bun dependencies in $dir"
   if [ "$CLEAN" -eq 1 ]; then
     rm -rf "$dir/node_modules"
   fi
-  (cd "$dir" && bun install)
+  (cd "$dir" && bun "${args[@]}")
 }
 
 main() {

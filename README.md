@@ -136,6 +136,12 @@ Use `install.sh` for the first deployment on a new machine. It installs or selec
 ./install.sh
 ```
 
+If dependency downloads are slow or the server has restricted npm access, use a closer registry and lower Bun's network concurrency:
+
+```bash
+BUN_REGISTRY=https://registry.npmmirror.com BUN_NETWORK_CONCURRENCY=12 ./install.sh
+```
+
 For a completely fresh dependency rebuild:
 
 ```bash
@@ -299,6 +305,7 @@ Common launcher options:
 - **First deployment**: run `./install.sh` from the repository root. Use `./install.sh --clean` when moving between machines or after dependency corruption.
 - **`cd opencode` fails after cloning**: confirm that the `v0.5` branch is checked out with `git checkout v0.5`.
 - **`npm install -g node-gyp` or npm registry access times out**: update to the latest `install.sh` and rerun. The installer now prefers the `node-gyp` bundled with Node/npm and only contacts npm as a fallback. If a fallback install is still needed on a restricted network, use a reachable registry, for example `NPM_CONFIG_REGISTRY=https://registry.npmmirror.com ./install.sh`.
+- **`bun install` is very slow**: run `BUN_REGISTRY=https://registry.npmmirror.com BUN_NETWORK_CONCURRENCY=12 ./install.sh`. The installer passes the registry to `bun install` and uses `--frozen-lockfile` when `bun.lock` is present.
 - **`bun install` fails with `std::string_view` or old `node-gyp` errors**: run `./install.sh --clean`; the installer selects Node.js 22 and exports a modern `node-gyp`.
 - **`.opencode` dependency install fails**: confirm `.opencode/package.json` exists, then run `./install.sh --clean`.
 - **Browser shows a red disconnected indicator**: hard refresh the page, then confirm `./run.sh status` reports `frontend http=200` and `curl http://127.0.0.1:4444/global/health` returns healthy JSON.
