@@ -7,6 +7,8 @@
 # Network options:
 #   BUN_REGISTRY=https://registry.npmmirror.com ./install.sh
 #   BUN_NETWORK_CONCURRENCY=12 ./install.sh
+#   NODE_USE_SYSTEM_CA=1 ./install.sh
+#   BUN_CAFILE=/path/to/company-ca.pem ./install.sh
 
 set -euo pipefail
 
@@ -126,7 +128,13 @@ install_bun_dependencies() {
   local dir="$1"
   local registry="${BUN_REGISTRY:-${NPM_CONFIG_REGISTRY:-${NPM_REGISTRY:-}}}"
   local network_concurrency="${BUN_NETWORK_CONCURRENCY:-16}"
+  local ca="${BUN_CA:-}"
+  local cafile="${BUN_CAFILE:-${NODE_EXTRA_CA_CERTS:-}}"
   local -a args=(install --network-concurrency "$network_concurrency")
+
+  # Prefer the OS certificate store on clusters/corporate networks where Bun's
+  # bundled CA set may not include the local HTTPS inspection/root CA.
+  export NODE_USE_SYSTEM_CA="${NODE_USE_SYSTEM_CA:-1}"
 
   if [ -f "$dir/bun.lock" ] || [ -f "$dir/bun.lockb" ]; then
     args+=(--frozen-lockfile)
@@ -135,12 +143,38 @@ install_bun_dependencies() {
   if [ -n "$registry" ]; then
     args+=(--registry "$registry")
   fi
+  if [ -n "$ca" ]; then
+    args+=(--ca "$ca")
+  fi
+  if [ -n "$cafile" ]; then
+    args+=(--cafile "$cafile")
+  fi
 
   log "Installing Bun dependencies in $dir"
   if [ "$CLEAN" -eq 1 ]; then
     rm -rf "$dir/node_modules"
   fi
-  (cd "$dir" && bun "${args[@]}")
+  if ! (cd "$dir" && bun "${args[@]}"); then
+    cat >&2 <<EOF
+
+Bun dependency installation failed in:
+  $dir
+
+If the error contains ERR_TLS_CERT_ALTNAME_INVALID, the npm registry certificate
+does not match the registry hostname seen by this server. Retry with one of:
+
+  NODE_USE_SYSTEM_CA=1 BUN_REGISTRY=https://registry.npmjs.org ./install.sh
+  NODE_USE_SYSTEM_CA=1 BUN_REGISTRY=https://registry.npmmirror.com ./install.sh
+  BUN_CAFILE=/path/to/your-ca-bundle.pem ./install.sh
+
+If this cluster rewrites HTTPS certificates incorrectly and no CA bundle is
+available, use an HTTP registry as a last resort inside a trusted network:
+
+  BUN_REGISTRY=http://registry.npmmirror.com ./install.sh
+
+EOF
+    exit 1
+  fi
 }
 
 build_web_ui() {
