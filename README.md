@@ -130,7 +130,7 @@ git pull --ff-only origin v0.5
 
 ### 1. Install and configure BioMaster
 
-Use `install.sh` for the first deployment on a new machine. It installs or selects Bun, Node.js 22, a modern `node-gyp`, Python dependencies, OpenCode dependencies, BioMaster plugin dependencies, and then validates the BioSkills index.
+Use `install.sh` for the first deployment on a new machine. It installs or selects Bun, Node.js 22, a modern `node-gyp`, Python dependencies, OpenCode dependencies, BioMaster plugin dependencies, builds the BioMaster Web UI, and then validates the BioSkills index.
 
 ```bash
 ./install.sh
@@ -169,7 +169,7 @@ Open:
 http://127.0.0.1:4444
 ```
 
-`./run.sh` starts two internal processes but exposes one browser-facing entrypoint. The backend is bound to localhost by default, and the frontend proxies API, SSE, WebSocket, and BioSkills requests to it.
+`./run.sh` starts one OpenCode server process. The same port serves the Web UI, API, SSE, WebSocket, and BioSkills routes, so there is no separate frontend/backend deployment to manage.
 
 ### 3. What appears in OpenCode
 
@@ -200,7 +200,7 @@ print(base64.urlsafe_b64encode(f"opencode:{password}".encode()).decode().rstrip(
 PY
 ```
 
-Open the frontend with the actual server IP address:
+Open BioMaster with the actual server IP address:
 
 ```text
 http://<server-ip>:4444/?auth_token=<generated-token>
@@ -208,13 +208,13 @@ http://<server-ip>:4444/?auth_token=<generated-token>
 
 For safety, `run.sh` refuses `--host 0.0.0.0` unless a password is provided. For trusted isolated networks only, override this with `--unsafe`.
 
-BioMaster v0.5 uses a **single browser-facing port** by default. The frontend port is the only URL users need to open. The backend still runs internally, but the Vite frontend proxies API, SSE, WebSocket, and BioSkills requests to it.
+BioMaster v0.5 uses a **single server port** by default. The Web UI and API are served by the same OpenCode process.
 
-To use a custom public port, keep `FRONTEND_PORT` as the browser port and treat `BACKEND_PORT` as an internal API port:
+To use a custom public port:
 
 ```bash
-./run.sh stop --port 18080 --backend-port 18096
-./run.sh restart --host 0.0.0.0 --port 18080 --backend-port 18096 --password "$OPENCODE_SERVER_PASSWORD"
+./run.sh stop --port 18080
+./run.sh restart --host 0.0.0.0 --port 18080 --password "$OPENCODE_SERVER_PASSWORD"
 ```
 
 Then open:
@@ -223,22 +223,21 @@ Then open:
 http://<server-ip>:18080/?auth_token=<generated-token>
 ```
 
-Use the frontend port in the browser. In the example above, `18080` is the web UI and the single public entrypoint. `18096` is the internal backend API used by the proxy and does not need to be opened in the browser or exposed externally.
+Use the same port in the browser. In the example above, `18080` serves both the Web UI and the OpenCode API.
 
 ### 5. Verify the running service
 
 To verify that the running services come from this repository and not from another user's stale process:
 
 ```bash
-./run.sh status --host 0.0.0.0 --port 18080 --backend-port 18096
-ss -ltnp | grep -E ':18080|:18096'
-ps -fp "$(pgrep -f "opencode/packages/opencode/src/index.ts serve .*--port 18096" | head -1)"
-ps -fp "$(pgrep -f "(bun.*run dev|vite).*--port 18080" | head -1)"
+./run.sh status --host 0.0.0.0 --port 18080
+ss -ltnp | grep ':18080'
+ps -fp "$(pgrep -f "opencode/packages/opencode/src/index.ts serve .*--port 18080" | head -1)"
 ```
 
-The backend command should point to this checkout's `opencode/packages/opencode/src/index.ts`, and the frontend command should point to this checkout's `opencode/packages/app`.
+The server command should point to this checkout's `opencode/packages/opencode/src/index.ts`.
 
-To test the single-port proxy from the browser-facing port:
+To test the single server port:
 
 ```bash
 curl http://127.0.0.1:18080/global/health
@@ -261,7 +260,7 @@ The command endpoint should include `biomaster-start`, `biomaster-run`, and `bio
 
 ### 6. Use an SSH tunnel when ports are blocked
 
-On HPC or institutional servers, external ports may be blocked even when `./run.sh status` reports `http=200`. In that case, keep the service bound to localhost and forward only the frontend port from your local machine:
+On HPC or institutional servers, external ports may be blocked even when `./run.sh status` reports `http=200`. In that case, keep the service bound to localhost and forward only the BioMaster server port from your local machine:
 
 ```bash
 # Server
@@ -275,10 +274,10 @@ Then open `http://127.0.0.1:4444` locally.
 
 ### 7. Logs and process control
 
-Logs are written under `.logs/` by default and include the current username in the filename. This avoids permission conflicts on shared systems where temporary log files may belong to another user. Override the paths only when needed:
+Logs are written under `.logs/` by default and include the current username in the filename. This avoids permission conflicts on shared systems where temporary log files may belong to another user. Override the path only when needed:
 
 ```bash
-BACKEND_LOG=logs/backend.log FRONTEND_LOG=logs/frontend.log ./run.sh local
+SERVER_LOG=logs/server.log ./run.sh local
 ```
 
 Useful launcher commands:
@@ -286,18 +285,18 @@ Useful launcher commands:
 ```bash
 ./run.sh local                         # start locally on 127.0.0.1:4444
 ./run.sh remote --password '<secret>'  # start remotely on 0.0.0.0:4444
-./run.sh restart --port 18080          # restart with a custom frontend port
-./run.sh stop                          # stop backend and frontend
+./run.sh restart --port 18080          # restart with a custom server port
+./run.sh stop                          # stop BioMaster
 ./run.sh status                        # show process IDs and HTTP status
-./run.sh logs                          # show recent backend/frontend logs
+./run.sh logs                          # show recent server logs
 ```
 
 Common launcher options:
 
 ```bash
 ./run.sh local --port 18080
-./run.sh remote --port 18080 --backend-port 18096 --password '<secret>'
-./run.sh restart --host 0.0.0.0 --port 18080 --backend-port 18096 --password '<secret>'
+./run.sh remote --port 18080 --password '<secret>'
+./run.sh restart --host 0.0.0.0 --port 18080 --password '<secret>'
 ```
 
 ### Deployment Troubleshooting
@@ -308,9 +307,9 @@ Common launcher options:
 - **`bun install` is very slow**: run `BUN_REGISTRY=https://registry.npmmirror.com BUN_NETWORK_CONCURRENCY=12 ./install.sh`. The installer passes the registry to `bun install` and uses `--frozen-lockfile` when `bun.lock` is present.
 - **`bun install` fails with `std::string_view` or old `node-gyp` errors**: run `./install.sh --clean`; the installer selects Node.js 22 and exports a modern `node-gyp`.
 - **`.opencode` dependency install fails**: confirm `.opencode/package.json` exists, then run `./install.sh --clean`.
-- **Browser shows a red disconnected indicator**: hard refresh the page, then confirm `./run.sh status` reports `frontend http=200` and `curl http://127.0.0.1:4444/global/health` returns healthy JSON.
-- **Remote browser cannot open the page**: confirm that the firewall or cluster gateway allows the frontend port, or use the SSH tunnel workflow above.
-- **Backend health returns `401` when a password is set**: this indicates authentication is active. Use the frontend URL with the `auth_token` query parameter.
+- **Browser shows a red disconnected indicator**: hard refresh the page, then confirm `./run.sh status` reports `server http=200` and `curl http://127.0.0.1:4444/global/health` returns healthy JSON.
+- **Remote browser cannot open the page**: confirm that the firewall or cluster gateway allows the BioMaster server port, or use the SSH tunnel workflow above.
+- **Health returns `401` when a password is set**: this indicates authentication is active. Use the BioMaster URL with the `auth_token` query parameter.
 - **BioMaster commands are missing**: make sure the selected project directory is the repository root and that `.opencode/commands/` exists in that root.
 
 ## Static Site Deployment
@@ -377,7 +376,7 @@ The repository root now contains `.opencode/`, so BioMaster commands and skills 
 ### BioMaster workflow interface
 
 1. Start OpenCode with `./run.sh local`.
-2. Open the frontend at `http://127.0.0.1:4444` or `http://<server-ip>:4444`.
+2. Open BioMaster at `http://127.0.0.1:4444` or `http://<server-ip>:4444`.
 3. Select the BioMaster project directory when prompted:
 
    ```text
@@ -428,11 +427,11 @@ If BioMaster appears missing in a new session, check the following before debugg
 
 - The service was started with `./run.sh`, not a global `opencode` or `npx opencode` command.
 - The selected project is `<repository-root>`.
-- The browser frontend is connected to the matching backend through the single-port proxy.
-- `/global/health` on the frontend port returns a healthy response.
+- The browser is connected to the same `./run.sh` server process.
+- `/global/health` on the BioMaster server port returns a healthy response.
 - After adding new `.opencode/skills/*/SKILL.md` files, OpenCode was restarted or the project was reopened.
 
-The backend port is an internal API endpoint and is not the BioMaster interface. Open the frontend port in the browser and include `auth_token` when `OPENCODE_SERVER_PASSWORD` is set.
+Open the same BioMaster server port in the browser and include `auth_token` when `OPENCODE_SERVER_PASSWORD` is set.
 
 ## Validation
 

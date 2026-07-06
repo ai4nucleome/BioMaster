@@ -20,6 +20,8 @@ make knowledge-seed
 make test
 ```
 
+`./install.sh` also builds the Web UI used by the single `./run.sh` server process. Do not reintroduce a separate Vite deployment path for release usage.
+
 `make knowledge-seed` generates `.opencode/knowledge/biomaster_skills.db` from `.opencode/bioskills` and seeded routes. Do not commit the generated DB.
 
 ## Adding BioSkills

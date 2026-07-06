@@ -2,6 +2,9 @@ import { FSUtil } from "@opencode-ai/core/fs-util"
 import { Effect, Stream } from "effect"
 import { HttpBody, HttpClient, HttpClientRequest, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { createHash } from "node:crypto"
+import { existsSync, statSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { ProxyUtil } from "../proxy-util"
 
 let embeddedUIPromise: Promise<Record<string, string> | null> | undefined
@@ -39,6 +42,21 @@ function proxyResponseHeaders(headers: Record<string, string>) {
 
 export function upstreamURL(path: string) {
   return new URL(path, UI_UPSTREAM).toString()
+}
+
+const localWebUIDir = () =>
+  process.env.OPENCODE_WEB_UI_DIST ??
+  path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../../app/dist")
+
+function localUIFile(requestPath: string) {
+  const dist = localWebUIDir()
+  const index = path.join(dist, "index.html")
+  if (!existsSync(index)) return
+
+  const clean = decodeURIComponent(requestPath.split("?")[0] ?? "").replace(/^\/+/, "")
+  const candidate = clean ? path.join(dist, clean) : index
+  if (candidate.startsWith(dist) && existsSync(candidate) && statSync(candidate).isFile()) return candidate
+  return index
 }
 
 export function embeddedUI(disableEmbeddedWebUi: boolean) {
@@ -80,8 +98,11 @@ export function serveUIEffect(
   services: { fs: FSUtil.Interface; client: HttpClient.HttpClient; disableEmbeddedWebUi: boolean },
 ) {
   return Effect.gen(function* () {
-    const embeddedWebUI = yield* Effect.promise(() => embeddedUI(services.disableEmbeddedWebUi))
     const path = new URL(request.url, "http://localhost").pathname
+    const localFile = localUIFile(path)
+    if (localFile) return yield* services.fs.readFile(localFile).pipe(Effect.map((body) => embeddedUIResponse(localFile, body)))
+
+    const embeddedWebUI = yield* Effect.promise(() => embeddedUI(services.disableEmbeddedWebUi))
 
     if (embeddedWebUI) return yield* serveEmbeddedUIEffect(path, services.fs, embeddedWebUI)
 

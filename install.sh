@@ -143,6 +143,16 @@ install_bun_dependencies() {
   (cd "$dir" && bun "${args[@]}")
 }
 
+build_web_ui() {
+  log "Building BioMaster Web UI"
+  (
+    cd "$ROOT/opencode/packages/app" &&
+      VITE_OPENCODE_SINGLE_PORT=1 \
+      VITE_BIOMASTER_PROJECT_PATH="$ROOT" \
+      bun --bun run build
+  )
+}
+
 main() {
   log "Preparing BioMaster v0.5 under $ROOT"
   need_command curl
@@ -171,6 +181,7 @@ main() {
 
   install_bun_dependencies "$ROOT/opencode"
   install_bun_dependencies "$ROOT/.opencode"
+  build_web_ui
 
   log "Building BioMaster indexes"
   (cd "$ROOT" && make validate && make index)
