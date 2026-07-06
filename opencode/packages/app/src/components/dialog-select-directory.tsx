@@ -56,7 +56,7 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
   const [filter, setFilter] = createSignal("")
   let list: ListRef | undefined
 
-  const missingBase = createMemo(() => !(sync.data.path.home || sync.data.path.directory))
+  const missingBase = createMemo(() => !(sync.data.path.worktree || sync.data.path.home || sync.data.path.directory))
   const [fallbackPath] = createResource(
     () => (missingBase() ? true : undefined),
     async () => {
@@ -70,7 +70,12 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
 
   const home = createMemo(() => sync.data.path.home || fallbackPath()?.home || "")
   const start = createMemo(
-    () => sync.data.path.home || sync.data.path.directory || fallbackPath()?.home || fallbackPath()?.directory,
+    () =>
+      sync.data.path.worktree ||
+      sync.data.path.directory ||
+      sync.data.path.home ||
+      fallbackPath()?.directory ||
+      fallbackPath()?.home,
   )
 
   const directories = createDirectorySearch({

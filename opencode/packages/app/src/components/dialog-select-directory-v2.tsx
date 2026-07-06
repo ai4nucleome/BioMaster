@@ -64,7 +64,7 @@ export function DialogSelectDirectoryV2(props: DialogSelectDirectoryV2Props) {
   let pathArea: HTMLDivElement | undefined
   let navigation = 0
 
-  const missingBase = createMemo(() => !(sync.data.path.home || sync.data.path.directory))
+  const missingBase = createMemo(() => !(sync.data.path.worktree || sync.data.path.home || sync.data.path.directory))
   const [fallbackPath] = createResource(
     () => (missingBase() ? true : undefined),
     () =>
@@ -78,10 +78,11 @@ export function DialogSelectDirectoryV2(props: DialogSelectDirectoryV2Props) {
   const start = createMemo(
     () =>
       props.start ||
-      sync.data.path.home ||
+      sync.data.path.worktree ||
       sync.data.path.directory ||
-      fallbackPath()?.home ||
-      fallbackPath()?.directory,
+      sync.data.path.home ||
+      fallbackPath()?.directory ||
+      fallbackPath()?.home,
   )
   const search = createDirectorySearch({ sdk, home, base: () => root() || start() })
   const [suggestions] = createResource(input, async (value) => {

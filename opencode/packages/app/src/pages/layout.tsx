@@ -2242,11 +2242,18 @@ export default function LegacyLayout(props: ParentProps) {
         const roots = [currentProject()?.worktree, ...projects().map((project) => project.worktree)].filter(
           (root): root is string => Boolean(root),
         )
+        const biomasterRoots = roots
+          .filter((root) => !root.endsWith("/biomaster2-main"))
+          .map((root) => `${root.replace(/\/+$/, "")}/biomaster2-main`)
         const root =
           roots.find((candidate) => candidate.endsWith("/biomaster2-main")) ??
           roots.find((candidate) => candidate.includes("/biomaster2-main")) ??
+          biomasterRoots[0] ??
           roots[0]
-        if (root) navigateWithSidebarReset(`/${base64Encode(root)}/skills`)
+        if (root) {
+          openProject(root, false)
+          navigateWithSidebarReset(`/${base64Encode(root)}/skills`)
+        }
       }}
       helpLabel={() => language.t("sidebar.help")}
       onOpenHelp={() => platform.openLink("https://opencode.ai/desktop-feedback")}
