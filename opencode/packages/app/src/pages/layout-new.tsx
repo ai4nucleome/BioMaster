@@ -43,7 +43,7 @@ export default function NewLayout(props: ParentProps) {
         type="button"
         title="BioSkills"
         aria-label="Open BioSkills"
-        class="fixed bottom-4 left-4 z-50 hidden md:flex h-8 items-center gap-2 rounded-full bg-background-base px-3 text-12-medium text-text-base shadow-[var(--shadow-lg-border-base)] hover:text-text-strong transition-colors"
+        class="fixed bottom-4 left-4 z-50 flex h-8 items-center gap-2 rounded-full bg-background-base px-3 text-12-medium text-text-base shadow-[var(--shadow-lg-border-base)] hover:text-text-strong transition-colors"
         onClick={() => {
           const root = biomasterRoot()
           if (!root) return

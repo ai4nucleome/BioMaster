@@ -121,6 +121,16 @@ const SkillsRoute = () => {
   )
 }
 
+const RoutedSkillsRoute = () => {
+  const settings = useSettings()
+
+  return (
+    <Show when={settings.general.newLayoutDesigns()} fallback={<LegacyServerLayout><SkillsRoute /></LegacyServerLayout>}>
+      <SkillsRoute />
+    </Show>
+  )
+}
+
 const TargetSessionRoute = () => {
   const params = useParams<{ serverKey: string; id: string }>()
   const global = useGlobal()
@@ -636,9 +646,9 @@ function Routes() {
 
   return (
     <>
+      <Route path="/:dir/skills" component={RoutedSkillsRoute} />
       <Route component={LegacyServerLayout}>
         <Show when={!settings.general.newLayoutDesigns()}>{<Route path="/" component={LegacyHome} />}</Show>
-        <Route path="/:dir/skills" component={SkillsRoute} />
         <Route path="/:dir" component={DirectoryLayout}>
           <Route path="/" component={() => <Navigate href="session" />} />
           <Route path="/session/:id?" component={SessionRoute} />
