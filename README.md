@@ -69,7 +69,6 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 ├── README.md
 ├── install.sh                    # first-time installer and dependency setup
 ├── run.sh                        # daily launcher with host/port/password options
-├── oc.sh                         # compatibility wrapper for older commands
 ├── docs/                         # GitHub Pages-ready static public site
 ├── source/                       # publication and deployment assets
 │   ├── Biomaster.svg             # project logo
