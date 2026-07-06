@@ -92,6 +92,11 @@ function hasBioSkills(directory: string): boolean {
 function resolveBioSkillsDirectory(directory: string): string {
   const resolved = path.resolve(directory)
   if (hasBioSkills(resolved)) return resolved
+  const configDir = process.env.OPENCODE_CONFIG_DIR
+  if (configDir) {
+    const biomasterRoot = path.basename(configDir) === ".opencode" ? path.dirname(configDir) : configDir
+    if (hasBioSkills(biomasterRoot)) return biomasterRoot
+  }
   return resolved
 }
 

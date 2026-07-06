@@ -48,7 +48,7 @@ import { TerminalProvider } from "@/context/terminal"
 import { TabsProvider, useTabs, type DraftTab } from "@/context/tabs"
 import { SDKProvider, useSDK } from "@/context/sdk"
 import { WslServersProvider } from "@/wsl/context"
-import DirectoryLayout, { DirectoryDataProvider } from "@/pages/directory-layout"
+import DirectoryLayout, { decodeDirectory, DirectoryDataProvider } from "@/pages/directory-layout"
 import LegacyLayout from "@/pages/layout"
 import NewLayout from "@/pages/layout-new"
 import { ErrorPage } from "./pages/error"
@@ -101,6 +101,23 @@ const SessionRoute = () => {
     <SessionProviders>
       <Session />
     </SessionProviders>
+  )
+}
+
+const SkillsRoute = () => {
+  const params = useParams<{ dir: string }>()
+  const directory = createMemo(() => (params.dir ? decodeDirectory(params.dir) : undefined))
+
+  return (
+    <Show when={directory()} keyed>
+      {(directory) => (
+        <SDKProvider directory={directory}>
+          <DirectoryDataProvider directory={directory}>
+            <SkillsPage />
+          </DirectoryDataProvider>
+        </SDKProvider>
+      )}
+    </Show>
   )
 }
 
@@ -629,6 +646,7 @@ function Routes() {
       </Route>
       <Show when={settings.general.newLayoutDesigns()}>
         <Route path="/" component={NewHome} />
+        <Route path="/:dir/skills" component={SkillsRoute} />
         <Route path="/:dir/session/:id" component={LegacyTargetSessionRoute} />
       </Show>
       <Route path="/new-session" component={DraftRoute} />

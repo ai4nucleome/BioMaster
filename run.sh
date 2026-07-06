@@ -160,7 +160,7 @@ start_server() {
     exit 1
   fi
   echo "starting BioMaster on ${HOSTNAME_BIND}:${PORT} (project: ${BIO_DIR}) ..."
-  setsid bash -c "cd '$BIO_DIR' && OPENCODE_WEB_UI_DIST='$APP_DIST' ${BUN_CMD} --conditions=browser '$OC_INDEX' serve --port ${PORT} --hostname ${HOSTNAME_BIND} --print-logs > '$SERVER_LOG' 2>&1" < /dev/null &
+  setsid bash -c "cd '$BIO_DIR' && OPENCODE_CONFIG_DIR='$BIO_DIR/.opencode' OPENCODE_WEB_UI_DIST='$APP_DIST' ${BUN_CMD} --conditions=browser '$OC_INDEX' serve --port ${PORT} --hostname ${HOSTNAME_BIND} --print-logs > '$SERVER_LOG' 2>&1" < /dev/null &
   disown
 }
 

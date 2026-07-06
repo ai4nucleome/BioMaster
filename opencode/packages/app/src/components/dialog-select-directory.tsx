@@ -52,6 +52,7 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
   const { sync, sdk, ...serverCtx } = global.ensureServerCtx(props.server)
   const dialog = useDialog()
   const language = useLanguage()
+  const biomasterRoot = () => import.meta.env.VITE_BIOMASTER_PROJECT_PATH
 
   const [filter, setFilter] = createSignal("")
   let list: ListRef | undefined
@@ -71,6 +72,7 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
   const home = createMemo(() => sync.data.path.home || fallbackPath()?.home || "")
   const start = createMemo(
     () =>
+      biomasterRoot() ||
       sync.data.path.worktree ||
       sync.data.path.directory ||
       sync.data.path.home ||
@@ -87,6 +89,13 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
   const recentProjects = createMemo(() => {
     const projects = serverCtx.projects.list()
     const byProject = new Map<string, number>()
+    const root = biomasterRoot()
+    const pinned = root
+      ? (() => {
+          const row = toRow(root, home(), "recent")
+          return [{ ...row, search: `${row.search}\nBioMaster\ncurrent project` }]
+        })()
+      : []
 
     for (const project of projects) {
       let at = 0
@@ -102,7 +111,7 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
       byProject.set(project.worktree, at)
     }
 
-    return projects
+    const recent = projects
       .map((project, index) => ({ project, at: byProject.get(project.worktree) ?? 0, index }))
       .sort((a, b) => b.at - a.at || a.index - b.index)
       .slice(0, 5)
@@ -114,6 +123,7 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
           search: `${row.search}\n${name}`,
         }
       })
+    return uniqueRows([...pinned, ...recent])
   })
 
   const items = async (value: string) => {
