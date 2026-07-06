@@ -12,7 +12,6 @@ projects/*/
 .opencode/knowledge/*.db-wal
 .opencode/bioskills/.index.db
 .opencode/node_modules/
-.opencode/package.json
 .opencode/package-lock.json
 .opencode/bun.lock
 

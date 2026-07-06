@@ -94,25 +94,69 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 
 ## Quick Start
 
-### 1. Install dependencies
+The commands below assume that you are running them from the repository root after cloning the `v0.5` branch.
 
 ```bash
-cd /home/agent/BioMaster/biomaster-skill-v0.5
+git clone -b v0.5 git@github.com:ai4nucleome/biomaster2.git BioMaster-v0.5
+cd BioMaster-v0.5
+```
 
+If the repository has already been cloned, switch to the release branch first:
+
+```bash
+git fetch origin
+git checkout v0.5
+git pull --ff-only origin v0.5
+```
+
+### 1. Prepare Node.js and Bun
+
+BioMaster v0.5 uses Bun for the OpenCode backend/frontend. On older servers, system Node.js may be too old for native dependencies such as `tree-sitter-*`; use Node.js 22 or newer.
+
+```bash
+# Install Bun if needed.
+curl -fsSL https://bun.sh/install | bash
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Install Node.js 22 with nvm if needed.
+curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+. "$NVM_DIR/nvm.sh"
+nvm install 22
+nvm use 22
+nvm alias default 22
+
+# Use a modern node-gyp instead of an old system node-gyp.
+npm install -g node-gyp
+export npm_config_node_gyp="$HOME/.nvm/versions/node/$(node -v)/lib/node_modules/node-gyp/bin/node-gyp.js"
+
+node -v
+bun -v
+node "$npm_config_node_gyp" --version
+```
+
+### 2. Install dependencies
+
+Run these commands from the repository root:
+
+```bash
 cd opencode
+rm -rf node_modules
 bun install
 cd ..
 
 cd biomaster2-main/.opencode
+rm -rf node_modules
 bun install
 cd ../..
 ```
 
-### 2. Start the local interface
+### 3. Start the local interface
 
 ```bash
-cd /home/agent/BioMaster/biomaster-skill-v0.5
 ./oc.sh restart
+./oc.sh status
 ```
 
 Open:
@@ -121,11 +165,13 @@ Open:
 http://127.0.0.1:4444
 ```
 
-### 3. Start on a remote server
+### 4. Start on a remote server
+
+For direct remote access, bind both services to all interfaces and set a password:
 
 ```bash
-cd /home/agent/BioMaster/biomaster-skill-v0.5
 HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD=agent ./oc.sh restart
+HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD=agent ./oc.sh status
 ```
 
 Open the frontend with the actual server IP address:
@@ -135,6 +181,55 @@ http://<server-ip>:4444/?auth_token=b3BlbmNvZGU6YWdlbnQ=
 ```
 
 The example token corresponds to `opencode:agent`. For any public or shared deployment, replace the example password and avoid exposing an unauthenticated backend.
+
+To use custom ports:
+
+```bash
+./oc.sh stop
+
+HOSTNAME_BIND=0.0.0.0 \
+BACKEND_PORT=18096 \
+FRONTEND_PORT=18080 \
+OPENCODE_SERVER_PASSWORD=agent \
+./oc.sh restart
+```
+
+Then open:
+
+```text
+http://<server-ip>:18080/?auth_token=b3BlbmNvZGU6YWdlbnQ=
+```
+
+Use the frontend port in the browser. In the example above, `18080` is the web UI and `18096` is the backend API. Opening the backend port directly is not the BioMaster interface. If the backend health check returns `401` while `OPENCODE_SERVER_PASSWORD` is set, authentication is enabled and the backend is alive; use the frontend URL with `auth_token`.
+
+To verify that the running services come from this repository and not from another user's stale process:
+
+```bash
+BACKEND_PORT=18096 FRONTEND_PORT=18080 ./oc.sh status
+ss -ltnp | grep -E ':18080|:18096'
+ps -fp "$(pgrep -f "opencode/packages/opencode/src/index.ts serve .*--port 18096" | head -1)"
+ps -fp "$(pgrep -f "(bun.*run dev|vite).*--port 18080" | head -1)"
+```
+
+The backend command should point to this checkout's `opencode/packages/opencode/src/index.ts`, and the frontend command should point to this checkout's `opencode/packages/app`.
+
+On HPC or institutional servers, external ports may be blocked even when `./oc.sh status` reports `http=200`. In that case, keep the service bound to localhost and use an SSH tunnel from your local machine:
+
+```bash
+# Server
+./oc.sh restart
+
+# Local machine
+ssh -L 4444:127.0.0.1:4444 -L 4096:127.0.0.1:4096 <user>@<server-ip>
+```
+
+Then open `http://127.0.0.1:4444` locally.
+
+Logs are written under `.logs/` by default and include the current username in the filename. This avoids permission conflicts on shared systems where temporary log files may belong to another user. Override the paths only when needed:
+
+```bash
+BACKEND_LOG=logs/backend.log FRONTEND_LOG=logs/frontend.log ./oc.sh restart
+```
 
 Useful launcher commands:
 
@@ -153,7 +248,7 @@ The `docs/` directory is plain HTML, CSS, JavaScript, and static assets. It does
 Preview locally:
 
 ```bash
-cd /home/agent/BioMaster/biomaster-skill-v0.5/docs
+cd docs
 python3 -m http.server 8080
 ```
 
@@ -179,7 +274,7 @@ Deployment options:
 3. Select the BioMaster project directory when prompted:
 
    ```text
-   /home/agent/BioMaster/biomaster-skill-v0.5/biomaster2-main
+   <repository-root>/biomaster2-main
    ```
 
 4. Use the BioMaster commands and agents through OpenCode:
@@ -209,7 +304,7 @@ The SQLite database under `.opencode/knowledge/` is a generated cache. If it is 
 Run the full validation suite before release or deployment:
 
 ```bash
-cd /home/agent/BioMaster/biomaster-skill-v0.5/biomaster2-main
+cd biomaster2-main
 make test
 ```
 

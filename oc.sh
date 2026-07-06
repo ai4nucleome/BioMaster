@@ -24,8 +24,9 @@ if [ "$HEALTHCHECK_HOST" = "0.0.0.0" ]; then
   HEALTHCHECK_HOST="127.0.0.1"
 fi
 
-BACKEND_LOG="/tmp/opencode-backend.log"
-FRONTEND_LOG="/tmp/opencode-frontend.log"
+BACKEND_LOG="${BACKEND_LOG:-$ROOT/.logs/opencode-${USER:-user}-backend.log}"
+FRONTEND_LOG="${FRONTEND_LOG:-$ROOT/.logs/opencode-${USER:-user}-frontend.log}"
+mkdir -p "$(dirname "$BACKEND_LOG")" "$(dirname "$FRONTEND_LOG")"
 
 if command -v bun >/dev/null 2>&1; then
   BUN_CMD="bun"
