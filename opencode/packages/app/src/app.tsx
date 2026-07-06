@@ -638,15 +638,14 @@ function Routes() {
     <>
       <Route component={LegacyServerLayout}>
         <Show when={!settings.general.newLayoutDesigns()}>{<Route path="/" component={LegacyHome} />}</Show>
+        <Route path="/:dir/skills" component={SkillsRoute} />
         <Route path="/:dir" component={DirectoryLayout}>
           <Route path="/" component={() => <Navigate href="session" />} />
           <Route path="/session/:id?" component={SessionRoute} />
-          <Route path="/skills" component={SkillsPage} />
         </Route>
       </Route>
       <Show when={settings.general.newLayoutDesigns()}>
         <Route path="/" component={NewHome} />
-        <Route path="/:dir/skills" component={SkillsRoute} />
         <Route path="/:dir/session/:id" component={LegacyTargetSessionRoute} />
       </Show>
       <Route path="/new-session" component={DraftRoute} />

@@ -127,6 +127,7 @@ export function DialogSelectDirectory(props: DialogSelectDirectoryProps) {
   })
 
   const items = async (value: string) => {
+    if (!cleanPickerInput(value)) return recentProjects()
     const results = await directories(value)
     const directoryRows = results.map((absolute) => toRow(absolute, home(), "folders"))
     return uniqueRows([...recentProjects(), ...directoryRows])
