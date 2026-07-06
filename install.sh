@@ -6,7 +6,8 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_PATH="${BASH_SOURCE[0]:-$0}"
+ROOT="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 CLEAN=0
 
 for arg in "$@"; do
@@ -15,7 +16,7 @@ for arg in "$@"; do
       CLEAN=1
       ;;
     -h|--help)
-      sed -n '1,8p' "$0"
+      sed -n '1,8p' "$SCRIPT_PATH"
       exit 0
       ;;
     *)
@@ -79,13 +80,42 @@ ensure_node22() {
 }
 
 ensure_node_gyp() {
-  log "Installing modern node-gyp"
-  npm install -g node-gyp
-  export npm_config_node_gyp="$HOME/.nvm/versions/node/$(node -v)/lib/node_modules/node-gyp/bin/node-gyp.js"
-  if [ ! -f "$npm_config_node_gyp" ]; then
-    npm_config_node_gyp="$(npm root -g)/node-gyp/bin/node-gyp.js"
-    export npm_config_node_gyp
+  log "Selecting node-gyp"
+  local node_prefix npm_root candidate registry
+  node_prefix="$(dirname "$(dirname "$(command -v node)")")"
+  npm_root="$(npm root -g)"
+
+  for candidate in \
+    "$node_prefix/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" \
+    "$npm_root/npm/node_modules/node-gyp/bin/node-gyp.js" \
+    "$npm_root/node-gyp/bin/node-gyp.js"
+  do
+    if [ -f "$candidate" ]; then
+      export npm_config_node_gyp="$candidate"
+      echo "Using node-gyp: $npm_config_node_gyp"
+      return
+    fi
+  done
+
+  registry="${NPM_CONFIG_REGISTRY:-${NPM_REGISTRY:-https://registry.npmjs.org/}}"
+  echo "Bundled node-gyp was not found; installing node-gyp from $registry"
+  if npm install -g node-gyp --registry "$registry" --fetch-retries=5 --fetch-timeout=120000; then
+    candidate="$(npm root -g)/node-gyp/bin/node-gyp.js"
+    if [ -f "$candidate" ]; then
+      export npm_config_node_gyp="$candidate"
+      echo "Using node-gyp: $npm_config_node_gyp"
+      return
+    fi
   fi
+
+  cat >&2 <<EOF
+Unable to locate or install node-gyp.
+
+If this server cannot reach npm, retry with a reachable registry, for example:
+  NPM_CONFIG_REGISTRY=https://registry.npmmirror.com ./install.sh
+
+EOF
+  exit 1
 }
 
 install_bun_dependencies() {
@@ -97,38 +127,39 @@ install_bun_dependencies() {
   (cd "$dir" && bun install)
 }
 
-log "Preparing BioMaster v0.5 under $ROOT"
-need_command curl
-need_command python3
-python3 -m pip --version >/dev/null 2>&1 || {
-  echo "Missing Python pip. Install python3-pip, then rerun ./install.sh." >&2
-  exit 1
-}
+main() {
+  log "Preparing BioMaster v0.5 under $ROOT"
+  need_command curl
+  need_command python3
+  python3 -m pip --version >/dev/null 2>&1 || {
+    echo "Missing Python pip. Install python3-pip, then rerun ./install.sh." >&2
+    exit 1
+  }
 
-ensure_bun
-ensure_node22
-ensure_node_gyp
+  ensure_bun
+  ensure_node22
+  ensure_node_gyp
 
-log "Runtime versions"
-node -v
-bun -v
-if [ -f "$npm_config_node_gyp" ]; then
-  node "$npm_config_node_gyp" --version
-else
-  echo "node-gyp path is not available: $npm_config_node_gyp" >&2
-  exit 1
-fi
+  log "Runtime versions"
+  node -v
+  bun -v
+  if [ -f "$npm_config_node_gyp" ]; then
+    node "$npm_config_node_gyp" --version
+  else
+    echo "node-gyp path is not available: $npm_config_node_gyp" >&2
+    exit 1
+  fi
 
-log "Installing Python dependencies"
-python3 -m pip install -r "$ROOT/requirements.txt"
+  log "Installing Python dependencies"
+  python3 -m pip install -r "$ROOT/requirements.txt"
 
-install_bun_dependencies "$ROOT/opencode"
-install_bun_dependencies "$ROOT/.opencode"
+  install_bun_dependencies "$ROOT/opencode"
+  install_bun_dependencies "$ROOT/.opencode"
 
-log "Building BioMaster indexes"
-(cd "$ROOT" && make validate && make index)
+  log "Building BioMaster indexes"
+  (cd "$ROOT" && make validate && make index)
 
-cat <<EOF
+  cat <<EOF
 
 BioMaster installation completed.
 
@@ -139,3 +170,8 @@ Start on a remote server:
   ./run.sh remote --password '<strong-password>'
 
 EOF
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  main
+fi
