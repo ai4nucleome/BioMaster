@@ -1122,6 +1122,7 @@ export default function LegacyLayout(props: ParentProps) {
 
   function projectRoot(directory: string) {
     const key = pathKey(directory)
+    if (key.endsWith("/biomaster2-main")) return directory
     const project = layout.projects
       .list()
       .find((item) => pathKey(item.worktree) === key || item.sandboxes?.some((sandbox) => pathKey(sandbox) === key))
