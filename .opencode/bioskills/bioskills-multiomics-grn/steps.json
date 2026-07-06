@@ -1,0 +1,70 @@
+[
+  {
+    "id": "input-preparation",
+    "title": "Input Preparation",
+    "tags": [
+      "data-loading",
+      "qc",
+      "scanpy"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "peak-calling-topic-modeling",
+    "title": "Peak Calling & Topic Modeling",
+    "tags": [
+      "peak-calling",
+      "macs3",
+      "topic-modeling",
+      "cistopic",
+      "lda"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "scenic-eregulon-inference",
+    "title": "SCENIC+ eRegulon Inference",
+    "tags": [
+      "scenicplus",
+      "motif-enrichment",
+      "region-to-gene",
+      "tf-to-region",
+      "eregulon"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "eregulon-interpretation-scoring",
+    "title": "eRegulon Interpretation & Scoring",
+    "tags": [
+      "eregulon",
+      "activity-scoring",
+      "aucell",
+      "interpretation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization",
+    "title": "Visualization",
+    "tags": [
+      "visualization",
+      "dotplot",
+      "heatmap",
+      "network-plot"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "figr-alternative-r",
+    "title": "FigR Alternative (R)",
+    "tags": [
+      "figr",
+      "dorc",
+      "peak-gene-correlation",
+      "r",
+      "alternative"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "verify",
+    "title": "Verify",
+    "tags": [
+      "verify",
+      "bioinformatics",
+      "scrnaseq"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "inspect-markers-before-automation",
+    "title": "Inspect Markers Before Automation",
+    "tags": [
+      "marker-review",
+      "visualization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "choose-annotation-level",
+    "title": "Choose Annotation Level",
+    "tags": [
+      "strategy-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "run-reference-based-annotation",
+    "title": "Run Reference-Based Annotation",
+    "tags": [
+      "celltypist",
+      "reference-transfer",
+      "majority-voting"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "curate-with-markers-and-cluster-context",
+    "title": "Curate with Markers and Cluster Context",
+    "tags": [
+      "curation",
+      "confidence-scoring",
+      "marker-validation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "export-labels",
+    "title": "Export Labels",
+    "tags": [
+      "export",
+      "output"
+    ],
+    "enabled": true
+  }
+]

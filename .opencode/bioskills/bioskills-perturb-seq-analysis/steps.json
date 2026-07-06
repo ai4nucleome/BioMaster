@@ -1,0 +1,56 @@
+[
+  {
+    "id": "preprocessing-qc",
+    "title": "Preprocessing & QC",
+    "tags": [
+      "qc",
+      "normalization",
+      "doublet-detection",
+      "hvg"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "sgrna-assignment",
+    "title": "sgRNA Assignment",
+    "tags": [
+      "sgrna-assignment",
+      "multiplet-detection",
+      "moi"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "escaper-filtering-mixscape",
+    "title": "Escaper Filtering (Mixscape)",
+    "tags": [
+      "mixscape",
+      "escaper-filtering",
+      "perturbation-signature"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "differential-expression",
+    "title": "Differential Expression",
+    "tags": [
+      "differential-expression",
+      "sceptre",
+      "nb-glm",
+      "permutation-test",
+      "pydeseq2"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "perturbation-ranking-factor-analysis",
+    "title": "Perturbation Ranking & Factor Analysis",
+    "tags": [
+      "perturbation-ranking",
+      "factor-analysis",
+      "fr-perturb",
+      "multiome"
+    ],
+    "enabled": true
+  }
+]

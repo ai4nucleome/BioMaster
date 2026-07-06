@@ -1,8 +1,0 @@
-skills:
-- name: biomaster
-  layer: registry
-  path: .opencode/skills/biomaster/SKILL.md
-  description: Load BioMaster as one integrated skill-driven bioinformatics assistant.
-  source: manual
-  status: active
-  domain: bioinformatics

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "data-loading-preprocessing",
+    "title": "Data Loading & Preprocessing",
+    "tags": [
+      "data-loading",
+      "coverage-filter",
+      "bismark"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dmr-detection",
+    "title": "DMR Detection",
+    "tags": [
+      "dmr-detection",
+      "tiling",
+      "smoothing",
+      "differential-methylation",
+      "qvalue"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dmr-refinement-merging",
+    "title": "DMR Refinement & Merging",
+    "tags": [
+      "merge",
+      "refinement",
+      "granges"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "genomic-annotation",
+    "title": "Genomic Annotation",
+    "tags": [
+      "annotation",
+      "genes",
+      "promoters",
+      "cpg-islands"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-export",
+    "title": "Visualization & Export",
+    "tags": [
+      "visualization",
+      "export",
+      "gviz",
+      "bed"
+    ],
+    "enabled": true
+  }
+]

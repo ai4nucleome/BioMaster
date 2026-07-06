@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biomaster.local/schemas/check_report.schema.json",
+  "title": "BioMaster CHECK_REPORT.yaml",
+  "type": "object",
+  "required": ["analysis_id", "plan_path", "updated_at", "overall_status", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "analysis_id": {
+      "type": "string"
+    },
+    "plan_path": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["running", "passed", "warning", "failed"]
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "status", "summary", "checked_outputs", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "step_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["passed", "warning", "failed"]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "checked_outputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "failed_check": {
+            "type": ["string", "null"]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "suggested_next_action": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    }
+  }
+}

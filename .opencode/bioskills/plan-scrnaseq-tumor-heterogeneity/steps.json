@@ -1,0 +1,13 @@
+[
+  {
+    "id": "plan",
+    "title": "Plan",
+    "tags": [
+      "plan",
+      "tumor",
+      "scrnaseq",
+      "tumor_heterogeneity"
+    ],
+    "enabled": true
+  }
+]

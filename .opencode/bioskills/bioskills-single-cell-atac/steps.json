@@ -1,0 +1,83 @@
+[
+  {
+    "id": "ecosystem-selection-data-loading",
+    "title": "Ecosystem Selection & Data Loading",
+    "tags": [
+      "data-loading",
+      "ecosystem",
+      "signac",
+      "archr",
+      "snapatac2"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "per-cell-qc-doublet-detection",
+    "title": "Per-Cell QC & Doublet Detection",
+    "tags": [
+      "qc",
+      "doublet-detection",
+      "amulet",
+      "tss-enrichment",
+      "nucleosome-signal"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dimensionality-reduction-clustering",
+    "title": "Dimensionality Reduction & Clustering",
+    "tags": [
+      "tfidf",
+      "lsi",
+      "spectral",
+      "umap",
+      "leiden",
+      "clustering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "per-cluster-peak-calling",
+    "title": "Per-Cluster Peak Calling",
+    "tags": [
+      "peak-calling",
+      "macs3",
+      "pseudobulk",
+      "consensus-peakset"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cell-type-annotation",
+    "title": "Cell-Type Annotation",
+    "tags": [
+      "gene-activity",
+      "annotation",
+      "cell-cycle",
+      "sex-qc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "multiome-integration-optional",
+    "title": "Multiome Integration (Optional)",
+    "tags": [
+      "multiome",
+      "wnn",
+      "multimodal-integration"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "advanced-analyses-reference-mapping",
+    "title": "Advanced Analyses & Reference Mapping",
+    "tags": [
+      "reference-mapping",
+      "scarches",
+      "peakvi",
+      "chrombpnet",
+      "reconciliation"
+    ],
+    "enabled": true
+  }
+]

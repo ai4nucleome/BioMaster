@@ -1,0 +1,63 @@
+[
+  {
+    "id": "viewer-setup-marker-visualization",
+    "title": "Viewer Setup & Marker Visualization",
+    "tags": [
+      "napari",
+      "visualization",
+      "marker-overlay"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "interactive-annotation-widgets",
+    "title": "Interactive Annotation Widgets",
+    "tags": [
+      "magicgui",
+      "annotation",
+      "export"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "batch-annotation-workflow",
+    "title": "Batch Annotation Workflow",
+    "tags": [
+      "batch",
+      "annotation",
+      "workflow"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "training-data-extraction",
+    "title": "Training Data Extraction",
+    "tags": [
+      "feature-extraction",
+      "training-data",
+      "regionprops"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "semi-automated-annotation",
+    "title": "Semi-Automated Annotation",
+    "tags": [
+      "knn",
+      "classification",
+      "propagation",
+      "confidence"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "annotation-validation",
+    "title": "Annotation Validation",
+    "tags": [
+      "validation",
+      "qc",
+      "visualization"
+    ],
+    "enabled": true
+  }
+]

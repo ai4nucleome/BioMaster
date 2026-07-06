@@ -1,0 +1,94 @@
+[
+  {
+    "id": "setup-and-data-loading",
+    "title": "Setup and Data Loading",
+    "tags": [
+      "data-loading",
+      "anndata",
+      "setup"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "quality-control",
+    "title": "Quality Control",
+    "tags": [
+      "qc",
+      "filtering",
+      "mitochondrial",
+      "doublet-detection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "normalization-feature-selection-and-scaling",
+    "title": "Normalization, Feature Selection, and Scaling",
+    "tags": [
+      "normalization",
+      "hvg",
+      "scaling",
+      "regression",
+      "feature-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dimensionality-reduction-and-embedding",
+    "title": "Dimensionality Reduction and Embedding",
+    "tags": [
+      "pca",
+      "neighbors",
+      "umap",
+      "dimensionality-reduction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "clustering",
+    "title": "Clustering",
+    "tags": [
+      "leiden",
+      "clustering",
+      "community-detection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "marker-gene-identification",
+    "title": "Marker Gene Identification",
+    "tags": [
+      "marker-genes",
+      "differential-expression",
+      "wilcoxon",
+      "rank-genes"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cell-type-annotation-and-export",
+    "title": "Cell Type Annotation and Export",
+    "tags": [
+      "annotation",
+      "cell-type",
+      "export",
+      "visualization",
+      "dotplot"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "advanced-analyses",
+    "title": "Advanced Analyses",
+    "tags": [
+      "batch-correction",
+      "combat",
+      "trajectory",
+      "paga",
+      "pseudotime",
+      "differential-expression",
+      "publication",
+      "visualization"
+    ],
+    "enabled": true
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "report",
+    "title": "Report",
+    "tags": [
+      "report",
+      "tumor",
+      "scrnaseq"
+    ],
+    "enabled": true
+  }
+]

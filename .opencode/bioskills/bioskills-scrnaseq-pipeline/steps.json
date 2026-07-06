@@ -1,0 +1,60 @@
+[
+  {
+    "id": "data-loading-qc",
+    "title": "Data Loading & QC",
+    "tags": [
+      "data-loading",
+      "qc",
+      "filtering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "doublet-detection",
+    "title": "Doublet Detection",
+    "tags": [
+      "doublet-detection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "normalization-feature-selection",
+    "title": "Normalization & Feature Selection",
+    "tags": [
+      "normalization",
+      "hvg",
+      "feature-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dimensionality-reduction-clustering",
+    "title": "Dimensionality Reduction & Clustering",
+    "tags": [
+      "pca",
+      "umap",
+      "neighbors",
+      "clustering",
+      "leiden"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "marker-gene-discovery",
+    "title": "Marker Gene Discovery",
+    "tags": [
+      "marker-genes",
+      "differential-expression"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cell-type-annotation",
+    "title": "Cell Type Annotation",
+    "tags": [
+      "annotation",
+      "cell-type"
+    ],
+    "enabled": true
+  }
+]

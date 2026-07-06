@@ -1,0 +1,13 @@
+[
+  {
+    "id": "execute",
+    "title": "Execute",
+    "tags": [
+      "execute",
+      "tumor",
+      "scrnaseq",
+      "scanpy"
+    ],
+    "enabled": true
+  }
+]

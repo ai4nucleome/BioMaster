@@ -1,0 +1,81 @@
+[
+  {
+    "id": "method-selection-experimental-design",
+    "title": "Method Selection & Experimental Design",
+    "tags": [
+      "method-selection",
+      "experimental-design",
+      "control-planning",
+      "stamp",
+      "tribe",
+      "dart-seq"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "alignment-bam-generation",
+    "title": "Alignment & BAM Generation",
+    "tags": [
+      "alignment",
+      "star",
+      "cellranger",
+      "bam",
+      "indexing"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "editing-site-detection",
+    "title": "Editing-Site Detection",
+    "tags": [
+      "edit-calling",
+      "jacusa2",
+      "bullseye",
+      "sailor",
+      "reditools2",
+      "c-to-u",
+      "a-to-i"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "control-subtraction-specificity-filtering",
+    "title": "Control Subtraction & Specificity Filtering",
+    "tags": [
+      "control-subtraction",
+      "filtering",
+      "strand-specificity",
+      "alu-filtering",
+      "qc",
+      "specificity"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "single-cell-scstamp-analysis",
+    "title": "Single-Cell scSTAMP Analysis",
+    "tags": [
+      "single-cell",
+      "scstamp",
+      "pseudobulk",
+      "clustering",
+      "scanpy",
+      "leiden",
+      "umap"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "validation-failure-mode-handling",
+    "title": "Validation & Failure-Mode Handling",
+    "tags": [
+      "validation",
+      "failure-modes",
+      "clip-reconciliation",
+      "saturation",
+      "qc",
+      "diagnostics"
+    ],
+    "enabled": true
+  }
+]

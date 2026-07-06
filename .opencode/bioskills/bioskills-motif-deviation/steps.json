@@ -1,0 +1,57 @@
+[
+  {
+    "id": "data-preparation",
+    "title": "Data Preparation",
+    "tags": [
+      "qc",
+      "filtering",
+      "gc-bias",
+      "summarized-experiment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "motif-matching",
+    "title": "Motif Matching",
+    "tags": [
+      "motif-matching",
+      "jaspar",
+      "cisbp",
+      "motifmatchr"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "deviation-computation",
+    "title": "Deviation Computation",
+    "tags": [
+      "chromvar",
+      "background-peaks",
+      "deviations",
+      "variability"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "differential-motif-analysis",
+    "title": "Differential Motif Analysis",
+    "tags": [
+      "differential",
+      "limma",
+      "findmarkers",
+      "marker-features"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "multi-method-tf-activity-integration",
+    "title": "Multi-Method TF Activity Integration",
+    "tags": [
+      "decoupler",
+      "tf-activity",
+      "consensus",
+      "multi-omics"
+    ],
+    "enabled": true
+  }
+]

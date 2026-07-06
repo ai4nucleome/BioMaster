@@ -92,12 +92,6 @@ function hasBioSkills(directory: string): boolean {
 function resolveBioSkillsDirectory(directory: string): string {
   const resolved = path.resolve(directory)
   if (hasBioSkills(resolved)) return resolved
-
-  // BioMaster v0.3 keeps the actual project under biomaster2-main while the
-  // OpenCode workspace can still be opened at the merge repository root.
-  const biomaster2 = path.join(resolved, "biomaster2-main")
-  if (hasBioSkills(biomaster2)) return biomaster2
-
   return resolved
 }
 

@@ -1,0 +1,49 @@
+[
+  {
+    "id": "qc-metrics-and-visualization",
+    "title": "QC Metrics and Visualization",
+    "tags": [
+      "qc",
+      "qc-metrics",
+      "visualization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "filtering",
+    "title": "Filtering",
+    "tags": [
+      "filtering",
+      "qc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "normalization",
+    "title": "Normalization",
+    "tags": [
+      "normalization",
+      "log-transform",
+      "sctransform"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "highly-variable-gene-selection",
+    "title": "Highly Variable Gene Selection",
+    "tags": [
+      "hvg",
+      "feature-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "scaling-and-confounder-regression",
+    "title": "Scaling and Confounder Regression",
+    "tags": [
+      "scaling",
+      "regress-out"
+    ],
+    "enabled": true
+  }
+]

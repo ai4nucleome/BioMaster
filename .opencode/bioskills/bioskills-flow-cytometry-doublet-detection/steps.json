@@ -1,0 +1,65 @@
+[
+  {
+    "id": "data-loading-channel-verification",
+    "title": "Data Loading & Channel Verification",
+    "tags": [
+      "data-loading",
+      "fcs",
+      "qc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "manual-scatter-gating",
+    "title": "Manual Scatter Gating",
+    "tags": [
+      "gating",
+      "fsc",
+      "ssc",
+      "singlets"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "automated-qc-based-singlet-gating",
+    "title": "Automated & QC-Based Singlet Gating",
+    "tags": [
+      "automated-gating",
+      "qc",
+      "flowai",
+      "flowdensity"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "regression-ratio-based-detection",
+    "title": "Regression & Ratio-Based Detection",
+    "tags": [
+      "regression",
+      "ratio",
+      "doublet-scoring"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cytof-doublet-detection",
+    "title": "CyTOF Doublet Detection",
+    "tags": [
+      "cytof",
+      "dna",
+      "event-length",
+      "catalyst"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "batch-processing-reporting-visualization",
+    "title": "Batch Processing, Reporting & Visualization",
+    "tags": [
+      "batch",
+      "reporting",
+      "visualization"
+    ],
+    "enabled": true
+  }
+]

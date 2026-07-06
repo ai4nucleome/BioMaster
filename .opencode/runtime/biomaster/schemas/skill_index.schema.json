@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biomaster.local/schemas/skill_index.schema.json",
+  "title": "BioMaster Skill Index",
+  "type": "object",
+  "required": ["skills"],
+  "properties": {
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "layer", "path", "description", "source", "status"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "layer": {
+            "type": "string",
+            "enum": ["registry", "plan", "execute", "verify", "debug"]
+          },
+          "path": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "variant", "deprecated"]
+          },
+          "domain": {
+            "type": "string"
+          },
+          "analysis": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "output": {
+            "type": "string"
+          },
+          "failure": {
+            "type": "string"
+          },
+          "canonical": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "aliases": {
+            "type": "string"
+          },
+          "origin_source": {
+            "type": "string"
+          },
+          "origin_page": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

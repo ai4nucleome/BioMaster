@@ -1,0 +1,44 @@
+[
+  {
+    "id": "mixcr-processing",
+    "title": "MiXCR Processing",
+    "tags": [
+      "align",
+      "assemble",
+      "clonotype-export",
+      "mixcr"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "vdjtools-analysis",
+    "title": "VDJtools Analysis",
+    "tags": [
+      "diversity",
+      "overlap",
+      "repertoire",
+      "vdjtools"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization",
+    "title": "Visualization",
+    "tags": [
+      "visualization",
+      "spectratype",
+      "vj-usage"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "qc-and-validation",
+    "title": "QC and Validation",
+    "tags": [
+      "qc",
+      "validation",
+      "reporting"
+    ],
+    "enabled": true
+  }
+]

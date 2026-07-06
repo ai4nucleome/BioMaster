@@ -1,0 +1,65 @@
+[
+  {
+    "id": "data-loading-qc-preparation",
+    "title": "Data Loading & QC Preparation",
+    "tags": [
+      "data-io",
+      "qc",
+      "doublet-rate"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "scrublet-detection-python",
+    "title": "Scrublet Detection (Python)",
+    "tags": [
+      "scrublet",
+      "doublet-scoring",
+      "simulation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "doubletfinder-detection-r",
+    "title": "DoubletFinder Detection (R)",
+    "tags": [
+      "doubletfinder",
+      "pann",
+      "parameter-sweep",
+      "seurat"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "scdblfinder-detection-r",
+    "title": "scDblFinder Detection (R)",
+    "tags": [
+      "scdblfinder",
+      "gradient-boosting",
+      "singlecellexperiment"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualization-doublet-filtering",
+    "title": "Visualization & Doublet Filtering",
+    "tags": [
+      "visualization",
+      "filtering",
+      "umap",
+      "homotypic-heterotypic"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "method-comparison-pipeline-integration",
+    "title": "Method Comparison & Pipeline Integration",
+    "tags": [
+      "method-comparison",
+      "pipeline-integration",
+      "scanpy",
+      "seurat"
+    ],
+    "enabled": true
+  }
+]

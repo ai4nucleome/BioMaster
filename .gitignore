@@ -2,7 +2,9 @@
 node_modules/
 .pnp/
 .pnp.js
-/.opencode/
+.opencode/node_modules/
+.opencode/package-lock.json
+.opencode/bun.lock
 
 # Build output / caches
 dist/
@@ -15,9 +17,24 @@ coverage/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*.egg-info/
+.benchmarks/
+/data/
+
+# Generated BioMaster outputs
+examples/results/*
+!examples/results/.gitkeep
+CHECK_REPORT.yaml
+test_output.h5ad
+/runs/
+/projects/
 
 # Generated BioSkills full-text index (rebuilt on demand)
 **/.index.db
+.opencode/knowledge/biomaster_skills.db
+.opencode/knowledge/*.db-shm
+.opencode/knowledge/*.db-wal
+.opencode/bioskills/.index.db
 *.db-shm
 *.db-wal
 

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "setup-source-selection",
+    "title": "Setup & Source Selection",
+    "tags": [
+      "setup",
+      "source-selection",
+      "cache-config",
+      "accession-hierarchy"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "metadata-resolution",
+    "title": "Metadata Resolution",
+    "tags": [
+      "metadata",
+      "pysradb",
+      "accession-resolution"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "download-extract",
+    "title": "Download & Extract",
+    "tags": [
+      "download",
+      "ena",
+      "prefetch",
+      "fasterq-dump",
+      "strides",
+      "aws-s3",
+      "compression"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "single-cell-10x-handling",
+    "title": "Single-cell / 10x Handling",
+    "tags": [
+      "single-cell",
+      "10x",
+      "technical-reads",
+      "sra-stat"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "verification",
+    "title": "Verification",
+    "tags": [
+      "verification",
+      "md5",
+      "vdb-validate"
+    ],
+    "enabled": true
+  }
+]

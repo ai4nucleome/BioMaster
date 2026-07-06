@@ -1,0 +1,55 @@
+[
+  {
+    "id": "input-validation-loading",
+    "title": "Input Validation & Loading",
+    "tags": [
+      "input-validation",
+      "loading",
+      "raw-counts"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "qc-feature-selection",
+    "title": "QC & Feature Selection",
+    "tags": [
+      "qc",
+      "normalization",
+      "hvg",
+      "feature-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "latent-model-training",
+    "title": "Latent Model Training",
+    "tags": [
+      "scvi",
+      "scanvi",
+      "latent-embedding",
+      "batch-correction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "latent-projection-umap",
+    "title": "Latent Projection & UMAP",
+    "tags": [
+      "neighbors",
+      "umap",
+      "latent-projection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "diagnostics-export-reporting",
+    "title": "Diagnostics, Export & Reporting",
+    "tags": [
+      "batch-diagnostics",
+      "export",
+      "reporting",
+      "reproducibility"
+    ],
+    "enabled": true
+  }
+]

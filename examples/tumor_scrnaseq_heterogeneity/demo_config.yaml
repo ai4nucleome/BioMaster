@@ -1,0 +1,6 @@
+mode: test
+domain: tumor
+discipline: scrnaseq
+pipeline: tumor_heterogeneity
+dataset: maynard2020_3k
+route_id: tumor_scrnaseq_heterogeneity

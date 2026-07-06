@@ -1,0 +1,62 @@
+[
+  {
+    "id": "reading-10x-genomics-data",
+    "title": "Reading 10X Genomics Data",
+    "tags": [
+      "read-10x",
+      "cellranger",
+      "scanpy",
+      "seurat"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "creating-objects-from-matrices",
+    "title": "Creating Objects from Matrices",
+    "tags": [
+      "anndata",
+      "seurat-object",
+      "object-structure",
+      "from-matrix"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "reading-and-writing-native-formats",
+    "title": "Reading and Writing Native Formats",
+    "tags": [
+      "h5ad",
+      "rds",
+      "csv",
+      "loom",
+      "io",
+      "serialization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "metadata-subsetting-and-raw-counts",
+    "title": "Metadata, Subsetting, and Raw Counts",
+    "tags": [
+      "metadata",
+      "subsetting",
+      "raw-counts",
+      "layers",
+      "add-metadata"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "merging-and-format-conversion",
+    "title": "Merging and Format Conversion",
+    "tags": [
+      "merge",
+      "join-layers",
+      "format-conversion",
+      "seuratdisk",
+      "h5seurat",
+      "cross-language"
+    ],
+    "enabled": true
+  }
+]

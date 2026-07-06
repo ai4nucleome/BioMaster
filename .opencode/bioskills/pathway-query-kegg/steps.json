@@ -1,0 +1,42 @@
+[
+  {
+    "id": "setup-api-configuration",
+    "title": "Setup & API Configuration",
+    "tags": [
+      "setup",
+      "api-config",
+      "organism-codes"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "pathway-discovery",
+    "title": "Pathway Discovery",
+    "tags": [
+      "pathway-search",
+      "pathway-list",
+      "keyword-query"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "pathway-details-gene-retrieval",
+    "title": "Pathway Details & Gene Retrieval",
+    "tags": [
+      "pathway-details",
+      "pathway-genes",
+      "link-operation"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "gene-lookup-id-conversion",
+    "title": "Gene Lookup & ID Conversion",
+    "tags": [
+      "gene-lookup",
+      "id-conversion",
+      "conv-operation"
+    ],
+    "enabled": true
+  }
+]

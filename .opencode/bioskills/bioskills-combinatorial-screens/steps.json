@@ -1,0 +1,74 @@
+[
+  {
+    "id": "architecture-selection-library-design",
+    "title": "Architecture Selection & Library Design",
+    "tags": [
+      "library-design",
+      "architecture-selection",
+      "singleton-controls",
+      "cas12a",
+      "big-papi"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "library-qc-singleton-verification",
+    "title": "Library QC & Singleton Verification",
+    "tags": [
+      "qc",
+      "library-skew",
+      "gini",
+      "singleton-verification",
+      "coverage"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "mageck-mle-with-interaction-terms-cas9-big-papi-path",
+    "title": "MAGeCK MLE with Interaction Terms (Cas9 / Big Papi Path)",
+    "tags": [
+      "mageck-mle",
+      "interaction-terms",
+      "design-matrix",
+      "big-papi",
+      "cas9"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cas12a-4-guide-array-aggregation-in4mer-inzolia-path",
+    "title": "Cas12a 4-Guide Array Aggregation (in4mer / Inzolia Path)",
+    "tags": [
+      "cas12a",
+      "in4mer",
+      "inzolia",
+      "cassette-aggregation",
+      "lfc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "genetic-interaction-scoring",
+    "title": "Genetic Interaction Scoring",
+    "tags": [
+      "gi-scoring",
+      "synthetic-lethal",
+      "synthetic-rescue",
+      "additive-null",
+      "zscore"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "failure-diagnosis-cross-modality-validation",
+    "title": "Failure Diagnosis & Cross-Modality Validation",
+    "tags": [
+      "failure-diagnosis",
+      "validation",
+      "saturation",
+      "cross-modality",
+      "quality-control"
+    ],
+    "enabled": true
+  }
+]

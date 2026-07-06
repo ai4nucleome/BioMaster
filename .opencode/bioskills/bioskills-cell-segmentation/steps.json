@@ -1,0 +1,56 @@
+[
+  {
+    "id": "preparation-image-loading",
+    "title": "Preparation & Image Loading",
+    "tags": [
+      "image-loading",
+      "version-check",
+      "channel-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cell-segmentation",
+    "title": "Cell Segmentation",
+    "tags": [
+      "cellpose",
+      "deepcell",
+      "mesmer",
+      "steinbock",
+      "segmentation",
+      "nuclei-expansion"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "single-cell-data-extraction",
+    "title": "Single-Cell Data Extraction",
+    "tags": [
+      "regionprops",
+      "intensity-extraction",
+      "morphology"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "quality-control",
+    "title": "Quality Control",
+    "tags": [
+      "qc",
+      "visualization",
+      "statistics"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "export-save",
+    "title": "Export & Save",
+    "tags": [
+      "export",
+      "anndata",
+      "tiff",
+      "csv"
+    ],
+    "enabled": true
+  }
+]

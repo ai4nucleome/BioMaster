@@ -2,7 +2,7 @@
 # BioMaster-on-OpenCode dev launcher
 # Usage: ./oc.sh {start|stop|restart|status|logs}
 #
-# Starts the opencode backend server (bound to the biomaster2-main project)
+# Starts the opencode backend server (bound to this BioMaster project root)
 # and the SolidJS web frontend, so you can use BioMaster in a browser.
 
 set -u
@@ -12,21 +12,49 @@ export PATH="$HOME/.bun/bin:$PATH"
 SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 # ROOT is the directory that contains this script (portable across machines).
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-BIO_DIR="$ROOT/biomaster2-main"
+BIO_DIR="$ROOT"
 OC_INDEX="$ROOT/opencode/packages/opencode/src/index.ts"
 APP_DIR="$ROOT/opencode/packages/app"
 
 BACKEND_PORT="${BACKEND_PORT:-4096}"
 FRONTEND_PORT="${FRONTEND_PORT:-4444}"
 HOSTNAME_BIND="${HOSTNAME_BIND:-127.0.0.1}"
+BACKEND_HOSTNAME_BIND="${BACKEND_HOSTNAME_BIND:-127.0.0.1}"
 HEALTHCHECK_HOST="$HOSTNAME_BIND"
 if [ "$HEALTHCHECK_HOST" = "0.0.0.0" ]; then
   HEALTHCHECK_HOST="127.0.0.1"
+fi
+BACKEND_HEALTHCHECK_HOST="$BACKEND_HOSTNAME_BIND"
+if [ "$BACKEND_HEALTHCHECK_HOST" = "0.0.0.0" ]; then
+  BACKEND_HEALTHCHECK_HOST="127.0.0.1"
 fi
 
 BACKEND_LOG="${BACKEND_LOG:-$ROOT/.logs/opencode-${USER:-user}-backend.log}"
 FRONTEND_LOG="${FRONTEND_LOG:-$ROOT/.logs/opencode-${USER:-user}-frontend.log}"
 mkdir -p "$(dirname "$BACKEND_LOG")" "$(dirname "$FRONTEND_LOG")"
+
+require_safe_remote() {
+  if [ "$HOSTNAME_BIND" != "0.0.0.0" ]; then
+    return
+  fi
+  if [ -n "${OPENCODE_SERVER_PASSWORD:-}" ]; then
+    return
+  fi
+  if [ "${ALLOW_UNSAFE_REMOTE:-0}" = "1" ]; then
+    echo "warning: HOSTNAME_BIND=0.0.0.0 without OPENCODE_SERVER_PASSWORD is unsecured"
+    return
+  fi
+  cat >&2 <<'EOF'
+Refusing to bind BioMaster to 0.0.0.0 without authentication.
+
+Set a password for remote access:
+  HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD='<strong-password>' ./oc.sh restart
+
+For trusted isolated networks only, override with:
+  ALLOW_UNSAFE_REMOTE=1 HOSTNAME_BIND=0.0.0.0 ./oc.sh restart
+EOF
+  exit 1
+}
 
 if command -v bun >/dev/null 2>&1; then
   BUN_CMD="bun"
@@ -54,8 +82,8 @@ start_backend() {
     echo "backend already running (pid $(backend_pid))"
     return
   fi
-  echo "starting backend on ${HOSTNAME_BIND}:${BACKEND_PORT} (project: ${BIO_DIR}) ..."
-  setsid bash -c "cd '$BIO_DIR' && ${BUN_CMD} --conditions=browser '$OC_INDEX' serve --port ${BACKEND_PORT} --hostname ${HOSTNAME_BIND} --print-logs > '$BACKEND_LOG' 2>&1" < /dev/null &
+  echo "starting backend on ${BACKEND_HOSTNAME_BIND}:${BACKEND_PORT} (internal API, project: ${BIO_DIR}) ..."
+  setsid bash -c "cd '$BIO_DIR' && ${BUN_CMD} --conditions=browser '$OC_INDEX' serve --port ${BACKEND_PORT} --hostname ${BACKEND_HOSTNAME_BIND} --print-logs > '$BACKEND_LOG' 2>&1" < /dev/null &
   disown
 }
 
@@ -67,7 +95,7 @@ start_frontend() {
   echo "starting frontend on ${HOSTNAME_BIND}:${FRONTEND_PORT} ..."
   # Use `bun --bun` so vite runs on bun's runtime instead of whatever `node`
   # happens to be first in PATH (background shells can pick up an ancient node).
-  setsid bash -c "cd '$APP_DIR' && VITE_OPENCODE_SERVER_HOST=${HOSTNAME_BIND} VITE_OPENCODE_SERVER_PORT=${BACKEND_PORT} ${BUN_CMD} --bun run dev -- --port ${FRONTEND_PORT} --host ${HOSTNAME_BIND} > '$FRONTEND_LOG' 2>&1" < /dev/null &
+  setsid bash -c "cd '$APP_DIR' && VITE_OPENCODE_SINGLE_PORT=1 VITE_BIOMASTER_PROJECT_PATH='$BIO_DIR' VITE_OPENCODE_SERVER_HOST=${HEALTHCHECK_HOST} VITE_OPENCODE_SERVER_PORT=${BACKEND_PORT} VITE_OPENCODE_BACKEND_PROXY_TARGET=http://${BACKEND_HEALTHCHECK_HOST}:${BACKEND_PORT} ${BUN_CMD} --bun run dev -- --port ${FRONTEND_PORT} --host ${HOSTNAME_BIND} > '$FRONTEND_LOG' 2>&1" < /dev/null &
   disown
 }
 
@@ -106,6 +134,7 @@ stop_frontend() {
 
 case "${1:-status}" in
   start)
+    require_safe_remote
     start_backend
     start_frontend
     echo "waiting for services ..."
@@ -122,12 +151,14 @@ case "${1:-status}" in
     "$SELF" start
     ;;
   status)
-    echo "backend  (${BACKEND_PORT}): pid=$(backend_pid || echo -) http=$(http_code http://${HEALTHCHECK_HOST}:${BACKEND_PORT}/agent)"
+    echo "backend  (${BACKEND_PORT}, internal): pid=$(backend_pid || echo -) http=$(http_code http://${BACKEND_HEALTHCHECK_HOST}:${BACKEND_PORT}/global/health)"
     echo "frontend (${FRONTEND_PORT}): pid=$(frontend_pid || echo -) http=$(http_code http://${HEALTHCHECK_HOST}:${FRONTEND_PORT}/)"
     if [ "$HOSTNAME_BIND" = "0.0.0.0" ]; then
+      echo "app:       http://<server-ip>:${FRONTEND_PORT}"
       echo "bioskills: http://<server-ip>:${FRONTEND_PORT}${BIOSKILLS_PATH}"
-      echo "local:     http://${HEALTHCHECK_HOST}:${FRONTEND_PORT}${BIOSKILLS_PATH}"
+      echo "local:     http://${HEALTHCHECK_HOST}:${FRONTEND_PORT}"
     else
+      echo "app:       http://${HOSTNAME_BIND}:${FRONTEND_PORT}"
       echo "bioskills: http://${HOSTNAME_BIND}:${FRONTEND_PORT}${BIOSKILLS_PATH}"
     fi
     ;;

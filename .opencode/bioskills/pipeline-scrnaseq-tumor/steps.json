@@ -1,0 +1,13 @@
+[
+  {
+    "id": "pipeline",
+    "title": "Pipeline",
+    "tags": [
+      "pipeline",
+      "tumor",
+      "scrnaseq",
+      "tumor_scrnaseq"
+    ],
+    "enabled": true
+  }
+]

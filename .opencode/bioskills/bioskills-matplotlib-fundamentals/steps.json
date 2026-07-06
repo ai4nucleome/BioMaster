@@ -1,0 +1,89 @@
+[
+  {
+    "id": "setup-configuration",
+    "title": "Setup & Configuration",
+    "tags": [
+      "rcparams",
+      "configuration",
+      "fonts",
+      "version-check"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "figure-axes-creation",
+    "title": "Figure & Axes Creation",
+    "tags": [
+      "figure",
+      "axes",
+      "subplots",
+      "constrained-layout",
+      "figsize"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "plotting-common-chart-types",
+    "title": "Plotting Common Chart Types",
+    "tags": [
+      "scatter",
+      "line",
+      "bar",
+      "boxplot",
+      "histogram",
+      "heatmap",
+      "rasterization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "seaborn-integration",
+    "title": "seaborn Integration",
+    "tags": [
+      "seaborn",
+      "axes-level",
+      "facetgrid",
+      "objects-grammar"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "axis-formatting-color",
+    "title": "Axis Formatting & Color",
+    "tags": [
+      "axis-formatting",
+      "ticks",
+      "scales",
+      "color-palette",
+      "cvd-safe",
+      "diverging"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "saving-export",
+    "title": "Saving & Export",
+    "tags": [
+      "savefig",
+      "export",
+      "pdf",
+      "png",
+      "tiff",
+      "svg",
+      "dpi"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "troubleshooting-failure-modes",
+    "title": "Troubleshooting Failure Modes",
+    "tags": [
+      "troubleshooting",
+      "fonts",
+      "layout",
+      "rasterization",
+      "debugging"
+    ],
+    "enabled": true
+  }
+]

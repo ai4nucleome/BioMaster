@@ -1,0 +1,21 @@
+# Bioskills Batch Integration
+
+## Overview
+
+This workflow integrates multiple scRNA-seq batches to remove technical batch effects while preserving biological variation. It takes merged or per-sample count matrices annotated with a batch key and produces a batch-corrected embedding suitable for clustering, visualization, and annotation. The pipeline first jointly preprocesses and merges samples (QC, normalization, batch-aware highly variable gene selection, scaling, PCA), then applies a chosen correction method (Harmony, scVI, scANVI, Seurat CCA/RPCA, or fastMNN) to learn a batch-invariant embedding, runs downstream clustering and UMAP on the corrected embedding, and finally evaluates integration quality with mixing metrics (LISI, silhouette) and before/after visual checks. Use this skill when combining samples from different runs, donors, technologies, or labs; for multi-omic integration across modalities use a separate multimodal skill. Reference examples were tested with anndata 0.10+, scanpy 1.10+, scikit-learn 1.4+, and scvi-tools 1.1+; if installed versions differ, introspect the package (pip show / packageVersion) and adapt API calls rather than retrying on ImportError or AttributeError.
+
+## Preprocessing & Merging
+
+Load per-sample count matrices (e.g. 10X h5 files), merge them into a single object carrying a batch identifier (orig.ident / batch key), and run shared preprocessing before any correction. This includes basic QC (filter low-quality cells by gene counts and mitochondrial fraction), normalization, log-transformation, batch-aware highly variable gene selection so HVGs are chosen across batches, scaling, and PCA. The resulting PCA embedding is the input to embedding-based correctors like Harmony, while raw counts feed count-based models like scVI. This stage is method-agnostic and must be completed before choosing a correction approach.
+
+## Batch Correction
+
+Select and apply an integration method to remove batch effects from the PCA embedding or raw counts. Method choice depends on dataset size and batch-effect severity: Harmony iteratively corrects PCA embeddings and is the fast default for most cases; scVI trains a variational autoencoder conditioned on batch to learn a batch-invariant latent space and scales to large datasets with strong batch effects; scANVI extends scVI with partial cell-type labels for semi-supervised label transfer; Seurat's anchor-based framework (CCA, or the faster RPCA) finds shared biological anchors between datasets and is suited to conserved biology and reference mapping; fastMNN uses mutual nearest neighbors and is preferred when preserving rare populations matters. Multiple batch variables (e.g. sample and technology) can be corrected jointly. Every method outputs a batch-corrected embedding stored in a dedicated reduction (harmony, X_scVI, integrated.cca, or MNN) for downstream use. Selection guide: Harmony for quick integration and most cases; scVI or Harmony for large datasets (>500k cells); scVI for strong batch effects; Seurat anchors or scANVI for reference mapping; fastMNN for preserving rare populations.
+
+## Downstream Clustering & Visualization
+
+Build the neighbor graph, run UMAP, and cluster cells on the batch-corrected embedding rather than the raw PCA. Use the corrected reduction (harmony, X_scVI, integrated.cca, or MNN) as the input representation for both neighbor construction and UMAP. Clustering resolution should be tuned to the biological question; a typical starting resolution is 0.5. Visualize the result split by batch (to confirm mixing) and by cluster (to confirm biological structure) before proceeding to annotation.
+
+## Integration Evaluation
+
+Assess whether integration successfully removed batch effects while preserving biological variation. Quantitative metrics include LISI (Local Inverse Simpson's Index) and silhouette scores: batch mixing should be high (batches well mixed) while cell-type separation should be preserved (low LISI / high silhouette for cell types). Visual assessment compares PCA (before) versus the corrected embedding (after), split by batch and by cell type, to confirm that batches mix while biological structure remains. Always evaluate before drawing biological conclusions from integrated data.

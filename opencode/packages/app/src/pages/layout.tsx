@@ -1122,7 +1122,6 @@ export default function LegacyLayout(props: ParentProps) {
 
   function projectRoot(directory: string) {
     const key = pathKey(directory)
-    if (key.endsWith("/biomaster2-main")) return directory
     const project = layout.projects
       .list()
       .find((item) => pathKey(item.worktree) === key || item.sandboxes?.some((sandbox) => pathKey(sandbox) === key))
@@ -2243,14 +2242,7 @@ export default function LegacyLayout(props: ParentProps) {
         const roots = [currentProject()?.worktree, ...projects().map((project) => project.worktree)].filter(
           (root): root is string => Boolean(root),
         )
-        const biomasterRoots = roots
-          .filter((root) => !root.endsWith("/biomaster2-main"))
-          .map((root) => `${root.replace(/\/+$/, "")}/biomaster2-main`)
-        const root =
-          roots.find((candidate) => candidate.endsWith("/biomaster2-main")) ??
-          roots.find((candidate) => candidate.includes("/biomaster2-main")) ??
-          biomasterRoots[0] ??
-          roots[0]
+        const root = roots[0]
         if (root) {
           openProject(root, false)
           navigateWithSidebarReset(`/${base64Encode(root)}/skills`)

@@ -34,7 +34,7 @@ The BioMaster manuscript, **"BioMaster: Multi-agent System for Automated Bioinfo
 | User interface | Modified OpenCode frontend with BioMaster and BioSkills management pages |
 | Agent runtime | Plan, Execute, Debug, and Check agents following the deterministic v0.2 workflow skeleton |
 | Knowledge layer | File-backed BioSkills library with SQLite cache generated from `.opencode/bioskills/` |
-| Deployment assets | GitHub Pages-ready static site in `docs/`, cleaned archive `docs.tar.gz`, and curated figures in `source/` |
+| Deployment assets | GitHub Pages-ready static site in `docs/` and curated figures in `source/` |
 | Validation | BioSkills validation, SQLite sync, smoke tests, and pytest workflow coverage |
 
 ## Manuscript and Figures
@@ -57,9 +57,9 @@ BioMaster uses a stepwise multi-agent workflow:
 
 The current deployment keeps this agent skeleton stable while using the newer BioSkills and SQLite control layer:
 
-- `biomaster2-main/.opencode/bioskills/` is the canonical BioSkills source.
-- `biomaster2-main/.opencode/knowledge/biomaster_skills.db` is a generated cache and should not be committed.
 - `opencode/` contains the modified OpenCode backend and web application.
+- `.opencode/bioskills/` is the canonical BioSkills source.
+- `.opencode/knowledge/biomaster_skills.db` is a generated cache and should not be committed.
 - `docs/` contains the static public project site and can be selected directly as the GitHub Pages source.
 
 ## Repository Structure
@@ -67,9 +67,9 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 ```text
 .
 ├── README.md
-├── oc.sh                         # OpenCode backend/frontend launcher
+├── install.sh                    # first-time installer and dependency setup
+├── oc.sh                         # daily OpenCode backend/frontend launcher
 ├── docs/                         # GitHub Pages-ready static public site
-├── docs.tar.gz                   # cleaned static site deployment archive
 ├── source/                       # publication and deployment assets
 │   ├── Biomaster.svg             # project logo
 │   ├── UI.png                    # UI asset
@@ -79,18 +79,36 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 │   └── packages/
 │       ├── opencode/             # backend API, including BioSkills routes
 │       └── app/                  # web frontend and BioSkills Library UI
-└── biomaster2-main/              # BioMaster OpenCode project
-    ├── data/                     # demo datasets for test-mode workflows
-    ├── examples/                 # smoke tests and example requests
-    ├── tests/                    # pytest coverage
-    └── .opencode/
-        ├── agents/               # plan, execute, debug, check, skiller, author, creator
-        ├── commands/             # biomaster-* command templates
-        ├── bioskills/            # canonical file-backed BioSkills library
-        ├── runtime/biomaster/    # Python runtime bridge and validation logic
-        ├── tools/                # BioSkills OpenCode tools
-        └── knowledge/            # generated SQLite cache location
+├── examples/                     # smoke tests and example requests
+├── tests/                        # pytest coverage
+└── .opencode/                    # BioMaster OpenCode project configuration
+    ├── agents/                   # plan, execute, debug, check, skiller, author, creator
+    ├── commands/                 # biomaster-* command templates
+    ├── bioskills/                # canonical file-backed BioSkills library
+    ├── runtime/biomaster/        # Python runtime bridge and validation logic
+    ├── tools/                    # BioSkills OpenCode tools
+    └── knowledge/                # generated SQLite cache location
 ```
+
+## Portability and Release Boundary
+
+BioMaster v0.5 is designed to run from any checkout path. The launcher derives all repository paths from the location of `install.sh` and `oc.sh`; do not hard-code `/home/...`, `/Users/...`, or server-specific paths in project files.
+
+Tracked release assets:
+
+- `.opencode/`: BioMaster agents, commands, skill, BioSkills library, runtime bridge, and plugin package manifest.
+- `opencode/`: the modified OpenCode backend/frontend source.
+- `docs/` and `source/`: public site and manuscript-facing assets.
+- `examples/` and `tests/`: lightweight fixtures and release validation.
+
+Untracked/generated assets:
+
+- `opencode/node_modules/` and `.opencode/node_modules/`
+- `.logs/`
+- `projects/` and `runs/`
+- `.opencode/knowledge/biomaster_skills.db`
+- `.opencode/bioskills/.index.db`
+- local `data/` with large/private biological inputs
 
 ## Quick Start
 
@@ -109,50 +127,29 @@ git checkout v0.5
 git pull --ff-only origin v0.5
 ```
 
-### 1. Prepare Node.js and Bun
+### 1. Install and configure BioMaster
 
-BioMaster v0.5 uses Bun for the OpenCode backend/frontend. On older servers, system Node.js may be too old for native dependencies such as `tree-sitter-*`; use Node.js 22 or newer.
-
-```bash
-# Install Bun if needed.
-curl -fsSL https://bun.sh/install | bash
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# Install Node.js 22 with nvm if needed.
-curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-. "$NVM_DIR/nvm.sh"
-nvm install 22
-nvm use 22
-nvm alias default 22
-
-# Use a modern node-gyp instead of an old system node-gyp.
-npm install -g node-gyp
-export npm_config_node_gyp="$HOME/.nvm/versions/node/$(node -v)/lib/node_modules/node-gyp/bin/node-gyp.js"
-
-node -v
-bun -v
-node "$npm_config_node_gyp" --version
-```
-
-### 2. Install dependencies
-
-Run these commands from the repository root:
+Use `install.sh` for the first deployment on a new machine. It installs or selects Bun, Node.js 22, a modern `node-gyp`, Python dependencies, OpenCode dependencies, BioMaster plugin dependencies, and then validates the BioSkills index.
 
 ```bash
-cd opencode
-rm -rf node_modules
-bun install
-cd ..
-
-cd biomaster2-main/.opencode
-rm -rf node_modules
-bun install
-cd ../..
+./install.sh
 ```
 
-### 3. Start the local interface
+For a completely fresh dependency rebuild:
+
+```bash
+./install.sh --clean
+```
+
+Expected successful checks include:
+
+```text
+node v22.x
+bun 1.x
+Validated 185 BioSkills
+```
+
+### 2. Run BioMaster
 
 ```bash
 ./oc.sh restart
@@ -165,24 +162,48 @@ Open:
 http://127.0.0.1:4444
 ```
 
-### 4. Start on a remote server
+`./oc.sh` starts two internal processes but exposes one browser-facing entrypoint. The backend is bound to localhost by default, and the frontend proxies API, SSE, WebSocket, and BioSkills requests to it.
 
-For direct remote access, bind both services to all interfaces and set a password:
+### 3. What appears in OpenCode
+
+When the BioMaster project root is selected, OpenCode automatically loads:
+
+- the public skill `/biomaster` from `.opencode/skills/biomaster/SKILL.md`;
+- workflow commands such as `/biomaster-start`, `/biomaster-run`, `/biomaster-plan`, `/biomaster-check`, `/biomaster-debug`, and `/biomaster-resume` from `.opencode/commands/`.
+
+These entries are expected on every correctly deployed device. They are project-local BioMaster controls, not browser cache artifacts.
+
+### 4. Start BioMaster on a remote server
+
+For direct remote access, bind the web entrypoint to all interfaces and set a password. Do not reuse the example password below; generate a deployment-specific value:
 
 ```bash
-HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD=agent ./oc.sh restart
-HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD=agent ./oc.sh status
+export OPENCODE_SERVER_PASSWORD="$(openssl rand -base64 24)"
+HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD="$OPENCODE_SERVER_PASSWORD" ./oc.sh restart
+HOSTNAME_BIND=0.0.0.0 OPENCODE_SERVER_PASSWORD="$OPENCODE_SERVER_PASSWORD" ./oc.sh status
+```
+
+Generate the browser token on the server:
+
+```bash
+python3 - <<'PY'
+import base64, os
+password = os.environ["OPENCODE_SERVER_PASSWORD"]
+print(base64.urlsafe_b64encode(f"opencode:{password}".encode()).decode().rstrip("="))
+PY
 ```
 
 Open the frontend with the actual server IP address:
 
 ```text
-http://<server-ip>:4444/?auth_token=b3BlbmNvZGU6YWdlbnQ=
+http://<server-ip>:4444/?auth_token=<generated-token>
 ```
 
-The example token corresponds to `opencode:agent`. For any public or shared deployment, replace the example password and avoid exposing an unauthenticated backend.
+For safety, `oc.sh` refuses `HOSTNAME_BIND=0.0.0.0` unless `OPENCODE_SERVER_PASSWORD` is set. For trusted isolated networks only, override this with `ALLOW_UNSAFE_REMOTE=1`.
 
-To use custom ports:
+BioMaster v0.5 uses a **single browser-facing port** by default. The frontend port is the only URL users need to open. The backend still runs internally, but the Vite frontend proxies API, SSE, WebSocket, and BioSkills requests to it.
+
+To use a custom public port, keep `FRONTEND_PORT` as the browser port and treat `BACKEND_PORT` as an internal API port:
 
 ```bash
 ./oc.sh stop
@@ -190,17 +211,19 @@ To use custom ports:
 HOSTNAME_BIND=0.0.0.0 \
 BACKEND_PORT=18096 \
 FRONTEND_PORT=18080 \
-OPENCODE_SERVER_PASSWORD=agent \
+OPENCODE_SERVER_PASSWORD="$OPENCODE_SERVER_PASSWORD" \
 ./oc.sh restart
 ```
 
 Then open:
 
 ```text
-http://<server-ip>:18080/?auth_token=b3BlbmNvZGU6YWdlbnQ=
+http://<server-ip>:18080/?auth_token=<generated-token>
 ```
 
-Use the frontend port in the browser. In the example above, `18080` is the web UI and `18096` is the backend API. Opening the backend port directly is not the BioMaster interface. If the backend health check returns `401` while `OPENCODE_SERVER_PASSWORD` is set, authentication is enabled and the backend is alive; use the frontend URL with `auth_token`.
+Use the frontend port in the browser. In the example above, `18080` is the web UI and the single public entrypoint. `18096` is the internal backend API used by the proxy and does not need to be opened in the browser or exposed externally.
+
+### 5. Verify the running service
 
 To verify that the running services come from this repository and not from another user's stale process:
 
@@ -213,17 +236,42 @@ ps -fp "$(pgrep -f "(bun.*run dev|vite).*--port 18080" | head -1)"
 
 The backend command should point to this checkout's `opencode/packages/opencode/src/index.ts`, and the frontend command should point to this checkout's `opencode/packages/app`.
 
-On HPC or institutional servers, external ports may be blocked even when `./oc.sh status` reports `http=200`. In that case, keep the service bound to localhost and use an SSH tunnel from your local machine:
+To test the single-port proxy from the browser-facing port:
+
+```bash
+curl http://127.0.0.1:18080/global/health
+```
+
+The expected response is similar to:
+
+```json
+{"healthy":true,"version":"local"}
+```
+
+BioMaster-specific checks through the same browser-facing port:
+
+```bash
+curl http://127.0.0.1:18080/command
+curl "http://127.0.0.1:18080/bioskills?directory=$(pwd)"
+```
+
+The command endpoint should include `biomaster-start`, `biomaster-run`, and `biomaster-check`. The BioSkills endpoint should return the curated skills stored under `.opencode/bioskills/`.
+
+### 6. Use an SSH tunnel when ports are blocked
+
+On HPC or institutional servers, external ports may be blocked even when `./oc.sh status` reports `http=200`. In that case, keep the service bound to localhost and forward only the frontend port from your local machine:
 
 ```bash
 # Server
 ./oc.sh restart
 
 # Local machine
-ssh -L 4444:127.0.0.1:4444 -L 4096:127.0.0.1:4096 <user>@<server-ip>
+ssh -L 4444:127.0.0.1:4444 <user>@<server-ip>
 ```
 
 Then open `http://127.0.0.1:4444` locally.
+
+### 7. Logs and process control
 
 Logs are written under `.logs/` by default and include the current username in the filename. This avoids permission conflicts on shared systems where temporary log files may belong to another user. Override the paths only when needed:
 
@@ -240,6 +288,17 @@ Useful launcher commands:
 ./oc.sh status     # show process IDs and HTTP status
 ./oc.sh logs       # show recent backend/frontend logs
 ```
+
+### Deployment Troubleshooting
+
+- **First deployment**: run `./install.sh` from the repository root. Use `./install.sh --clean` when moving between machines or after dependency corruption.
+- **`cd opencode` fails after cloning**: confirm that the `v0.5` branch is checked out with `git checkout v0.5`.
+- **`bun install` fails with `std::string_view` or old `node-gyp` errors**: run `./install.sh --clean`; the installer selects Node.js 22 and exports a modern `node-gyp`.
+- **`.opencode` dependency install fails**: confirm `.opencode/package.json` exists, then run `./install.sh --clean`.
+- **Browser shows a red disconnected indicator**: hard refresh the page, then confirm `./oc.sh status` reports `frontend http=200` and `curl http://127.0.0.1:4444/global/health` returns healthy JSON.
+- **Remote browser cannot open the page**: confirm that the firewall or cluster gateway allows the frontend port, or use the SSH tunnel workflow above.
+- **Backend health returns `401` when a password is set**: this indicates authentication is active. Use the frontend URL with the `auth_token` query parameter.
+- **BioMaster commands are missing**: make sure the selected project directory is the repository root and that `.opencode/commands/` exists in that root.
 
 ## Static Site Deployment
 
@@ -263,9 +322,44 @@ Deployment options:
 - **GitHub Pages**: set the Pages source to the `v0.5` branch and `/docs` folder.
 - **Nginx/Apache**: copy the contents of `docs/` to the web root.
 - **Vercel/Netlify**: deploy `docs/` as a static site.
-- **Archive transfer**: use `docs.tar.gz`, which is regenerated from `docs/` without macOS metadata files.
 
 ## Using BioMaster
+
+### BioMaster loading model
+
+BioMaster is loaded as **project-level OpenCode configuration**, not as a global OpenCode plugin. In v0.5, the repository root is the BioMaster project root, and the runtime, agents, commands, and curated skills live under:
+
+```text
+.opencode/
+```
+
+Important subdirectories include:
+
+- `.opencode/skills/`: OpenCode skills, including the primary `biomaster` skill.
+- `.opencode/commands/`: slash commands such as `/biomaster-start`, `/biomaster-run`, and `/biomaster-check`.
+- `.opencode/agents/`: BioMaster Plan, Execute, Debug, Check, and skill-management agents.
+- `.opencode/bioskills/`: the canonical BioSkills knowledge library.
+
+Because the configuration is project-local, BioMaster will not automatically load when running a globally installed OpenCode binary outside this checkout. Always start this repository's modified OpenCode runtime with:
+
+```bash
+./oc.sh restart
+```
+
+Do not use a globally installed command for BioMaster sessions:
+
+```bash
+opencode
+npx opencode
+```
+
+When the UI asks for a project directory, open:
+
+```text
+<repository-root>
+```
+
+The repository root now contains `.opencode/`, so BioMaster commands and skills are available without selecting a nested project directory.
 
 ### BioMaster workflow interface
 
@@ -274,7 +368,7 @@ Deployment options:
 3. Select the BioMaster project directory when prompted:
 
    ```text
-   <repository-root>/biomaster2-main
+   <repository-root>
    ```
 
 4. Use the BioMaster commands and agents through OpenCode:
@@ -287,7 +381,7 @@ Deployment options:
 The BioSkills Library stores structured knowledge as files under:
 
 ```text
-biomaster2-main/.opencode/bioskills/
+.opencode/bioskills/
 ```
 
 Each curated skill contains:
@@ -299,12 +393,39 @@ Each curated skill contains:
 
 The SQLite database under `.opencode/knowledge/` is a generated cache. If it is missing, it is rebuilt by the runtime sync scripts and tests.
 
+### Adding or updating skills
+
+OpenCode skills are loaded from the current project configuration. If a new skill is created under `.opencode/skills/`, restart OpenCode or reopen the BioMaster project before expecting the skill to auto-trigger:
+
+```bash
+./oc.sh restart
+```
+
+For example, a skill created at:
+
+```text
+.opencode/skills/tcga_luad_deg_enrichment/SKILL.md
+```
+
+will be available in sessions whose project directory is `<repository-root>`.
+
+### Troubleshooting BioMaster loading
+
+If BioMaster appears missing in a new session, check the following before debugging the model prompt:
+
+- The service was started with `./oc.sh`, not a global `opencode` or `npx opencode` command.
+- The selected project is `<repository-root>`.
+- The browser frontend is connected to the matching backend through the single-port proxy.
+- `/global/health` on the frontend port returns a healthy response.
+- After adding new `.opencode/skills/*/SKILL.md` files, OpenCode was restarted or the project was reopened.
+
+The backend port is an internal API endpoint and is not the BioMaster interface. Open the frontend port in the browser and include `auth_token` when `OPENCODE_SERVER_PASSWORD` is set.
+
 ## Validation
 
 Run the full validation suite before release or deployment:
 
 ```bash
-cd biomaster2-main
 make test
 ```
 
@@ -322,7 +443,12 @@ Generated files should remain untracked:
 - `.opencode/knowledge/biomaster_skills.db`
 - `.opencode/bioskills/.index.db`
 - `projects/<slug>/`
+- `runs/<run_id>/`
 - Python caches such as `__pycache__/` and `.pytest_cache/`
+
+`projects/` and `runs/` are runtime-created output directories. They are intentionally absent from a clean release checkout and are created on demand when BioMaster executes a workflow.
+
+Large local datasets are not shipped in the release repository. Keep reproducible, lightweight fixtures under `examples/data/` or `examples/real_data/`; place private or large analysis inputs outside the repository or under an ignored local `data/` directory.
 
 ## Source Assets
 
@@ -347,7 +473,7 @@ Keep figure claims consistent with the accepted manuscript and verified benchmar
 
 v0.5 is intended as a deployment and presentation version:
 
-- retains the v0.4 OpenCode/BioSkills runtime structure;
+- uses a flattened single-root BioMaster project structure with `opencode/` retained as the embedded engine;
 - adds the GitHub Pages-ready static site and manuscript-facing assets;
 - keeps the v0.2-style Plan -> Execute -> Debug -> Check workflow discipline;
 - organizes source assets for paper, documentation, and website reuse.
@@ -371,7 +497,8 @@ The citation entry will be updated when the final *Patterns* publication metadat
 ## Maintainer Checklist
 
 - Keep `docs/` and `source/` separate from runtime-generated workflow outputs.
-- Keep BioSkills source files in `biomaster2-main/.opencode/bioskills/`.
+- Keep BioSkills source files in `.opencode/bioskills/`.
 - Do not commit generated SQLite databases, BioSkills FTS indexes, dependency folders, or project run outputs.
+- Keep only lightweight example fixtures in `examples/`; do not commit large `.h5ad` or private biological datasets.
 - Review large biological data files before public release or migration to Git LFS.
 - Re-run `make test` after modifying runtime code, agents, BioSkills schemas, or OpenCode BioSkills routes.

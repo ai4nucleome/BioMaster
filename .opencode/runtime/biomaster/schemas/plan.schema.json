@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["analysis_type", "plan_version", "steps"],
+  "properties": {
+    "analysis_type": { "type": "string" },
+    "plan_version": { "type": "integer" },
+    "mode": { "type": "string" },
+    "dataset": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "objective"],
+        "properties": {
+          "step_id": { "type": "string" },
+          "objective": { "type": "string" },
+          "required_execute_skills": { "type": "array", "items": { "type": "string" } },
+          "required_report_skills": { "type": "array", "items": { "type": "string" } },
+          "required_verify_skills": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

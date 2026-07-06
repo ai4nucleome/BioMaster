@@ -1,0 +1,75 @@
+[
+  {
+    "id": "library-design-and-pre-screen-validation",
+    "title": "Library Design and Pre-Screen Validation",
+    "tags": [
+      "library-design",
+      "qc",
+      "validation",
+      "gini"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "guide-counting",
+    "title": "Guide Counting",
+    "tags": [
+      "counting",
+      "mageck",
+      "fastq",
+      "normalization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "quality-control",
+    "title": "Quality Control",
+    "tags": [
+      "qc",
+      "gini",
+      "replicate-correlation",
+      "pr-auc",
+      "screen-qc"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "copy-number-and-batch-correction",
+    "title": "Copy-Number and Batch Correction",
+    "tags": [
+      "copy-number",
+      "batch-correction",
+      "crisprcleanr",
+      "chronos",
+      "mageck-mle"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "hit-calling",
+    "title": "Hit Calling",
+    "tags": [
+      "hit-calling",
+      "mageck-rra",
+      "mageck-mle",
+      "bagel",
+      "drugz",
+      "jacks",
+      "chronos"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "consensus-and-visualization",
+    "title": "Consensus and Visualization",
+    "tags": [
+      "consensus",
+      "tiering",
+      "visualization",
+      "volcano",
+      "enrichment",
+      "mageckflute"
+    ],
+    "enabled": true
+  }
+]

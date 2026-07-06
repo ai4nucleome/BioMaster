@@ -1,0 +1,52 @@
+[
+  {
+    "id": "preprocessing-merging",
+    "title": "Preprocessing & Merging",
+    "tags": [
+      "merge",
+      "qc",
+      "normalization",
+      "hvg",
+      "pca"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "batch-correction",
+    "title": "Batch Correction",
+    "tags": [
+      "harmony",
+      "scvi",
+      "scanvi",
+      "seurat",
+      "cca",
+      "rpca",
+      "fastmnn",
+      "batch-correction"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "downstream-clustering-visualization",
+    "title": "Downstream Clustering & Visualization",
+    "tags": [
+      "neighbors",
+      "umap",
+      "leiden",
+      "clustering",
+      "visualization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "integration-evaluation",
+    "title": "Integration Evaluation",
+    "tags": [
+      "lisi",
+      "silhouette",
+      "evaluation",
+      "qc"
+    ],
+    "enabled": true
+  }
+]

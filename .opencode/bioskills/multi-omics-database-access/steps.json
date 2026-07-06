@@ -1,0 +1,52 @@
+[
+  {
+    "id": "pick-the-right-database",
+    "title": "Pick the right database",
+    "tags": [
+      "database-selection",
+      "repository-mapping"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "query-reproducibly",
+    "title": "Query reproducibly",
+    "tags": [
+      "query",
+      "eutils",
+      "esearch",
+      "provenance"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "normalize-returned-metadata",
+    "title": "Normalize returned metadata",
+    "tags": [
+      "metadata-normalization",
+      "id-mapping",
+      "pandas"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "download-only-needed-assets",
+    "title": "Download only needed assets",
+    "tags": [
+      "download",
+      "efetch",
+      "filtered-retrieval"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "export-usable-references",
+    "title": "Export usable references",
+    "tags": [
+      "export",
+      "provenance",
+      "metadata-tables"
+    ],
+    "enabled": true
+  }
+]

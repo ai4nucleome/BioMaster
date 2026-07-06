@@ -1,0 +1,55 @@
+[
+  {
+    "id": "check-topology-assumptions",
+    "title": "Check Topology Assumptions",
+    "tags": [
+      "topology-check",
+      "diffusion-map",
+      "neighborhood-graph"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "pick-roots-and-branches",
+    "title": "Pick Roots and Branches",
+    "tags": [
+      "root-selection",
+      "branch-definition",
+      "marker-based-root"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "infer-trajectories",
+    "title": "Infer Trajectories",
+    "tags": [
+      "pseudotime",
+      "dpt",
+      "rna-velocity",
+      "trajectory-inference"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "identify-dynamic-features",
+    "title": "Identify Dynamic Features",
+    "tags": [
+      "dynamic-genes",
+      "branch-markers",
+      "differential-expression",
+      "pseudotime-genes"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "visualize-with-context",
+    "title": "Visualize with Context",
+    "tags": [
+      "visualization",
+      "trajectory-overlay",
+      "pseudotime-heatmap",
+      "branch-visualization"
+    ],
+    "enabled": true
+  }
+]

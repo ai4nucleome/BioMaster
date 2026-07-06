@@ -65,6 +65,42 @@ const browserReachableServerUrl = (url: string | null) => {
 
 const readDefaultServerUrl = () => browserReachableServerUrl(getStorage(DEFAULT_SERVER_URL_KEY))
 const writeDefaultServerUrl = (url: string | null) => setStorage(DEFAULT_SERVER_URL_KEY, url)
+const isSinglePortMode = () => import.meta.env.VITE_OPENCODE_SINGLE_PORT === "1"
+const biomasterProjectPath = () => import.meta.env.VITE_BIOMASTER_PROJECT_PATH
+
+const decodePathSegment = (value: string) => {
+  try {
+    const padded = value.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(value.length / 4) * 4, "=")
+    return atob(padded)
+  } catch {
+    return ""
+  }
+}
+
+const clearStaleBioMasterState = () => {
+  if (!isSinglePortMode() || typeof localStorage === "undefined") return
+  const current = biomasterProjectPath()
+  const stale = ["biomaster-skill-v0.3", "biomaster2-main", "biomaster-skill-v0.5-deploy-test"]
+  try {
+    for (let index = localStorage.length - 1; index >= 0; index--) {
+      const key = localStorage.key(index)
+      if (!key) continue
+      const value = localStorage.getItem(key) ?? ""
+      const text = `${key}\n${value}`
+      const staleBioMaster = stale.some((item) => text.includes(item))
+      const currentProject = current ? text.includes(current) : false
+      if (staleBioMaster && !currentProject) localStorage.removeItem(key)
+    }
+  } catch {
+    return
+  }
+
+  const first = location.pathname.split("/").filter(Boolean)[0]
+  const decoded = first ? decodePathSegment(first) : ""
+  if (decoded && stale.some((item) => decoded.includes(item)) && (!current || decoded !== current)) {
+    history.replaceState(null, "", location.search ? `/${location.search}` : "/")
+  }
+}
 
 const notify: Platform["notify"] = async (title, description, href) => {
   if (!("Notification" in window)) return
@@ -110,9 +146,11 @@ const root = document.getElementById("root")
 if (!(root instanceof HTMLElement) && import.meta.env.DEV) {
   throw new Error(getRootNotFoundError())
 }
+clearStaleBioMasterState()
 
 const getCurrentUrl = () => {
   if (location.hostname.includes("opencode.ai")) return "http://localhost:4096"
+  if (isSinglePortMode()) return location.origin
   const envHost = import.meta.env.VITE_OPENCODE_SERVER_HOST
   const envPort = import.meta.env.VITE_OPENCODE_SERVER_PORT
   const browserReachableHost = envHost === "0.0.0.0" ? location.hostname || "localhost" : envHost
@@ -126,6 +164,7 @@ const getCurrentUrl = () => {
 }
 
 const getDefaultUrl = () => {
+  if (isSinglePortMode()) return getCurrentUrl()
   const lsDefault = readDefaultServerUrl()
   if (lsDefault) return lsDefault
   return getCurrentUrl()

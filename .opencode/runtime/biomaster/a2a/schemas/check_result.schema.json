@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["message_type", "from", "to", "run_id", "phase", "payload"],
+  "properties": {
+    "message_type": { "const": "check_result" },
+    "payload": {
+      "type": "object",
+      "required": ["step_id", "status"],
+      "properties": {
+        "step_id": { "type": "string" },
+        "status": { "enum": ["pass", "fail", "failed", "passed"] },
+        "failed_check": { "type": "string" },
+        "suggested_debug_skills": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

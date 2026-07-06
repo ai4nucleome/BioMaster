@@ -1,0 +1,12 @@
+[
+  {
+    "id": "discipline",
+    "title": "Discipline",
+    "tags": [
+      "discipline",
+      "bioinformatics",
+      "scrnaseq"
+    ],
+    "enabled": true
+  }
+]

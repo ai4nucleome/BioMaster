@@ -1,0 +1,65 @@
+[
+  {
+    "id": "data-preparation",
+    "title": "Data Preparation",
+    "tags": [
+      "prepdata",
+      "transform",
+      "sce"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "clustering",
+    "title": "Clustering",
+    "tags": [
+      "flowsom",
+      "catalyst",
+      "phenograph",
+      "clustering"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "dimensionality-reduction-visualization",
+    "title": "Dimensionality Reduction & Visualization",
+    "tags": [
+      "umap",
+      "tsne",
+      "dimensionality-reduction",
+      "visualization"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "cluster-annotation-merging",
+    "title": "Cluster Annotation & Merging",
+    "tags": [
+      "annotation",
+      "heatmap",
+      "merging",
+      "k-selection"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "abundance-marker-expression-analysis",
+    "title": "Abundance & Marker Expression Analysis",
+    "tags": [
+      "abundance",
+      "marker-expression",
+      "pseudo-bulk"
+    ],
+    "enabled": true
+  },
+  {
+    "id": "export-batch-integration",
+    "title": "Export & Batch Integration",
+    "tags": [
+      "export",
+      "batch-correction",
+      "batchelor"
+    ],
+    "enabled": true
+  }
+]

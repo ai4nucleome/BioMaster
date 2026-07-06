@@ -1,0 +1,13 @@
+[project]
+name = "biomaster-skill"
+version = "0.1.0"
+description = "BioMaster OpenCode skill-driven bioinformatics system"
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "numpy", "scanpy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".opencode/runtime"]

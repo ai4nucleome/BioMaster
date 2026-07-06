@@ -1,6 +1,0 @@
-gene_id,ctrl_1,ctrl_2,treat_1,treat_2
-GeneA,120,118,420,395
-GeneB,52,49,55,53
-GeneC,0,1,12,10
-GeneD,210,198,80,76
-GeneE,33,29,35,31
