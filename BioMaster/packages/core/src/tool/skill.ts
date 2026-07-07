@@ -34,18 +34,17 @@ export const description = [
 
 export const toModelOutput = (skill: SkillV2.Info, files: ReadonlyArray<string>) => {
   const directory = path.dirname(skill.location)
+  const relativeFile = (file: string) => (path.isAbsolute(file) ? path.relative(directory, file) : file)
   return [
     `<skill_content name="${skill.name}">`,
     `# Skill: ${skill.name}`,
     "",
     skill.content.trim(),
     "",
-    `Base directory for this skill: ${directory}`,
-    "Relative paths in this skill (e.g., scripts/, reference/) are relative to this base directory.",
     "Note: file list is sampled.",
     "",
     "<skill_files>",
-    ...files.map((file) => `<file>${file}</file>`),
+    ...files.map((file) => `<file>${relativeFile(file)}</file>`),
     "</skill_files>",
     "</skill_content>",
   ].join("\n")

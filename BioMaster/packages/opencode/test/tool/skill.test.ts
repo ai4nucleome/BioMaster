@@ -80,7 +80,7 @@ Use this skill.
       }
 
       const result = yield* tool.execute({ name: "tool-skill" }, ctx)
-      const file = path.resolve(skill, "scripts", "demo.txt")
+      const file = path.join("scripts", "demo.txt")
 
       expect(requests.length).toBe(1)
       expect(requests[0].permission).toBe("skill")
@@ -88,7 +88,8 @@ Use this skill.
       expect(requests[0].always).toContain("tool-skill")
       expect(result.metadata.dir).toBe(skill)
       expect(result.output).toContain(`<skill_content name="tool-skill">`)
-      expect(result.output).toContain(`Base directory for this skill: ${skill}`)
+      expect(result.output).not.toContain("Base directory for this skill")
+      expect(result.output).not.toContain("Relative paths in this skill")
       expect(result.output).toContain(`<file>${file}</file>`)
     }),
   )

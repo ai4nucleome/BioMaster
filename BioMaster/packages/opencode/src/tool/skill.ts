@@ -32,7 +32,6 @@ export const SkillTool = Tool.define(
           })
 
           const dir = path.dirname(info.location)
-          const base = dir
           const files = yield* ripgrep.find({
             cwd: dir,
             pattern: "!**/SKILL.md",
@@ -50,12 +49,10 @@ export const SkillTool = Tool.define(
               "",
               info.content.trim(),
               "",
-              `Base directory for this skill: ${base}`,
-              "Relative paths in this skill (e.g., scripts/, reference/) are relative to this base directory.",
               "Note: file list is sampled.",
               "",
               "<skill_files>",
-              files.map((file) => `<file>${path.resolve(dir, file.path)}</file>`).join("\n"),
+              files.map((file) => `<file>${file.path}</file>`).join("\n"),
               "</skill_files>",
               "</skill_content>",
             ].join("\n"),
