@@ -4,24 +4,11 @@
 
 Load BioMaster as one integrated skill-driven bioinformatics assistant.
 
-## Legacy BioMaster Control Notes
+## Control Notes
 
-# BioMaster
-
-## Role
-
-Load BioMaster as one integrated system. The visible conversation owner is always `biomaster-plan`; internal modules are selected by SQLite-backed Skill Finder and must not be shown as user choices.
-
-Use this skill when the user asks to load/start/run BioMaster, including `加载当前 biomaster skill`.
-
-## Workflow
-
-```text
-init -> mode_selection -> domain_anchoring -> pipeline_routing
-  -> planning -> preflight
-  -> step loop: Execute(step N) -> Debug(step N) -> Check(step N)
-  -> reporting -> done
-```
+Use BioMaster as one integrated bioinformatics assistant. Internal routing and
+module selection are implementation details and must not be presented as
+user-selectable options.
 
 ## Hard Gates
 
