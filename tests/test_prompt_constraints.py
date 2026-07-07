@@ -43,7 +43,8 @@ def test_sqlite_readiness_is_a_hard_gate():
     plan = (ROOT / ".opencode" / "agents" / "biomaster-plan.md").read_text(encoding="utf-8")
     execute = (ROOT / ".opencode" / "agents" / "biomaster-execute.md").read_text(encoding="utf-8")
 
-    assert "On skill load, ensure the SQLite control plane is ready" in skill
+    assert "On BioMaster load or before knowledge retrieval" in skill
+    assert "initialize/sync/seed it before knowledge, route, or skill selection" in skill
     assert "Plan must include SQLite route search evidence" in skill
     assert "Execute must query SQLite `skills`" in skill
     assert "sqlite_readiness" in plan
