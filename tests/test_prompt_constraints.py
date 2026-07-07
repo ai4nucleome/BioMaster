@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 
@@ -49,3 +50,18 @@ def test_sqlite_readiness_is_a_hard_gate():
     assert "Execute must query SQLite `skills`" in skill
     assert "sqlite_readiness" in plan
     assert "Do not proceed from prompt memory alone" in execute
+
+
+def test_biomaster_prompts_do_not_embed_local_conversation_examples():
+    prompt_files = [
+        ROOT / ".opencode" / "skills" / "biomaster" / "SKILL.md",
+        ROOT / ".opencode" / "bioskills" / "biomaster" / "macro.md",
+        ROOT / ".opencode" / "bioskills" / "biomaster" / "micro.md",
+        ROOT / ".opencode" / "agents" / "biomaster-plan.md",
+    ]
+
+    for prompt_file in prompt_files:
+        text = prompt_file.read_text(encoding="utf-8")
+        assert not re.search(r"[\u4e00-\u9fff]", text), f"{prompt_file} contains non-English prompt text"
+        assert "Base directory for this skill" not in text
+        assert "Relative paths in this skill" not in text
