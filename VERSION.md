@@ -1,12 +1,12 @@
 # Version Notes
 
-This repository contains the BioMaster v0.5 deployment release.
+This repository contains the BioMaster internal deployment release candidate.
 
 ## Scope
 
 - Project root: repository root.
 - BioMaster OpenCode configuration root: `.opencode/`.
-- Embedded OpenCode engine: `opencode/`.
+- Embedded OpenCode engine: `BioMaster/`.
 - One public OpenCode skill: `biomaster`.
 - Core workflow agents: `biomaster-plan`, `biomaster-execute`, `biomaster-debug`, and `biomaster-check`.
 - Skill-management agents: `biomaster-skiller`, `biomaster-skill-author`, and `biomaster-skill-creator`.

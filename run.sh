@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# BioMaster v0.6 single-process launcher
+# BioMaster single-process launcher
 #
 # Examples:
 #   ./run.sh local
@@ -11,8 +11,8 @@ set -u
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 BIO_DIR="$ROOT"
-OC_INDEX="$ROOT/opencode/packages/opencode/src/index.ts"
-APP_DIST="$ROOT/opencode/packages/app/dist"
+OC_INDEX="$ROOT/BioMaster/packages/opencode/src/index.ts"
+APP_DIST="$ROOT/BioMaster/packages/app/dist"
 
 ACTION="status"
 HOSTNAME_BIND="${HOSTNAME_BIND:-127.0.0.1}"
@@ -143,15 +143,65 @@ print(f"/{slug}/skills")
 PY
 )"
 
-server_pids() { pgrep -f "opencode/packages/opencode/src/index.ts serve .*--port ${PORT}"; }
+server_pids() { pgrep -u "${USER:-$(id -un)}" -f "${OC_INDEX}.*serve .*--port ${PORT}"; }
 server_pid() { server_pids | head -1; }
-legacy_frontend_pids() { pgrep -f "(npm exec bun@1.3.14.*run dev|bun.*run dev|vite).*--port ${PORT}"; }
+legacy_frontend_pids() { pgrep -u "${USER:-$(id -un)}" -f "(npm exec bun@1.3.14.*run dev|bun.*run dev|vite).*--port ${PORT}"; }
+port_listener_pids() {
+  python3 - "$PORT" <<'PY'
+import os
+import socket
+import struct
+import sys
+from pathlib import Path
+
+port = int(sys.argv[1])
+uid = os.getuid()
+inodes = set()
+for table in ("/proc/net/tcp", "/proc/net/tcp6"):
+    try:
+        lines = Path(table).read_text().splitlines()[1:]
+    except OSError:
+        continue
+    for line in lines:
+        cols = line.split()
+        local = cols[1]
+        state = cols[3]
+        inode = cols[9]
+        if state != "0A":
+            continue
+        local_port = int(local.rsplit(":", 1)[1], 16)
+        if local_port == port:
+            inodes.add(inode)
+
+if not inodes:
+    raise SystemExit
+
+for proc in Path("/proc").iterdir():
+    if not proc.name.isdigit():
+        continue
+    try:
+        if proc.stat().st_uid != uid:
+            continue
+        fds = proc / "fd"
+        for fd in fds.iterdir():
+            try:
+                target = os.readlink(fd)
+            except OSError:
+                continue
+            if target.startswith("socket:[") and target[8:-1] in inodes:
+                print(proc.name)
+                break
+    except OSError:
+        continue
+PY
+}
+managed_pids() { { server_pids; port_listener_pids; } | awk 'NF && !seen[$0]++'; }
 
 http_code() { curl -s -o /dev/null -w "%{http_code}" --max-time 4 "$1" 2>/dev/null; }
 
 start_server() {
-  if [ -n "$(server_pid)" ]; then
-    echo "server already running (pid $(server_pid))"
+  if [ -n "$(managed_pids)" ]; then
+    echo "server already running (pid $(managed_pids | head -1))"
     return
   fi
   if [ ! -f "$APP_DIST/index.html" ]; then
@@ -166,11 +216,18 @@ start_server() {
 
 stop_server() {
   local pids legacy
-  pids="$(server_pids)"
+  pids="$(managed_pids)"
   if [ -n "$pids" ]; then
     echo "$pids" | while read -r pid; do
       [ -n "$pid" ] && kill "$pid" 2>/dev/null && echo "stopped server (pid $pid)"
     done
+    sleep 2
+    pids="$(managed_pids)"
+    if [ -n "$pids" ]; then
+      echo "$pids" | while read -r pid; do
+        [ -n "$pid" ] && kill -KILL "$pid" 2>/dev/null && echo "force stopped server (pid $pid)"
+      done
+    fi
   else
     echo "server not running"
   fi
@@ -184,7 +241,7 @@ stop_server() {
 }
 
 show_status() {
-  echo "server (${PORT}): pid=$(server_pid || echo -) http=$(http_code http://${HEALTHCHECK_HOST}:${PORT}/global/health)"
+  echo "server (${PORT}): pid=$(managed_pids | head -1 || echo -) http=$(http_code http://${HEALTHCHECK_HOST}:${PORT}/global/health)"
   if [ "$HOSTNAME_BIND" = "0.0.0.0" ]; then
     echo "app:       http://<server-ip>:${PORT}"
     echo "bioskills: http://<server-ip>:${PORT}${BIOSKILLS_PATH}"

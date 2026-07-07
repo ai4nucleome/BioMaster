@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# BioMaster v0.5 first-time installer
+# BioMaster first-time installer
 # Usage:
 #   ./install.sh          # install/update dependencies
 #   ./install.sh --clean  # remove dependency folders before installing
@@ -180,7 +180,7 @@ EOF
 build_web_ui() {
   log "Building BioMaster Web UI"
   (
-    cd "$ROOT/opencode/packages/app" &&
+    cd "$ROOT/BioMaster/packages/app" &&
       VITE_OPENCODE_SINGLE_PORT=1 \
       VITE_BIOMASTER_PROJECT_PATH="$ROOT" \
       bun --bun run build
@@ -188,7 +188,7 @@ build_web_ui() {
 }
 
 main() {
-  log "Preparing BioMaster v0.5 under $ROOT"
+  log "Preparing BioMaster under $ROOT"
   need_command curl
   need_command python3
   python3 -m pip --version >/dev/null 2>&1 || {
@@ -213,7 +213,7 @@ main() {
   log "Installing Python dependencies"
   python3 -m pip install -r "$ROOT/requirements.txt"
 
-  install_bun_dependencies "$ROOT/opencode"
+  install_bun_dependencies "$ROOT/BioMaster"
   install_bun_dependencies "$ROOT/.opencode"
   build_web_ui
 

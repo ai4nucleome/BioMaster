@@ -1,6 +1,6 @@
 # Contributing
 
-BioMaster is organized as a single OpenCode package, `.opencode/`, plus root-level developer tooling. Keep runtime changes inside `.opencode` whenever possible.
+BioMaster is organized as a single repository root with project-local OpenCode configuration in `.opencode/`, the embedded BioMaster/OpenCode engine in `BioMaster/`, and root-level developer tooling. Keep BioMaster workflow, skill, and runtime changes inside `.opencode/` whenever possible; keep UI/server changes inside `BioMaster/`.
 
 ## Source Areas
 
@@ -37,7 +37,7 @@ BioSkills are discoverable through both the OpenCode BioSkills UI and the SQLite
 
 ## Path Policy
 
-- End-user installation should only require `.opencode/`.
+- End-user installation should run from the repository root and requires `install.sh`, `run.sh`, `.opencode/`, and the embedded `BioMaster/` engine source.
 - Python imports should assume `PYTHONPATH=.opencode/runtime`.
 - Do not introduce a second root-level runtime package.
 - Do not hard-code machine-specific absolute paths. Resolve paths from the repository root, script location, or user-provided inputs.

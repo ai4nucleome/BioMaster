@@ -1,9 +1,9 @@
 # Role -> skill layer mapping for the file-backed BioSkills library.
 #
 # This file is the STABLE INTEGRATION INTERFACE between BioMaster worker roles
-# and the file-backed BioSkills library. Runtime workflows follow the v0.2
+# and the file-backed BioSkills library. Runtime workflows follow the
 # Plan -> Execute -> Debug -> Check skeleton; BioSkills and SQLite remain the
-# v0.3 knowledge layer.
+# knowledge layer.
 #
 # ── Why an interface? ────────────────────────────────────────────────────
 # The BioMaster worker set is intentionally narrow: plan / execute / debug /

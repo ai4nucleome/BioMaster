@@ -13,7 +13,7 @@
       <img src="https://img.shields.io/badge/Patterns-accepted-blue.svg" alt="Patterns accepted" />
     </a>
     <a href="#quick-start">
-      <img src="https://img.shields.io/badge/version-v0.5-informational.svg" alt="BioMaster v0.5" />
+      <img src="https://img.shields.io/badge/release-internal%20candidate-informational.svg" alt="BioMaster internal release candidate" />
     </a>
   </p>
 </div>
@@ -22,17 +22,17 @@
 
 BioMaster is a multi-agent framework designed to translate natural-language biological analysis goals into executable, monitored, and validated bioinformatics workflows. It separates workflow design, command generation, runtime debugging, and output verification into distinct agent roles, and grounds these roles in curated workflow-level and tool-level knowledge.
 
-This repository is the **v0.5 deployment-oriented release**. It is based on the v0.4 OpenCode-integrated implementation and adds a GitHub Pages-ready static site under `docs/` plus an organized `source/` directory for publication, website, and deployment assets.
+This repository is an **internal deployment-oriented release candidate**. It builds on the OpenCode-integrated BioMaster implementation and includes a GitHub Pages-ready static site under `docs/` plus an organized `source/` directory for publication, website, and deployment assets.
 
 The BioMaster manuscript, **"BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow"**, has been accepted by *Patterns*. A preprint is available on bioRxiv.
 
-## v0.5 at a Glance
+## Release Candidate at a Glance
 
-| Area | v0.5 content |
+| Area | Content |
 | --- | --- |
 | Paper context | README, citation, documentation pages, and manuscript figures aligned with the accepted *Patterns* manuscript |
 | User interface | Modified OpenCode frontend with BioMaster and BioSkills management pages |
-| Agent runtime | Plan, Execute, Debug, and Check agents following the deterministic v0.2 workflow skeleton |
+| Agent runtime | Plan, Execute, Debug, and Check agents following a deterministic workflow skeleton |
 | Knowledge layer | File-backed BioSkills library with SQLite cache generated from `.opencode/bioskills/` |
 | Deployment assets | GitHub Pages-ready static site in `docs/` and curated figures in `source/` |
 | Validation | BioSkills validation, SQLite sync, smoke tests, and pytest workflow coverage |
@@ -57,7 +57,7 @@ BioMaster uses a stepwise multi-agent workflow:
 
 The current deployment keeps this agent skeleton stable while using the newer BioSkills and SQLite control layer:
 
-- `opencode/` contains the modified OpenCode backend and web application.
+- `BioMaster/` contains the renamed embedded BioMaster/OpenCode engine source, including the backend and web application.
 - `.opencode/bioskills/` is the canonical BioSkills source.
 - `.opencode/knowledge/biomaster_skills.db` is a generated cache and should not be committed.
 - `docs/` contains the static public project site and can be selected directly as the GitHub Pages source.
@@ -67,15 +67,21 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 ```text
 .
 ├── README.md
+├── VERSION.md                    # release-candidate scope and validation checklist
+├── CONTRIBUTING.md               # contributor and maintenance guidance
+├── Makefile                      # validation, indexing, testing, and cleanup targets
+├── requirements.txt              # Python runtime/test dependencies
+├── pyproject.toml                # Python package and pytest configuration
 ├── install.sh                    # first-time installer and dependency setup
 ├── run.sh                        # daily launcher with host/port/password options
+├── .github/workflows/            # lightweight repository CI
 ├── docs/                         # GitHub Pages-ready static public site
 ├── source/                       # publication and deployment assets
 │   ├── Biomaster.svg             # project logo
 │   ├── UI.png                    # UI asset
 │   ├── README.md                 # asset inventory and maintenance notes
 │   └── figures/                  # manuscript and website figures
-├── opencode/                     # modified OpenCode fork
+├── BioMaster/                    # renamed embedded BioMaster/OpenCode engine
 │   └── packages/
 │       ├── opencode/             # backend API, including BioSkills routes
 │       └── app/                  # web frontend and BioSkills Library UI
@@ -92,18 +98,18 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 
 ## Portability and Release Boundary
 
-BioMaster v0.5 is designed to run from any checkout path. The installer and launcher derive all repository paths from the location of `install.sh` and `run.sh`; do not hard-code `/home/...`, `/Users/...`, or server-specific paths in project files.
+BioMaster is designed to run from any checkout path. The installer and launcher derive all repository paths from the location of `install.sh` and `run.sh`; do not hard-code `/home/...`, `/Users/...`, or server-specific paths in project files.
 
 Tracked release assets:
 
 - `.opencode/`: BioMaster agents, commands, skill, BioSkills library, runtime bridge, and plugin package manifest.
-- `opencode/`: the modified OpenCode backend/frontend source.
+- `BioMaster/`: the modified OpenCode backend/frontend source.
 - `docs/` and `source/`: public site and manuscript-facing assets.
 - `examples/` and `tests/`: lightweight fixtures and release validation.
 
 Untracked/generated assets:
 
-- `opencode/node_modules/` and `.opencode/node_modules/`
+- `BioMaster/node_modules/` and `.opencode/node_modules/`
 - `.logs/`
 - `projects/` and `runs/`
 - `.opencode/knowledge/biomaster_skills.db`
@@ -112,19 +118,19 @@ Untracked/generated assets:
 
 ## Quick Start
 
-The commands below assume that you are running them from the repository root after cloning the `v0.5` branch.
+The commands below assume that you are running them from the repository root after cloning the selected release branch.
 
 ```bash
-git clone -b v0.5 git@github.com:ai4nucleome/biomaster2.git BioMaster-v0.5
-cd BioMaster-v0.5
+git clone git@github.com:ai4nucleome/biomaster2.git BioMaster
+cd BioMaster
 ```
 
 If the repository has already been cloned, switch to the release branch first:
 
 ```bash
 git fetch origin
-git checkout v0.5
-git pull --ff-only origin v0.5
+git checkout <release-branch>
+git pull --ff-only origin <release-branch>
 ```
 
 ### 1. Install and configure BioMaster
@@ -214,7 +220,7 @@ http://<server-ip>:4096/?auth_token=<generated-token>
 
 For safety, `run.sh` refuses `--host 0.0.0.0` unless a password is provided. For trusted isolated networks only, override this with `--unsafe`.
 
-BioMaster v0.5 uses a **single server port** by default. The Web UI and API are served by the same OpenCode process.
+BioMaster uses a **single server port** by default. The Web UI and API are served by the same OpenCode process.
 
 To use a custom public port:
 
@@ -238,10 +244,10 @@ To verify that the running services come from this repository and not from anoth
 ```bash
 ./run.sh status --host 0.0.0.0 --port 18080
 ss -ltnp | grep ':18080'
-ps -fp "$(pgrep -f "opencode/packages/opencode/src/index.ts serve .*--port 18080" | head -1)"
+ps -fp "$(pgrep -f "BioMaster/packages/opencode/src/index.ts serve .*--port 18080" | head -1)"
 ```
 
-The server command should point to this checkout's `opencode/packages/opencode/src/index.ts`.
+The server command should point to this checkout's `BioMaster/packages/opencode/src/index.ts`.
 
 To test the single server port:
 
@@ -308,7 +314,7 @@ Common launcher options:
 ### Deployment Troubleshooting
 
 - **First deployment**: run `./install.sh` from the repository root. Use `./install.sh --clean` when moving between machines or after dependency corruption.
-- **`cd opencode` fails after cloning**: confirm that the `v0.5` branch is checked out with `git checkout v0.5`.
+- **`BioMaster/` engine directory is missing after cloning**: confirm that the selected release branch was checked out and pulled successfully.
 - **`npm install -g node-gyp` or npm registry access times out**: update to the latest `install.sh` and rerun. The installer now prefers the `node-gyp` bundled with Node/npm and only contacts npm as a fallback. If a fallback install is still needed on a restricted network, use a reachable registry, for example `NPM_CONFIG_REGISTRY=https://registry.npmmirror.com ./install.sh`.
 - **`bun install` is very slow**: run `BUN_REGISTRY=https://registry.npmmirror.com BUN_NETWORK_CONCURRENCY=12 ./install.sh`. The installer passes the registry to `bun install` and uses `--frozen-lockfile` when `bun.lock` is present.
 - **`bun install` fails with `ERR_TLS_CERT_ALTNAME_INVALID`**: the registry certificate does not match the hostname seen by this server. First try `NODE_USE_SYSTEM_CA=1 BUN_REGISTRY=https://registry.npmjs.org ./install.sh` or `NODE_USE_SYSTEM_CA=1 BUN_REGISTRY=https://registry.npmmirror.com ./install.sh`. If your institution provides a CA bundle, use `BUN_CAFILE=/path/to/ca-bundle.pem ./install.sh`. If the cluster rewrites HTTPS certificates incorrectly and no CA bundle is available, use `BUN_REGISTRY=http://registry.npmmirror.com ./install.sh` only inside a trusted network.
@@ -338,7 +344,7 @@ http://127.0.0.1:8080
 
 Deployment options:
 
-- **GitHub Pages**: set the Pages source to the `v0.5` branch and `/docs` folder.
+- **GitHub Pages**: set the Pages source to the selected release branch and `/docs` folder.
 - **Nginx/Apache**: copy the contents of `docs/` to the web root.
 - **Vercel/Netlify**: deploy `docs/` as a static site.
 
@@ -346,7 +352,7 @@ Deployment options:
 
 ### BioMaster loading model
 
-BioMaster is loaded as **project-level OpenCode configuration**, not as a global OpenCode plugin. In v0.5, the repository root is the BioMaster project root, and the runtime, agents, commands, and curated skills live under:
+BioMaster is loaded as **project-level OpenCode configuration**, not as a global OpenCode plugin. The repository root is the BioMaster project root, and the runtime, agents, commands, and curated skills live under:
 
 ```text
 .opencode/
@@ -490,11 +496,11 @@ Keep figure claims consistent with the accepted manuscript and verified benchmar
 
 ## Version Notes
 
-v0.5 is intended as a deployment and presentation version:
+This branch is intended as an internal deployment and presentation candidate:
 
-- uses a flattened single-root BioMaster project structure with `opencode/` retained as the embedded engine;
+- uses a flattened single-root BioMaster project structure with `BioMaster/` retained as the embedded engine;
 - adds the GitHub Pages-ready static site and manuscript-facing assets;
-- keeps the v0.2-style Plan -> Execute -> Debug -> Check workflow discipline;
+- keeps the Plan -> Execute -> Debug -> Check workflow discipline;
 - organizes source assets for paper, documentation, and website reuse.
 
 ## Citation

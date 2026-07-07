@@ -18,5 +18,5 @@ Open `index.html` directly in a browser. No build step is required.
 ## Deployment
 
 The site is plain HTML, CSS, and JavaScript. It can be deployed by selecting
-the `v0.5` branch and `/docs` folder in GitHub Pages settings, or by publishing
+the release branch and `/docs` folder in GitHub Pages settings, or by publishing
 this directory with a GitHub Pages Action.

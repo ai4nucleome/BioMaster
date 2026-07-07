@@ -1,7 +1,7 @@
 # BioMaster Source Assets
 
 This directory contains publication-facing and deployment-facing assets for the
-BioMaster v0.5 release. The files here are intended for the project README,
+BioMaster release candidate. The files here are intended for the project README,
 static site, manuscript-related communication, and future documentation.
 
 ## Directory Layout

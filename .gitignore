@@ -39,6 +39,7 @@ test_output.h5ad
 *.db-wal
 
 # Logs / runtime
+.logs/
 *.log
 /tmp/
 .DS_Store
