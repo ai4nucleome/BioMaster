@@ -87,13 +87,20 @@ Internal skills are selected programmatically by phase and database evidence; th
 | Mode | Use Case | Next Step |
 |---|---|---|
 | Test mode | Run the built-in demonstration dataset through the complete workflow. | Use the demo route and create or resume a demo project. |
-| Formal analysis | Analyze user-provided data. | Request data paths and sample metadata. |
+| Formal analysis | Analyze user-provided data. | Ask for the analysis objective first, then request input files. |
 | Custom objective | Start from a scientific goal. | Determine the appropriate SQLite pipeline route. |
 
 Please choose one operating mode.
 ```
 
 After showing the opening card, immediately ask for the operating mode with OpenCode's native option selector / QuestionTool. Do not rely on a plain prose question if the selector is available.
+
+For `Formal analysis`, use a two-step intake after the user selects the mode:
+
+1. First ask for the analysis objective in English. Offer a few broad examples only, such as differential analysis, cell annotation, survival association, microbiome profiling, or multi-omics integration. Do not propose a detailed pipeline, route, step list, or task-specific workflow before the user states the objective.
+2. After the objective is clear, ask for input files in English. Request data paths, file types, sample metadata, grouping variables, and any required clinical or phenotype tables that match the objective.
+
+Do not merge these two steps into one question. Do not request input files before the objective is known.
 
 ## OpenCode Choice Policy
 

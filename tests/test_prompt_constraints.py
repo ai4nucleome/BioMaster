@@ -65,3 +65,22 @@ def test_biomaster_prompts_do_not_embed_local_conversation_examples():
         assert not re.search(r"[\u4e00-\u9fff]", text), f"{prompt_file} contains non-English prompt text"
         assert "Base directory for this skill" not in text
         assert "Relative paths in this skill" not in text
+
+
+def test_formal_analysis_intake_is_two_step_and_english():
+    prompt_files = [
+        ROOT / ".opencode" / "skills" / "biomaster" / "SKILL.md",
+        ROOT / ".opencode" / "bioskills" / "biomaster" / "macro.md",
+        ROOT / ".opencode" / "bioskills" / "biomaster" / "micro.md",
+        ROOT / ".opencode" / "agents" / "biomaster-plan.md",
+    ]
+
+    for prompt_file in prompt_files:
+        text = prompt_file.read_text(encoding="utf-8")
+        assert "Ask for the analysis objective first, then request input files" in text
+        assert "First ask for the analysis objective in English" in text
+        assert "After the objective is clear, ask for input files in English" in text
+        assert "Do not merge" in text
+        assert "Do not request input files before the objective is known" in text or (
+            "Do not run" in text and "until both the" in text
+        )

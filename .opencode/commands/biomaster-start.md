@@ -47,4 +47,11 @@ After the opening card, invoke OpenCode's native option selector / QuestionTool 
 - `Formal analysis`
 - `Custom objective`
 
+If the user selects `Formal analysis`, use a two-step English intake before any route search or project creation:
+
+1. Ask for the analysis objective first and provide only broad examples.
+2. After the objective is clear, ask for input files, data paths, sample metadata, grouping variables, and required clinical or phenotype tables.
+
+Do not combine the objective question and file question into one turn.
+
 If the native selector is unavailable, show these same options as a short numbered fallback and explicitly say that the native selector was unavailable.
