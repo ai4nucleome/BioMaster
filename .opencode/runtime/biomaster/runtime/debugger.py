@@ -36,13 +36,15 @@ def query_sqlite_debug_context(skill_ids: list[str], db_path: Path = DEFAULT_DB_
             if skill is None:
                 missing.append(skill_id)
                 continue
-            if not skill.get("enabled") or not agent_allowed(skill, normalize_agent_name("biomaster-debug")):
+            layer = str(skill.get("layer") or "")
+            agent = "biomaster-plan" if layer == "report" else "biomaster-debug"
+            if not skill.get("enabled") or not agent_allowed(skill, normalize_agent_name(agent)):
                 rejected.append(skill_id)
                 continue
             resolved.append(
                 {
                     "skill_id": str(skill["skill_id"]),
-                    "layer": str(skill.get("layer") or ""),
+                    "layer": layer,
                     "path": str(skill["path"]),
                     "content_hash": str(skill.get("content_hash") or ""),
                 }

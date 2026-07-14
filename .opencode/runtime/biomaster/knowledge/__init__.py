@@ -5,6 +5,8 @@ import json
 import sqlite3
 from typing import Any
 
+import yaml
+
 from biomaster.mvp import MVP_REQUIRED_TABLES
 
 
@@ -18,51 +20,44 @@ DEFAULT_SKILL_ROOT = OPENCODE_ROOT / "skills"
 DEFAULT_INTERNAL_SKILL_ROOT = OPENCODE_ROOT / "biomaster-internal" / "skills"
 DEFAULT_KNOWLEDGE_ROOT = OPENCODE_ROOT / "knowledge"
 DEFAULT_BIOSKILLS_ROOT = OPENCODE_ROOT / "bioskills"
+DEFAULT_ACCESS_POLICY_PATH = OPENCODE_ROOT / "bioskills-access.yaml"
 
 REQUIRED_TABLES = MVP_REQUIRED_TABLES
 
-AGENT_ALIASES = {
-    "intake-agent": "biomaster-plan",
-    "plan-agent": "biomaster-plan",
-    "execute-agent": "biomaster-execute",
-    "check-agent": "biomaster-check",
-    "verify-agent": "biomaster-check",
-    "debug-agent": "biomaster-debug",
-}
+def load_access_policy(policy_path: Path = DEFAULT_ACCESS_POLICY_PATH) -> dict[str, Any]:
+    """Load the single fail-closed BioSkills access policy."""
+    if not policy_path.exists():
+        return {}
+    value = yaml.safe_load(policy_path.read_text(encoding="utf-8"))
+    return value if isinstance(value, dict) else {}
 
-LAYER_ALLOWED_AGENTS: dict[str, list[str]] = {
-    "registry": ["biomaster-plan"],
-    "domain-guide": ["biomaster-plan"],
-    "discipline": ["biomaster-plan"],
-    "pipeline": ["biomaster-plan"],
-    "plan": ["biomaster-plan"],
-    "exec": ["biomaster-execute", "biomaster-debug"],
-    "execute": ["biomaster-execute", "biomaster-debug"],
-    "verify": ["biomaster-check", "biomaster-execute", "biomaster-debug"],
-    "debug": ["biomaster-debug"],
-    "env": ["biomaster-execute", "biomaster-debug"],
-    "report": ["biomaster-plan", "biomaster-debug"],
-    "bioskill": ["biomaster-plan", "biomaster-execute", "biomaster-debug", "biomaster-check"],
-}
 
-KNOWLEDGE_RECORD_AGENTS: dict[str, list[str]] = {
-    "workflow": ["biomaster-plan"],
-    "task": ["biomaster-execute", "biomaster-debug"],
-}
+def _string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    return [str(item).strip() for item in value if str(item).strip()]
 
 
 def normalize_agent_name(agent_name: str) -> str:
-    return AGENT_ALIASES.get(agent_name, agent_name)
+    aliases = load_access_policy().get("aliases")
+    if not isinstance(aliases, dict):
+        return agent_name
+    normalized = aliases.get(agent_name)
+    return str(normalized).strip() if normalized else agent_name
 
 
 def allowed_agents_for_layer(layer: str) -> str:
-    agents = LAYER_ALLOWED_AGENTS.get(layer, [])
-    return ",".join(agents)
+    layer_agents = load_access_policy().get("layer_agents")
+    if not isinstance(layer_agents, dict):
+        return ""
+    return ",".join(_string_list(layer_agents.get(layer)))
 
 
 def allowed_agents_for_record_type(record_type: str) -> str:
-    agents = KNOWLEDGE_RECORD_AGENTS.get(record_type, [])
-    return ",".join(agents)
+    record_agents = load_access_policy().get("record_agents")
+    if not isinstance(record_agents, dict):
+        return ""
+    return ",".join(_string_list(record_agents.get(record_type)))
 
 
 def connect(db_path: Path = DEFAULT_DB_PATH) -> sqlite3.Connection:

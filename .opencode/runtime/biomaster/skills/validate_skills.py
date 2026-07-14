@@ -19,7 +19,7 @@ except ModuleNotFoundError:
 
 NAME_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 VALID_STATUS = {"active", "variant", "deprecated"}
-VALID_LAYERS = {"registry", "domain-guide", "discipline", "pipeline", "plan", "execute", "verify", "debug", "env", "report", "bioskill"}
+VALID_LAYERS = {"registry", "domain-guide", "discipline", "pipeline", "plan", "exec", "execute", "verify", "debug", "env", "report", "bioskill"}
 
 
 def parse_frontmatter(path: Path) -> dict[str, Any]:
@@ -63,6 +63,10 @@ def validate_bioskill(skill_dir: Path, names: set[str]) -> dict[str, str]:
     layer = str(meta.get("biomaster_layer") or meta.get("layer") or "bioskill")
     if layer not in VALID_LAYERS:
         raise ValueError(f"{skill_file} invalid biomaster layer: {layer}")
+    if name.startswith("plan-") and layer != "plan":
+        raise ValueError(f"{skill_file} workflow skill must use biomaster_layer: plan")
+    if name.startswith("exec-") and layer not in {"exec", "execute"}:
+        raise ValueError(f"{skill_file} execute skill must use biomaster_layer: execute")
     for sidecar in ("macro.md", "micro.md"):
         if not (skill_dir / sidecar).exists():
             raise ValueError(f"{skill_dir} missing {sidecar}")
@@ -96,10 +100,27 @@ def validate_bioskills_access_policy() -> None:
     policy = OPENCODE_ROOT / "bioskills-access.yaml"
     data = yaml.safe_load(policy.read_text(encoding="utf-8")) or {}
     roles = data.get("roles") or {}
-    if "biomaster-plan" not in roles:
-        raise ValueError("bioskills-access.yaml must define biomaster-plan")
-    if roles.get("biomaster-execute", {}).get("layer") != "micro":
-        raise ValueError("biomaster-execute must receive the micro layer")
+    expected_roles = {
+        "biomaster-plan": "macro",
+        "biomaster-execute": "micro",
+        "biomaster-debug": "micro",
+        "biomaster-check": "micro",
+        "biomaster-skiller": "none",
+        "biomaster-skill-author": "none",
+        "biomaster-skill-creator": "none",
+    }
+    for role, layer in expected_roles.items():
+        if roles.get(role, {}).get("layer") != layer:
+            raise ValueError(f"{role} must receive layer {layer}")
+    if (data.get("default") or {}).get("layer") != "none":
+        raise ValueError("unregistered agents must default to layer none")
+    layer_agents = data.get("layer_agents") or {}
+    if layer_agents.get("plan") != ["biomaster-plan"]:
+        raise ValueError("workflow skills must be restricted to biomaster-plan")
+    expected_execute = {"biomaster-execute", "biomaster-debug", "biomaster-check"}
+    for layer in ("exec", "execute"):
+        if set(layer_agents.get(layer) or []) != expected_execute:
+            raise ValueError(f"{layer} skills must be restricted to execute/debug/check")
 
 
 def main() -> None:

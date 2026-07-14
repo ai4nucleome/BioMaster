@@ -107,7 +107,6 @@ def convert_skill(skill_file: Path, target_root: Path) -> str:
                     "id": slugify(layer or "control"),
                     "title": title_case(layer or "control"),
                     "tags": [tag for tag in tags if tag],
-                    "enabled": True,
                 }
             ],
             indent=2,

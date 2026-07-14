@@ -4,12 +4,20 @@ from pathlib import Path
 import argparse
 import json
 
-from biomaster.knowledge import DEFAULT_DB_PATH, PROJECT_ROOT, connect, ensure_schema, json_loads
+from biomaster.knowledge import (
+    DEFAULT_DB_PATH,
+    PROJECT_ROOT,
+    connect,
+    ensure_knowledge_db,
+    ensure_schema,
+    json_loads,
+    normalize_agent_name,
+)
 from biomaster.knowledge.query_skills import get_skill_by_id
 from biomaster.knowledge.state_manager import get_disabled_skill_ids
 
 
-from biomaster.knowledge.phases import PHASE_ALLOWED_LAYERS
+from biomaster.knowledge.phases import PHASE_ALLOWED_LAYERS, SUBAGENT_BY_PHASE
 
 
 def read_contract_file(relative_path: str) -> str:
@@ -36,6 +44,10 @@ def assemble_prompt(
     run_id: str | None = None,
     db_path: Path = DEFAULT_DB_PATH,
 ) -> dict[str, object]:
+    ensure_knowledge_db(db_path)
+    agent = normalize_agent_name(agent_name)
+    expected_agent = SUBAGENT_BY_PHASE.get(phase)
+    phase_agent_allowed = expected_agent is None or agent == expected_agent
     connection = connect(db_path)
     try:
         ensure_schema(connection)
@@ -48,10 +60,10 @@ def assemble_prompt(
         context_blocks: list[str] = []
 
         for skill_id in selected_skill_ids:
-            if skill_id in disabled:
+            if not phase_agent_allowed or skill_id in disabled:
                 skipped_skills.append(skill_id)
                 continue
-            skill = get_skill_by_id(connection, skill_id)
+            skill = get_skill_by_id(connection, skill_id, agent_name=agent)
             if skill is None:
                 skipped_skills.append(skill_id)
                 continue

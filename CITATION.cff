@@ -1,0 +1,72 @@
+cff-version: 1.2.0
+message: "If you use BioMaster, please cite the published Patterns article."
+title: "BioMaster"
+type: software
+version: "2.0-alpha1"
+repository-code: "https://github.com/ai4nucleome/biomaster2"
+authors:
+  - family-names: Su
+    given-names: Houcheng
+  - family-names: Feng
+    given-names: Junning
+  - family-names: Lu
+    given-names: Yawen
+  - family-names: Xu
+    given-names: Yucheng
+  - family-names: Yang
+    given-names: Jinming
+  - family-names: Lu
+    given-names: Haojie
+  - family-names: Yang
+    given-names: Jixin
+  - family-names: Yang
+    given-names: Xu
+  - family-names: Xie
+    given-names: Sirui
+  - family-names: Long
+    given-names: Weicai
+  - family-names: Wang
+    given-names: Chengrui
+  - family-names: Hou
+    given-names: Yusen
+  - family-names: Zhu
+    given-names: Tingyu
+  - family-names: Zhang
+    given-names: Yanlin
+    orcid: "https://orcid.org/0000-0003-4002-443X"
+preferred-citation:
+  type: article
+  title: "BioMaster: Multi-agent system for automated bioinformatics analysis workflow"
+  authors:
+    - family-names: Su
+      given-names: Houcheng
+    - family-names: Feng
+      given-names: Junning
+    - family-names: Lu
+      given-names: Yawen
+    - family-names: Xu
+      given-names: Yucheng
+    - family-names: Yang
+      given-names: Jinming
+    - family-names: Lu
+      given-names: Haojie
+    - family-names: Yang
+      given-names: Jixin
+    - family-names: Yang
+      given-names: Xu
+    - family-names: Xie
+      given-names: Sirui
+    - family-names: Long
+      given-names: Weicai
+    - family-names: Wang
+      given-names: Chengrui
+    - family-names: Hou
+      given-names: Yusen
+    - family-names: Zhu
+      given-names: Tingyu
+    - family-names: Zhang
+      given-names: Yanlin
+      orcid: "https://orcid.org/0000-0003-4002-443X"
+  journal: Patterns
+  year: 2026
+  doi: "10.1016/j.patter.2026.101611"

@@ -5,7 +5,6 @@ export interface SkillStep {
   id: string
   title: string
   tags: string[]
-  enabled: boolean
 }
 
 export interface BioSkill {
@@ -110,9 +109,6 @@ export function createBioskillsClient(
     },
     setEnabled(name: string, enabled: boolean): Promise<BioSkill> {
       return request<BioSkill>("PATCH", `/bioskills/${encodeURIComponent(name)}`, { body: { enabled } })
-    },
-    setSteps(name: string, steps: SkillStep[]): Promise<BioSkill> {
-      return request<BioSkill>("PATCH", `/bioskills/${encodeURIComponent(name)}`, { body: { steps } })
     },
     remove(name: string): Promise<{ ok: boolean }> {
       return request<{ ok: boolean }>("DELETE", `/bioskills/${encodeURIComponent(name)}`)

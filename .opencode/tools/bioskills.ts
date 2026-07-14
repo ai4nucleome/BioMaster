@@ -18,10 +18,11 @@ import path from "node:path"
 
 type Layer = "macro" | "micro" | "all" | "none"
 
-type Step = { id: string; title: string; tags: string[]; enabled: boolean }
+type Step = { id: string; title: string; tags: string[] }
 
 type Skill = {
   name: string
+  biomasterLayer: string
   description: string
   domain: string
   primaryTool: string
@@ -100,7 +101,6 @@ function readSteps(base: string): Step[] {
         id: String(s?.id ?? `step-${i + 1}`),
         title: String(s?.title ?? s?.id ?? `Step ${i + 1}`),
         tags: toArray(s?.tags),
-        enabled: s?.enabled === false ? false : true,
       }))
       .filter((s) => s.title)
   } catch {
@@ -113,8 +113,25 @@ function readSkill(dir: string, name: string): Skill | null {
   const skillFile = path.join(base, "SKILL.md")
   if (!fs.existsSync(skillFile)) return null
   const data = parseFrontmatter(readFileSafe(skillFile))
+  const macro = readFileSafe(path.join(base, "macro.md"))
+  const micro = readFileSafe(path.join(base, "micro.md"))
+  const explicitLayer = String(data.biomaster_layer ?? data.layer ?? "").trim()
+  const biomasterLayer =
+    explicitLayer ||
+    (name.startsWith("plan-")
+      ? "plan"
+      : name.startsWith("exec-")
+        ? "execute"
+        : name.startsWith("verify-")
+          ? "verify"
+          : name.startsWith("debug-")
+            ? "debug"
+            : micro.trim()
+              ? "bioskill"
+              : "plan")
   return {
     name: String(data.name ?? name),
+    biomasterLayer,
     description: String(data.description ?? ""),
     domain: String(data.domain ?? ""),
     primaryTool: String(data.primary_tool ?? ""),
@@ -123,13 +140,13 @@ function readSkill(dir: string, name: string): Skill | null {
     source: String(data.source ?? ""),
     enabled: data.enabled === false || String(data.enabled).toLowerCase() === "false" ? false : true,
     steps: readSteps(base),
-    macro: readFileSafe(path.join(base, "macro.md")),
-    micro: readFileSafe(path.join(base, "micro.md")),
+    macro,
+    micro,
   }
 }
 
 // Split markdown into sections by its top-level headings, aligned to steps by
-// order. Used to drop muted-step content before handing skills to sub-agents.
+// order. Used to narrow retrieval to a requested step.
 function sectionsByHeading(md: string): { preamble: string; sections: { title: string; body: string }[] } {
   const lines = (md ?? "").split("\n")
   // Scan headings, ignoring lines inside fenced code blocks (```/~~~) so that
@@ -165,16 +182,6 @@ function sectionsByHeading(md: string): { preamble: string; sections: { title: s
   return { preamble, sections }
 }
 
-// Rebuild a layer's markdown keeping only the sections of enabled steps.
-function filterByEnabledSteps(md: string, steps: Step[]): string {
-  if (!steps.length) return md
-  if (steps.every((s) => s.enabled !== false)) return md
-  const { preamble, sections } = sectionsByHeading(md)
-  if (sections.length === 0) return md
-  const kept = sections.filter((_, i) => steps[i]?.enabled !== false)
-  return [preamble, ...kept.map((s) => s.body)].filter(Boolean).join("\n\n")
-}
-
 function listSkills(dir: string): Skill[] {
   if (!fs.existsSync(dir)) return []
   return fs
@@ -190,23 +197,31 @@ function isLayer(v: string): v is Layer {
   return v === "macro" || v === "micro" || v === "all" || v === "none"
 }
 
-// Resolve which skill layer a requesting agent should receive, returning both
-// the layer and a human-readable note on HOW it resolved. Resolution order:
-//   1. explicit `layer` override (skiller decision)
-//   2. exact role in bioskills-access.yaml
-//   3. alias -> canonical role (renamed / merged agents)
-//   4. default layer (safe fallback for any unregistered/new agent)
-// This keeps the agent<->skill wiring in one config file so the BioMaster agent
-// graph can be refactored (merge/add/rename agents) without touching this tool.
-function resolveLayer(directory: string, agent?: string, explicit?: string): { layer: Layer; via: string } {
-  if (explicit && isLayer(explicit)) return { layer: explicit, via: "explicit layer override" }
+type AccessPolicy = {
+  defaultLayer: Layer
+  roles: Record<string, Layer>
+  aliases: Record<string, string>
+  layerAgents: Record<string, string[]>
+}
 
+function parseInlineList(value: string): string[] {
+  const trimmed = value.trim()
+  if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) return []
+  return trimmed
+    .slice(1, -1)
+    .split(",")
+    .map((item) => item.trim().replace(/^["']|["']$/g, ""))
+    .filter(Boolean)
+}
+
+function readAccessPolicy(directory: string): AccessPolicy {
   const yamlText = readFileSafe(path.join(directory, ".opencode", "bioskills-access.yaml"))
-  let defaultLayer: Layer = "macro"
+  let defaultLayer: Layer = "none"
   const roles: Record<string, Layer> = {}
   const aliases: Record<string, string> = {}
+  const layerAgents: Record<string, string[]> = {}
   const lines = yamlText.split("\n")
-  let section: "default" | "roles" | "aliases" | null = null
+  let section: "default" | "roles" | "aliases" | "layer_agents" | null = null
   let currentRole: string | null = null
   for (const raw of lines) {
     if (/^\s*#/.test(raw)) continue
@@ -218,6 +233,11 @@ function resolveLayer(directory: string, agent?: string, explicit?: string): { l
     }
     if (/^roles:/.test(line)) {
       section = "roles"
+      currentRole = null
+      continue
+    }
+    if (/^layer_agents:/.test(line)) {
+      section = "layer_agents"
       currentRole = null
       continue
     }
@@ -241,23 +261,59 @@ function resolveLayer(directory: string, agent?: string, explicit?: string): { l
     } else if (section === "aliases") {
       const a = /^\s{2}([A-Za-z0-9_-]+):\s*([A-Za-z0-9_-]+)\s*$/.exec(line)
       if (a) aliases[a[1]] = a[2]
+    } else if (section === "layer_agents") {
+      const access = /^\s{2}([A-Za-z0-9_-]+):\s*(\[.*\])\s*$/.exec(line)
+      if (access) layerAgents[access[1]] = parseInlineList(access[2])
     }
   }
-
-  if (agent && roles[agent]) return { layer: roles[agent], via: `role '${agent}'` }
-  if (agent && aliases[agent] && roles[aliases[agent]]) {
-    return { layer: roles[aliases[agent]], via: `alias '${agent}' -> role '${aliases[agent]}'` }
-  }
-  return { layer: defaultLayer, via: agent ? `default (unregistered agent '${agent}')` : "default" }
+  return { defaultLayer, roles, aliases, layerAgents }
 }
 
-function enabledSteps(skill: Skill): Step[] {
-  return skill.steps.filter((s) => s.enabled !== false)
+function resolveAccess(
+  directory: string,
+  agent?: string,
+): { agent: string; layer: Layer; metadataOnly: boolean; allowed: boolean; via: string; policy: AccessPolicy } {
+  const policy = readAccessPolicy(directory)
+  if (!agent) {
+    return {
+      agent: "",
+      layer: policy.defaultLayer,
+      metadataOnly: false,
+      allowed: false,
+      via: "missing agent (denied)",
+      policy,
+    }
+  }
+  const canonical = policy.aliases[agent] ?? agent
+  const layer = policy.roles[canonical]
+  if (!layer) {
+    return {
+      agent: canonical,
+      layer: policy.defaultLayer,
+      metadataOnly: false,
+      allowed: false,
+      via: `unregistered agent '${agent}' (denied)`,
+      policy,
+    }
+  }
+  return {
+    agent: canonical,
+    layer,
+    metadataOnly: layer === "none",
+    allowed: true,
+    via: canonical === agent ? `role '${agent}'` : `alias '${agent}' -> role '${canonical}'`,
+    policy,
+  }
+}
+
+function agentCanReadSkill(skill: Skill, agent: string, policy: AccessPolicy): boolean {
+  const allowed = policy.layerAgents[skill.biomasterLayer] ?? []
+  return allowed.length > 0 && allowed.includes(agent)
 }
 
 function matches(skill: Skill, q: string): boolean {
   if (!q) return true
-  const stepTerms = enabledSteps(skill).flatMap((s) => [s.title, ...s.tags])
+  const stepTerms = skill.steps.flatMap((s) => [s.title, ...s.tags])
   const hay = [
     skill.name,
     skill.description,
@@ -286,7 +342,7 @@ function narrowToStep(skill: Skill, stepQuery: string): Skill {
   const match = skill.steps.find(
     (s) => s.id.toLowerCase() === q || s.title.toLowerCase() === q || s.title.toLowerCase().includes(q),
   )
-  if (!match || match.enabled === false) return { ...skill, steps: [], macro: "", micro: "" }
+  if (!match) return { ...skill, steps: [], macro: "", micro: "" }
   const pick = (md: string) => {
     const { sections } = sectionsByHeading(md)
     const idx = skill.steps.indexOf(match)
@@ -296,42 +352,49 @@ function narrowToStep(skill: Skill, stepQuery: string): Skill {
 }
 
 function render(skill: Skill, layer: Layer): string {
-  const active = enabledSteps(skill)
   const lines = [`## ${skill.name}`, skill.description, ""]
-  if (active.length) {
+  if (skill.steps.length) {
     lines.push(
-      `**steps:** ${active.map((s) => (s.tags.length ? `${s.title} [${s.tags.join(", ")}]` : s.title)).join(" | ")}`,
+      `**steps:** ${skill.steps.map((s) => (s.tags.length ? `${s.title} [${s.tags.join(", ")}]` : s.title)).join(" | ")}`,
       "",
     )
   }
   if (layer === "macro" || layer === "all") {
     lines.push(`**macro_tags:** ${skill.macroTags.join(", ") || "-"}`)
-    lines.push("", "### macro (description layer)", truncate(filterByEnabledSteps(skill.macro, skill.steps)), "")
+    lines.push("", "### macro (description layer)", truncate(skill.macro), "")
   }
   if (layer === "micro" || layer === "all") {
     lines.push(`**primary_tool:** ${skill.primaryTool || "-"}`)
     lines.push(`**micro_tags:** ${skill.microTags.join(", ") || "-"}`)
-    lines.push("", "### micro (execution layer)", truncate(filterByEnabledSteps(skill.micro, skill.steps)), "")
+    lines.push("", "### micro (execution layer)", truncate(skill.micro), "")
   }
   return lines.join("\n")
 }
 
+function renderMetadata(skill: Skill): string {
+  return [
+    `## ${skill.name}`,
+    skill.description,
+    "",
+    `**biomaster_layer:** ${skill.biomasterLayer || "unclassified"}`,
+    `**domain:** ${skill.domain || "-"}`,
+    `**status:** enabled`,
+    `**tags:** ${[...skill.macroTags, ...skill.microTags].join(", ") || "-"}`,
+  ].join("\n")
+}
+
 export default tool({
   description:
-    "Retrieve bioinformatics skills from the file-backed BioSkills library with role-based layering. " +
-    "Pass `agent` (e.g. biomaster-plan, biomaster-execute, biomaster-debug, biomaster-check) to get the layer that role " +
-    "should see (plan->macro/overview, execute&debug->micro/commands+params, check->none), or set `layer` explicitly " +
-    "(macro|micro|all|none). Use `q` to keyword-filter (e.g. 'single-cell clustering'), `name` for one skill, `step` to " +
-    "narrow to a single workflow step, `limit` to cap results. Muted skills and muted steps are never returned.",
+    "Retrieve bioinformatics skills from the file-backed BioSkills library with fail-closed role enforcement. " +
+    "Access is bound to the actual calling agent; optional `agent` must identify that same role. The policy fixes which " +
+    "skill types and content layer the caller may receive. Management agents receive metadata only. Use `q` to " +
+    "keyword-filter (e.g. 'single-cell clustering'), `name` for one skill, `step` to " +
+    "narrow to a single workflow step, `limit` to cap results. Muted skills are never returned.",
   args: {
     agent: tool.schema
       .string()
       .optional()
-      .describe("Requesting sub-agent role; maps to a skill layer via .opencode/bioskills-access.yaml"),
-    layer: tool.schema
-      .enum(["macro", "micro", "all", "none"])
-      .optional()
-      .describe("Explicit layer override (macro=overview for plan, micro=commands/params for execute/debug)"),
+      .describe("Optional caller role assertion; impersonating another role is denied"),
     q: tool.schema
       .string()
       .optional()
@@ -346,20 +409,35 @@ export default tool({
   async execute(args, context) {
     const directory = context.directory
     const dir = bioskillsDir(directory)
-    const { layer, via } = resolveLayer(directory, args.agent, args.layer)
-
-    if (layer === "none") {
+    const caller = context.agent
+    const requested = args.agent
+    const callerAccess = resolveAccess(directory, caller)
+    const requestedAccess = requested ? resolveAccess(directory, requested) : callerAccess
+    if (requested && requestedAccess.agent !== callerAccess.agent) {
       return {
-        title: "bioskills: no layer",
-        output: `Role '${args.agent ?? "unknown"}' is configured to receive no skills (layer=none; via ${via}).`,
-        metadata: { layer, via, agent: args.agent, count: 0 },
+        title: "bioskills: access denied",
+        output: `Role '${caller}' cannot request BioSkills as '${requested}'.`,
+        metadata: { agent: caller, requestedAgent: requested, count: 0, denied: true },
+      }
+    }
+    const access = callerAccess
+    const { layer, via } = access
+
+    if (!access.allowed) {
+      return {
+        title: "bioskills: access denied",
+        output: `Role '${caller || "unknown"}' is not registered for BioSkills body access (${via}).`,
+        metadata: { layer, via, agent: caller, count: 0, denied: true },
       }
     }
 
     let skills = listSkills(dir)
+    if (!access.metadataOnly) {
+      skills = skills.filter((skill) => agentCanReadSkill(skill, access.agent, access.policy))
+    }
     if (args.name) {
       skills = skills.filter((s) => s.name === args.name)
-      if (args.step) skills = skills.map((s) => narrowToStep(s, args.step!))
+      if (args.step && !access.metadataOnly) skills = skills.map((s) => narrowToStep(s, args.step!))
     } else {
       if (args.q) skills = skills.filter((s) => matches(s, args.q!))
       skills = skills.slice(0, args.limit ?? 8)
@@ -373,12 +451,19 @@ export default tool({
       }
     }
 
-    const header = `Returning ${skills.length} skill(s) at layer='${layer}'${args.agent ? ` for agent='${args.agent}'` : ""} (via ${via}).`
-    const body = skills.map((s) => render(s, layer)).join("\n---\n\n")
+    const header = `Returning ${skills.length} skill(s) at layer='${layer}' for agent='${caller}' (via ${via}).`
+    const body = skills.map((s) => (access.metadataOnly ? renderMetadata(s) : render(s, layer))).join("\n---\n\n")
     return {
-      title: `bioskills: ${skills.length} @ ${layer}`,
+      title: `bioskills: ${skills.length} @ ${access.metadataOnly ? "metadata" : layer}`,
       output: `${header}\n\n${body}`,
-      metadata: { layer, via, agent: args.agent, count: skills.length, names: skills.map((s) => s.name) },
+      metadata: {
+        layer,
+        via,
+        agent: caller,
+        metadataOnly: access.metadataOnly,
+        count: skills.length,
+        names: skills.map((s) => s.name),
+      },
     }
   },
 })

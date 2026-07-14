@@ -28,7 +28,6 @@ const InputSchema = Schema.Struct({
         id: Schema.optional(Schema.String),
         title: Schema.optional(Schema.String),
         tags: Schema.optional(Schema.Array(Schema.String)),
-        enabled: Schema.optional(Schema.Boolean),
       }),
     ),
   ),

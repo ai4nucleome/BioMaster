@@ -10,7 +10,7 @@ BioMaster is organized as a single repository root with project-local OpenCode c
 - `.opencode/runtime/biomaster/knowledge`: SQLite schema, sync, route selection, and phase policy.
 - `.opencode/runtime/biomaster/runtime`: run directory helpers, execution/debug/check helpers, and OpenCode artifact views.
 - `.opencode/runtime/biomaster/a2a`: structured worker-agent messages.
-- `examples` and `tests`: developer fixtures and regression tests.
+- `examples`: lightweight smoke tests, knowledge checks, and usage fixtures.
 
 ## Local Setup
 

@@ -10,6 +10,7 @@ from typing import Any
 import yaml
 
 from biomaster.knowledge import (
+    DEFAULT_ACCESS_POLICY_PATH,
     DEFAULT_BIOSKILLS_ROOT,
     DEFAULT_DB_PATH,
     OPENCODE_ROOT,
@@ -81,6 +82,9 @@ def bioskills_signature(bioskills_root: Path = DEFAULT_BIOSKILLS_ROOT) -> str:
             if path.exists():
                 stat = path.stat()
                 parts.append(f"{skill_dir.name}/{name}:{stat.st_mtime_ns}:{stat.st_size}")
+    if DEFAULT_ACCESS_POLICY_PATH.exists():
+        stat = DEFAULT_ACCESS_POLICY_PATH.stat()
+        parts.append(f"bioskills-access.yaml:{stat.st_mtime_ns}:{stat.st_size}")
     return content_hash("|".join(parts))
 
 

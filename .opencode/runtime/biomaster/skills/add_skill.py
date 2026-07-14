@@ -127,7 +127,6 @@ Add concrete commands, parameters, checks, or debugging instructions here.
             "id": spec["layer"],
             "title": spec["body_heading"],
             "tags": [target, required_value],
-            "enabled": True,
         }
     ]
     (skill_dir / "macro.md").write_text(macro, encoding="utf-8")

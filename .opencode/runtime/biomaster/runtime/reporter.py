@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import yaml
-
 from biomaster.runtime.run_context import RunContext
+from biomaster.runtime.yaml_io import load_yaml_mapping, validate_project_log
 
 
 def _table_cell(value: object) -> str:
@@ -25,7 +24,7 @@ def write_report_from_project_log(run: RunContext) -> str:
     if not run.project_log_path.exists():
         return write_final_report(run, {"Status": "PROJECT_LOG.yaml is not available yet."})
 
-    data = yaml.safe_load(run.project_log_path.read_text(encoding="utf-8")) or {}
+    data = load_yaml_mapping(run.project_log_path, validator=validate_project_log)
     steps = data.get("steps") or []
     passed = [step for step in steps if (step.get("check") or {}).get("status") == "pass"]
     blocked = [step for step in steps if (step.get("check") or {}).get("status") == "fail"]

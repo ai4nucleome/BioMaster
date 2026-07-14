@@ -6,6 +6,11 @@ import yaml
 from biomaster.knowledge import DEFAULT_DB_PATH, connect, ensure_knowledge_db, ensure_schema, normalize_agent_name
 from biomaster.knowledge.query_skills import agent_allowed, get_skill_by_id
 from biomaster.runtime.run_context import RunContext, utc_now
+from biomaster.runtime.yaml_io import (
+    load_yaml_mapping,
+    validate_check_report,
+    validate_project_log,
+)
 
 
 def _as_list(value: object) -> list[str]:
@@ -102,7 +107,7 @@ def _check_expected_output(run: RunContext, step_id: str, expected_output: str) 
 def _load_existing_report(run: RunContext) -> dict:
     if not run.check_report_path.exists():
         return {"run_id": run.run_id, "plan_id": run.run_id, "overall_status": "pass", "checks": []}
-    data = _read_yaml(run.check_report_path)
+    data = load_yaml_mapping(run.check_report_path, validator=validate_check_report)
     data.setdefault("run_id", run.run_id)
     data.setdefault("plan_id", run.run_id)
     data.setdefault("checks", [])
@@ -111,7 +116,7 @@ def _load_existing_report(run: RunContext) -> dict:
 
 def _load_project_log(run: RunContext) -> dict:
     if run.project_log_path.exists():
-        data = _read_yaml(run.project_log_path)
+        data = load_yaml_mapping(run.project_log_path, validator=validate_project_log)
     else:
         data = {}
     data.setdefault("project_name", run.run_id)

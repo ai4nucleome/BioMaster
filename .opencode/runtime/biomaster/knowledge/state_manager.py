@@ -9,11 +9,13 @@ from datetime import datetime, timezone
 from biomaster.knowledge import (
     DEFAULT_DB_PATH,
     PROJECT_ROOT,
+    REQUIRED_TABLES,
     connect,
     ensure_schema,
     json_dumps,
     json_loads,
     row_to_dict,
+    table_exists,
 )
 from biomaster.knowledge.phases import validate_phase_transition
 
@@ -105,7 +107,65 @@ def get_run(connection, run_id: str) -> dict:
     return row_to_dict(row)
 
 
-def update_run(connection, run_id: str, **fields: object) -> dict:
+def _assert_sqlite_ready(connection) -> None:
+    integrity = connection.execute("PRAGMA quick_check").fetchone()
+    if integrity is None or str(integrity[0]).lower() != "ok":
+        raise ValueError("SQLite readiness check failed: database integrity check did not pass")
+    missing_tables = [table for table in REQUIRED_TABLES if not table_exists(connection, table)]
+    if missing_tables:
+        raise ValueError("SQLite readiness check failed: missing tables: " + ", ".join(missing_tables))
+    for table in ("skills", "pipeline_routes"):
+        count = int(connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0])
+        if count == 0:
+            raise ValueError(f"SQLite readiness check failed: {table} is empty")
+
+
+def _assert_checks_passed(run_id: str, project_dir: Path) -> None:
+    from biomaster.runtime.yaml_io import load_yaml_mapping, validate_check_report, validate_plan
+
+    if not (project_dir / "PLAN.yaml").exists():
+        raise ValueError("cannot enter reporting or done without PLAN.yaml")
+    if not (project_dir / "CHECK_REPORT.yaml").exists():
+        raise ValueError("cannot enter reporting or done without CHECK_REPORT.yaml")
+    plan = load_yaml_mapping(project_dir / "PLAN.yaml", validator=validate_plan)
+    report = load_yaml_mapping(project_dir / "CHECK_REPORT.yaml", validator=validate_check_report)
+    if report.get("run_id", run_id) != run_id or report.get("overall_status") != "pass":
+        raise ValueError("cannot enter reporting or done while checking has not passed")
+    required_steps = [str(step["step_id"]) for step in plan["steps"]]
+    passed_steps = {
+        str(check.get("step_id"))
+        for check in report["checks"]
+        if check.get("status") == "pass"
+    }
+    missing = [step_id for step_id in required_steps if step_id not in passed_steps]
+    if missing:
+        raise ValueError("cannot enter reporting or done before all checks pass: " + ", ".join(missing))
+
+
+def _validate_phase_readiness(
+    connection,
+    run_id: str,
+    current: dict,
+    next_phase: str,
+    project_dir: Path,
+) -> None:
+    previous_phase = str(current.get("phase") or "")
+    if previous_phase == "domain_anchoring" and next_phase == "pipeline_routing":
+        _assert_sqlite_ready(connection)
+    if previous_phase == "pipeline_routing" and next_phase == "planning":
+        if not current.get("selected_route_id"):
+            raise ValueError("cannot enter planning before SQLite pipeline routing selects a route")
+    if next_phase in {"reporting", "done"}:
+        _assert_checks_passed(run_id, project_dir)
+
+
+def update_run(
+    connection,
+    run_id: str,
+    *,
+    project_dir: Path | None = None,
+    **fields: object,
+) -> dict:
     allowed = {
         "phase",
         "mode",
@@ -126,6 +186,13 @@ def update_run(connection, run_id: str, **fields: object) -> dict:
             errors = validate_phase_transition(str(current.get("phase") or ""), str(value))
             if errors:
                 raise ValueError("; ".join(errors))
+            _validate_phase_readiness(
+                connection,
+                run_id,
+                current,
+                str(value),
+                project_dir or PROJECT_ROOT / "projects" / run_id,
+            )
         if key == "selected_route_id":
             phase = str(current.get("phase") or "")
             if phase not in {"pipeline_routing", "planning"}:
@@ -146,6 +213,23 @@ def update_run(connection, run_id: str, **fields: object) -> dict:
     )
     connection.commit()
     return get_run(connection, run_id)
+
+
+def advance_run_phase(
+    connection,
+    run_id: str,
+    next_phase: str,
+    *,
+    project_dir: Path | None = None,
+) -> dict:
+    """Advance one legal phase after all runtime readiness gates pass."""
+
+    return update_run(
+        connection,
+        run_id,
+        project_dir=project_dir,
+        phase=next_phase,
+    )
 
 
 def get_disabled_skill_ids(connection, run_id: str | None) -> set[str]:

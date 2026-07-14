@@ -83,8 +83,9 @@ parameters for any step"). Prefer rejecting over writing a low-quality skill.
 ## Step 3 — Write
 
 Call `bioskills-author` with `name`, `description`, `overview`, and the ordered
-`steps`. To **re-divide an existing skill in place**, pass its exact `name` (read
-it first with the `bioskills` tool at `layer: "all"`), then rewrite it.
+`steps`. Management agents receive catalog metadata only; source content for a
+re-division must be supplied explicitly by the user rather than read from the
+existing skill body.
 
 ## Rules
 

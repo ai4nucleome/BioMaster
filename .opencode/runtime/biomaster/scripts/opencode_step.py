@@ -7,12 +7,13 @@ from typing import Any
 
 import yaml
 
-from biomaster.knowledge import DEFAULT_DB_PATH, PROJECT_ROOT, connect, ensure_schema
+from biomaster.knowledge import DEFAULT_DB_PATH, PROJECT_ROOT, connect, ensure_knowledge_db, ensure_schema
 from biomaster.knowledge.prompt_assembler import assemble_prompt
 from biomaster.knowledge.skill_finder import find_skills
-from biomaster.knowledge.state_manager import create_run, get_run, update_run
+from biomaster.knowledge.state_manager import advance_run_phase, create_run, get_run, update_run
 from biomaster.runtime import RunContext, check_step, debug_step, execute_step, load_plan
 from biomaster.runtime.run_context import find_matching_projects, resolve_project_dir
+from biomaster.runtime.yaml_io import load_yaml_mapping, validate_check_report
 
 
 def json_default(value: object) -> str:
@@ -43,7 +44,27 @@ def load_project_plan(project: str) -> dict[str, Any]:
     return load_plan(plan_path)
 
 
+def advance_project_phase(project: str, db_path: Path, next_phase: str) -> None:
+    connection = connect(db_path)
+    try:
+        ensure_schema(connection)
+        try:
+            state = get_run(connection, project)
+        except KeyError:
+            return
+        if str(state.get("phase") or "") != next_phase:
+            advance_run_phase(
+                connection,
+                project,
+                next_phase,
+                project_dir=project_root(project),
+            )
+    finally:
+        connection.close()
+
+
 def ensure_pipeline_routing_state(project: str, db_path: Path) -> None:
+    ensure_knowledge_db(db_path)
     connection = connect(db_path)
     try:
         ensure_schema(connection)
@@ -114,6 +135,21 @@ def command_plan_context(args: argparse.Namespace) -> dict[str, Any]:
 def command_execute_step(args: argparse.Namespace) -> dict[str, Any]:
     run = run_context(args.project)
     plan = load_project_plan(args.project)
+    connection = connect(args.db)
+    try:
+        ensure_schema(connection)
+        try:
+            phase = str(get_run(connection, args.project).get("phase") or "")
+        except KeyError:
+            phase = ""
+    finally:
+        connection.close()
+    if phase == "pipeline_routing":
+        advance_project_phase(args.project, args.db, "planning")
+        phase = "planning"
+    if phase == "planning":
+        advance_project_phase(args.project, args.db, "preflight")
+    advance_project_phase(args.project, args.db, "execution")
     result = execute_step(run, plan, args.step_id, db_path=args.db)
     return {
         "command": "execute-step",
@@ -128,6 +164,7 @@ def command_execute_step(args: argparse.Namespace) -> dict[str, Any]:
 def command_debug_step(args: argparse.Namespace) -> dict[str, Any]:
     run = run_context(args.project)
     plan = load_project_plan(args.project)
+    advance_project_phase(args.project, args.db, "debugging")
     result = debug_step(run, plan, args.step_id, db_path=args.db)
     return {
         "command": "debug-step",
@@ -142,7 +179,20 @@ def command_debug_step(args: argparse.Namespace) -> dict[str, Any]:
 def command_check_step(args: argparse.Namespace) -> dict[str, Any]:
     run = run_context(args.project)
     plan = load_project_plan(args.project)
+    advance_project_phase(args.project, args.db, "checking")
     result = check_step(run, args.step_id, plan=plan, db_path=args.db)
+    if result.get("status") == "fail":
+        advance_project_phase(args.project, args.db, "debugging")
+    else:
+        report = load_yaml_mapping(run.check_report_path, validator=validate_check_report)
+        passed = {
+            str(item.get("step_id"))
+            for item in report.get("checks", [])
+            if item.get("status") == "pass"
+        }
+        if all(str(step["step_id"]) in passed for step in plan.get("steps", [])):
+            advance_project_phase(args.project, args.db, "reporting")
+            advance_project_phase(args.project, args.db, "done")
     return {
         "command": "check-step",
         "project": args.project,

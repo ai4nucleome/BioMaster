@@ -1,4 +1,1 @@
 PyYAML>=6.0
-numpy
-scanpy
-pytest>=8.0

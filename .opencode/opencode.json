@@ -13,6 +13,10 @@
         "bash": false
       },
       "permission": {
+        "read": {
+          "*": "allow",
+          "**/.opencode/bioskills/**": "deny"
+        },
         "edit": "ask",
         "bash": {
           "*": "deny"
@@ -31,6 +35,10 @@
         "bash": true
       },
       "permission": {
+        "read": {
+          "*": "allow",
+          "**/.opencode/bioskills/**": "deny"
+        },
         "edit": "ask",
         "bash": {
           "*": "ask"
@@ -49,6 +57,10 @@
         "bash": true
       },
       "permission": {
+        "read": {
+          "*": "allow",
+          "**/.opencode/bioskills/**": "deny"
+        },
         "edit": "ask",
         "bash": {
           "*": "ask"
@@ -67,6 +79,10 @@
         "bash": true
       },
       "permission": {
+        "read": {
+          "*": "allow",
+          "**/.opencode/bioskills/**": "deny"
+        },
         "edit": "ask",
         "bash": {
           "*": "ask"
@@ -100,7 +116,7 @@
         "write": false,
         "edit": false,
         "bash": false,
-        "read": true,
+        "read": false,
         "bioskills": true,
         "bioskills-author": true
       },
@@ -120,7 +136,7 @@
         "write": false,
         "edit": false,
         "bash": false,
-        "read": true,
+        "read": false,
         "webfetch": true,
         "bioskills": true,
         "bioskills-author": true

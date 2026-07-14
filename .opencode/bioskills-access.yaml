@@ -1,9 +1,7 @@
-# Role -> skill layer mapping for the file-backed BioSkills library.
+# Canonical BioSkills access policy.
 #
-# This file is the STABLE INTEGRATION INTERFACE between BioMaster worker roles
-# and the file-backed BioSkills library. Runtime workflows follow the
-# Plan -> Execute -> Debug -> Check skeleton; BioSkills and SQLite remain the
-# knowledge layer.
+# Both the Python SQLite control plane and the TypeScript file-backed tool read
+# this file. Unknown roles/layers and empty agent lists are denied by default.
 #
 # ── Why an interface? ────────────────────────────────────────────────────
 # The BioMaster worker set is intentionally narrow: plan / execute / debug /
@@ -13,23 +11,16 @@
 # ── Layer values ─────────────────────────────────────────────────────────
 #   macro - description / overview layer (macro.md + macro_tags)      -> planning
 #   micro - execution layer (micro.md + micro_tags: cmds/params/etc.) -> coding
-#   all   - both layers                                               -> skill management tooling
-#   none  - no skills exposed                                         -> pure verification
+#   none  - metadata only; no skill body is exposed
 #
 # ── Capability guidance (how to classify a NEW agent) ────────────────────
 #   planning-type      (turns intent into a plan)      -> macro
 #   coding-type        (writes/fixes commands)         -> micro
-#   verification-type  (checks outputs, no authoring)  -> none
-#   management tooling (needs the whole library)       -> all
-#
-# ── Resolution order (implemented in bioskills.ts) ───────────────────────
-#   1. explicit `layer` arg on the tool call
-#   2. roles[agent]                      (exact match)
-#   3. roles[ aliases[agent] ]           (renamed / merged agent -> canonical role)
-#   4. default.layer                     (safe fallback for any unregistered agent)
+#   verification-type  (checks execute evidence)       -> micro
+#   management tooling (catalogues skills)              -> none (metadata only)
 
 default:
-  layer: macro
+  layer: none
 
 roles:
   biomaster-plan:
@@ -39,15 +30,43 @@ roles:
   biomaster-debug:
     layer: micro
   biomaster-check:
-    layer: none
+    layer: micro
   biomaster-skiller:
-    layer: all
+    layer: none
+  biomaster-skill-author:
+    layer: none
+  biomaster-skill-creator:
+    layer: none
+
+# Canonical SQLite layer -> agents allowed to receive the skill body.
+layer_agents:
+  registry: [biomaster-plan]
+  domain-guide: [biomaster-plan]
+  discipline: [biomaster-plan]
+  pipeline: [biomaster-plan]
+  plan: [biomaster-plan]
+  exec: [biomaster-execute, biomaster-debug, biomaster-check]
+  execute: [biomaster-execute, biomaster-debug, biomaster-check]
+  verify: [biomaster-check, biomaster-execute, biomaster-debug]
+  debug: [biomaster-debug]
+  env: [biomaster-execute, biomaster-debug]
+  report: [biomaster-plan]
+  bioskill: [biomaster-plan, biomaster-execute, biomaster-debug, biomaster-check]
+
+record_agents:
+  workflow: [biomaster-plan]
+  task: [biomaster-execute, biomaster-debug, biomaster-check]
 
 # aliases: map future / renamed / merged agent names onto an existing role so
 # they inherit that role's policy without adding a new `roles:` entry.
 # Edit these when the agent graph changes (merge/rename/add).
 aliases:
   biomaster-intake: biomaster-plan
-  biomaster-worker: biomaster-execute      # example: a merged execute+debug worker -> micro
-#   biomaster-coder: biomaster-execute
-#   biomaster-planner: biomaster-plan
+  biomaster-worker: biomaster-execute
+  intake-agent: biomaster-plan
+  plan-agent: biomaster-plan
+  execute-agent: biomaster-execute
+  task-agent: biomaster-execute
+  check-agent: biomaster-check
+  verify-agent: biomaster-check
+  debug-agent: biomaster-debug

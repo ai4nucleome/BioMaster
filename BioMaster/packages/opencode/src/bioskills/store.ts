@@ -7,15 +7,14 @@ import path from "node:path"
 export type SkillLayer = "macro" | "micro" | "all"
 
 // A structured step of a workflow skill. Steps are first-class units: each one
-// carries functional-module tags, can be individually turned on/off (muted),
-// and is allocatable by the skiller agent. The step's prose lives as a `##`
+// carries functional-module tags and is allocatable by the skiller agent.
+// Muting is supported only at whole-skill level. The step's prose lives as a `##`
 // section (matched by order/title) inside macro.md (description) and micro.md
 // (execution/code).
 export interface SkillStep {
   id: string
   title: string
   tags: string[]
-  enabled: boolean
 }
 
 export interface BioSkill {
@@ -67,6 +66,7 @@ export class BioSkillError extends Error {
 }
 
 const INDEX_FILE = ".index.db"
+const KNOWLEDGE_DB = path.join(".opencode", "knowledge", "biomaster_skills.db")
 
 export function bioskillsDir(directory: string): string {
   return path.join(directory, ".opencode", "bioskills")
@@ -103,7 +103,7 @@ function parseSteps(value: unknown): SkillStep[] {
       if (typeof raw === "string") {
         const title = raw.trim()
         if (!title) return null
-        return { id: slugifySafe(title, `step-${index + 1}`), title, tags: [], enabled: true }
+        return { id: slugifySafe(title, `step-${index + 1}`), title, tags: [] }
       }
       if (raw && typeof raw === "object") {
         const obj = raw as Record<string, unknown>
@@ -114,7 +114,6 @@ function parseSteps(value: unknown): SkillStep[] {
           id,
           title: title || id,
           tags: toArray(obj.tags),
-          enabled: obj.enabled === false ? false : true,
         }
       }
       return null
@@ -214,7 +213,6 @@ export function writeSkill(dir: string, skill: BioSkill): void {
     id: s.id,
     title: s.title,
     tags: s.tags ?? [],
-    enabled: s.enabled === false ? false : true,
   }))
   if (steps.length) fs.writeFileSync(stepsFile, JSON.stringify(steps, null, 2) + "\n")
   else if (fs.existsSync(stepsFile)) fs.rmSync(stepsFile)
@@ -523,7 +521,27 @@ export function update(directory: string, name: string, input: BioSkillInput): B
   } finally {
     db.close()
   }
+  if (input.enabled !== undefined) syncKnowledgeEnabled(directory, slug, skill.enabled)
   return { ...skill, name: slug }
+}
+
+export function syncKnowledgeEnabled(directory: string, skillID: string, enabled: boolean): boolean {
+  const dbPath = path.join(directory, KNOWLEDGE_DB)
+  if (!fs.existsSync(dbPath)) return false
+  const db = new Database(dbPath)
+  try {
+    const table = db
+      .query("SELECT 1 AS ok FROM sqlite_master WHERE type = 'table' AND name = 'skills'")
+      .get() as { ok?: number } | null
+    if (!table?.ok) return false
+    const result = db.run("UPDATE skills SET enabled = ?, updated_at = CURRENT_TIMESTAMP WHERE skill_id = ?", [
+      enabled ? 1 : 0,
+      skillID,
+    ])
+    return result.changes > 0
+  } finally {
+    db.close()
+  }
 }
 
 export function remove(directory: string, name: string): void {

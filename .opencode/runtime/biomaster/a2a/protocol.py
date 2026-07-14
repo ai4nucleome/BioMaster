@@ -10,7 +10,9 @@ AGENT_ALIASES = {
     "intake-agent": "biomaster-plan",
     "plan-agent": "biomaster-plan",
     "execute-agent": "biomaster-execute",
+    "task-agent": "biomaster-execute",
     "check-agent": "biomaster-check",
+    "verify-agent": "biomaster-check",
     "debug-agent": "biomaster-debug",
 }
 

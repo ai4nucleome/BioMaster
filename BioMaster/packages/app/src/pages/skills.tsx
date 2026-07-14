@@ -201,7 +201,7 @@ function overviewOf(md: string, stepTitles: string[]): string {
 // Align steps.json to the macro (description) + micro (execution) sections by
 // title, producing one card per step. Returns null when the skill is not
 // structured (no steps.json) so callers can fall back to blob rendering.
-type LayeredCard = { id: string; title: string; tags: string[]; enabled: boolean; macro: string; micro: string }
+type LayeredCard = { id: string; title: string; tags: string[]; macro: string; micro: string }
 function layeredCards(macro: string, micro: string, steps?: SkillStep[]): { overview: string; cards: LayeredCard[] } | null {
   if (!steps || steps.length === 0) return null
   const titles = steps.map((s) => s.title)
@@ -209,7 +209,6 @@ function layeredCards(macro: string, micro: string, steps?: SkillStep[]): { over
     id: s.id,
     title: s.title,
     tags: s.tags ?? [],
-    enabled: s.enabled !== false,
     macro: bodyForTitle(macro, s.title),
     micro: bodyForTitle(micro, s.title),
   }))
@@ -359,18 +358,6 @@ const SkillsPage: Component = () => {
     const result = await withBusy(
       () => client().setEnabled(skill.name, next),
       next ? `Turned on “${skill.name}”` : `Muted “${skill.name}”`,
-    )
-    if (!result) await refetch()
-  }
-
-  async function toggleStep(skill: BioSkill, stepId: string, enabled: boolean) {
-    const nextSteps = (skill.steps ?? []).map((s) => (s.id === stepId ? { ...s, enabled } : s))
-    const title = skill.steps?.find((s) => s.id === stepId)?.title ?? stepId
-    // optimistic update
-    mutate((prev) => prev?.map((s) => (s.name === skill.name ? { ...s, steps: nextSteps } : s)))
-    const result = await withBusy(
-      () => client().setSteps(skill.name, nextSteps),
-      enabled ? `Turned on step “${title}”` : `Muted step “${title}”`,
     )
     if (!result) await refetch()
   }
@@ -800,7 +787,6 @@ const SkillsPage: Component = () => {
                             onEdit={() => current() && setForm(toForm(current()!))}
                             onDelete={remove}
                             onToggle={toggleEnabled}
-                            onToggleStep={toggleStep}
                             busy={busy()}
                           />
                         }
@@ -868,17 +854,10 @@ const StepPanel: Component<{
   defaultOpen?: boolean
   // Structured metadata (present when the skill has steps.json)
   tags?: string[]
-  enabled?: boolean
-  busy?: boolean
-  onToggle?: () => void
 }> = (props) => {
   const [open, setOpen] = createSignal(!!props.defaultOpen)
-  const muted = () => props.enabled === false
   return (
-    <div
-      class="rounded-lg border border-border-weak-base bg-background-base overflow-hidden transition-opacity"
-      classList={{ "opacity-55": muted() }}
-    >
+    <div class="rounded-lg border border-border-weak-base bg-background-base overflow-hidden">
       <div class="w-full flex items-center gap-2 px-3 py-2 hover:bg-surface-base transition-colors">
         <button
           type="button"
@@ -899,9 +878,6 @@ const StepPanel: Component<{
             {props.index + 1}
           </span>
           <span class="text-13-medium min-w-0 truncate">{props.step.title}</span>
-          <Show when={muted()}>
-            <Chip>muted</Chip>
-          </Show>
         </button>
         <Show when={(props.tags?.length ?? 0) > 0}>
           <div class="hidden sm:flex items-center gap-1 shrink-0 max-w-[45%] overflow-hidden">
@@ -910,14 +886,6 @@ const StepPanel: Component<{
               <Chip>+{props.tags!.length - 4}</Chip>
             </Show>
           </div>
-        </Show>
-        <Show when={props.onToggle}>
-          <Toggle
-            on={props.enabled !== false}
-            disabled={props.busy}
-            label={`Toggle step ${props.step.title}`}
-            onToggle={() => props.onToggle!()}
-          />
         </Show>
       </div>
       <Show when={open()}>
@@ -942,8 +910,6 @@ const StepPanel: Component<{
 const MicroBody: Component<{
   content: string
   steps?: SkillStep[]
-  busy?: boolean
-  onToggleStep?: (stepId: string, enabled: boolean) => void
 }> = (props) => {
   const parsed = createMemo(() => splitSteps(props.content))
   // Structured steps (steps.json) align to the markdown sections by order.
@@ -971,13 +937,6 @@ const MicroBody: Component<{
                   step={step}
                   defaultOpen={i() === 0}
                   tags={meta()?.tags}
-                  enabled={meta()?.enabled}
-                  busy={props.busy}
-                  onToggle={
-                    meta() && props.onToggleStep
-                      ? () => props.onToggleStep!(meta()!.id, meta()!.enabled === false)
-                      : undefined
-                  }
                 />
               )
             }}
@@ -989,21 +948,16 @@ const MicroBody: Component<{
 }
 
 // Unified per-step card: shows the step's MACRO description by default and the
-// MICRO execution/code in a collapsible sub-panel. A single toggle mutes the
-// WHOLE step (both layers), matching how the skiller hides muted steps.
+// MICRO execution/code in a collapsible sub-panel.
 const LayeredStepCard: Component<{
   index: number
   card: LayeredCard
-  busy?: boolean
-  onToggle?: () => void
 }> = (props) => {
   const [showCode, setShowCode] = createSignal(false)
-  const muted = () => !props.card.enabled
   return (
     <div
-      class="rounded-xl border overflow-hidden transition-opacity"
-      classList={{ "opacity-55": muted() }}
-      style={{ "border-color": muted() ? "var(--v2-border-weak-base)" : TONES.macro.border }}
+      class="rounded-xl border overflow-hidden"
+      style={{ "border-color": TONES.macro.border }}
     >
       {/* header */}
       <div class="flex items-center gap-2 px-4 py-2.5 border-b bg-background-base" style={{ "border-color": "var(--v2-border-weaker-base)" }}>
@@ -1021,17 +975,6 @@ const LayeredStepCard: Component<{
               <Chip>+{props.card.tags.length - 4}</Chip>
             </Show>
           </div>
-        </Show>
-        <Show when={muted()}>
-          <Chip>muted</Chip>
-        </Show>
-        <Show when={props.onToggle}>
-          <Toggle
-            on={props.card.enabled}
-            disabled={props.busy}
-            label={`Toggle step ${props.card.title}`}
-            onToggle={() => props.onToggle!()}
-          />
         </Show>
       </div>
       {/* body */}
@@ -1097,7 +1040,6 @@ const SkillDetail: Component<{
   onEdit: () => void
   onDelete: (name: string) => void
   onToggle: (skill: BioSkill) => void
-  onToggleStep: (skill: BioSkill, stepId: string, enabled: boolean) => void
   busy: boolean
 }> = (props) => (
   <Show
@@ -1228,8 +1170,6 @@ const SkillDetail: Component<{
                     <MicroBody
                       content={skill().micro ?? ""}
                       steps={skill().steps}
-                      busy={props.busy}
-                      onToggleStep={(stepId, enabled) => props.onToggleStep(skill(), stepId, enabled)}
                     />
                   </div>
                 </section>
@@ -1266,15 +1206,13 @@ const SkillDetail: Component<{
                   </div>
                 </section>
 
-                {/* Per-step cards: each is macro description + collapsible micro, one toggle mutes both */}
+                {/* Per-step cards: each is macro description + collapsible micro. */}
                 <div class="flex flex-col gap-3">
                   <For each={data().cards}>
                     {(card, i) => (
                       <LayeredStepCard
                         index={i()}
                         card={card}
-                        busy={props.busy}
-                        onToggle={() => props.onToggleStep(skill(), card.id, !card.enabled)}
                       />
                     )}
                   </For>

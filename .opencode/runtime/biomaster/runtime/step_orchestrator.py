@@ -5,7 +5,8 @@ from typing import Any
 
 import yaml
 
-from biomaster.knowledge import DEFAULT_DB_PATH
+from biomaster.knowledge import DEFAULT_DB_PATH, connect, ensure_schema
+from biomaster.knowledge.state_manager import advance_run_phase, get_run
 from biomaster.runtime.checker import check_step
 from biomaster.runtime.debugger import debug_step
 from biomaster.runtime.executor import execute_step
@@ -30,6 +31,21 @@ def _passed_step_ids(run: RunContext) -> set[str]:
         for item in report.get("checks", [])
         if item.get("status") == "pass"
     }
+
+
+def _advance_if_tracked(run: RunContext, db_path: Path, next_phase: str) -> None:
+    connection = connect(db_path)
+    try:
+        ensure_schema(connection)
+        try:
+            state = get_run(connection, run.run_id)
+        except KeyError:
+            return
+        if str(state.get("phase") or "") == next_phase:
+            return
+        advance_run_phase(connection, run.run_id, next_phase, project_dir=run.root)
+    finally:
+        connection.close()
 
 
 def assert_upstream_steps_passed(run: RunContext, plan: dict, step_id: str) -> None:
@@ -58,7 +74,9 @@ def run_step_cycle(
     """
 
     assert_upstream_steps_passed(run, plan, step_id)
+    _advance_if_tracked(run, db_path, "execution")
     execution = execute_step(run, plan, step_id, db_path=db_path)
+    _advance_if_tracked(run, db_path, "debugging")
     debug = debug_step(run, plan, step_id, db_path=db_path)
     if debug["status"] != "pass":
         return {
@@ -70,8 +88,10 @@ def run_step_cycle(
             "debug": debug,
         }
 
+    _advance_if_tracked(run, db_path, "checking")
     check = check_step(run, step_id, plan=plan, db_path=db_path)
     if check["status"] != "pass":
+        _advance_if_tracked(run, db_path, "debugging")
         post_check_debug = debug_step(run, plan, step_id, db_path=db_path)
         return {
             "step_id": step_id,
@@ -115,10 +135,12 @@ def run_plan_serial(
                 "cycles": cycles,
             }
 
+    _advance_if_tracked(run, db_path, "reporting")
+    _advance_if_tracked(run, db_path, "done")
     return {
         "run_id": run.run_id,
         "status": "pass",
-        "next_action": "reporting",
+        "next_action": "done",
         "completed_steps": [item["step_id"] for item in cycles],
         "cycles": cycles,
     }

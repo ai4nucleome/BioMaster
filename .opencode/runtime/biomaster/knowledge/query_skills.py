@@ -15,12 +15,23 @@ from biomaster.knowledge import (
 )
 
 
-def get_skill_by_id(connection, skill_id: str) -> dict | None:
-    row = connection.execute(
-        "SELECT * FROM skills WHERE skill_id = ?",
-        (skill_id,),
-    ).fetchone()
-    return row_to_dict(row) if row else None
+def get_skill_by_id(
+    connection,
+    skill_id: str,
+    *,
+    agent_name: str | None = None,
+    enabled_only: bool = True,
+) -> dict | None:
+    query = "SELECT * FROM skills WHERE skill_id = ?"
+    if enabled_only:
+        query += " AND enabled = 1"
+    row = connection.execute(query, (skill_id,)).fetchone()
+    skill = row_to_dict(row) if row else None
+    if skill is None:
+        return None
+    if agent_name and not agent_allowed(skill, agent_name):
+        return None
+    return skill
 
 
 def list_skills(
@@ -106,7 +117,7 @@ def search_skills(
 
 def agent_allowed(skill: dict, agent_name: str) -> bool:
     allowed = [item.strip() for item in str(skill.get("allowed_agents") or "").split(",") if item.strip()]
-    return not allowed or agent_name in allowed
+    return bool(allowed) and normalize_agent_name(agent_name) in allowed
 
 
 def record_agent_allowed(record: dict, agent_name: str) -> bool:

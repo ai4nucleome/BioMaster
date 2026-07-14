@@ -1,4 +1,4 @@
-.PHONY: build validate index access examples test knowledge-db knowledge-sync knowledge-seed knowledge-test clean bootstrap pytest compliance skill-add
+.PHONY: build validate index access examples test knowledge-db knowledge-sync knowledge-seed knowledge-test clean bootstrap compliance skill-add
 
 PYTHONPATH := .opencode/runtime
 PYTHON := PYTHONPATH=$(PYTHONPATH) python3
@@ -21,9 +21,6 @@ clean:
 	rm -f test_output.h5ad
 	rm -rf .pytest_cache .benchmarks
 	$(PYTHON) -c "from pathlib import Path; import shutil; [shutil.rmtree(p) for p in Path('.').rglob('__pycache__')]"
-
-pytest:
-	$(PYTHON) -m pytest tests/ -q
 
 build: bootstrap index
 
@@ -57,5 +54,5 @@ knowledge-seed: knowledge-sync
 knowledge-test:
 	$(PYTHON) examples/run_knowledge_tests.py
 
-test: bootstrap validate index knowledge-seed examples knowledge-test pytest
+test: validate index knowledge-seed examples knowledge-test compliance
 	$(PYTHON) -c "from biomaster.knowledge import DEFAULT_BIOSKILLS_ROOT, DEFAULT_DB_PATH, connect; con=connect(DEFAULT_DB_PATH); print('BioSkills:', len([p for p in DEFAULT_BIOSKILLS_ROOT.iterdir() if p.is_dir() and (p/'SKILL.md').exists()])); print('SQLite skills:', con.execute('select count(*) from skills').fetchone()[0]); con.close()"

@@ -6,6 +6,12 @@ import re
 import yaml
 
 from biomaster.knowledge import PROJECT_ROOT
+from biomaster.runtime.yaml_io import (
+    atomic_write_yaml,
+    validate_check_report,
+    validate_plan,
+    validate_project_log,
+)
 
 
 PROJECTS_ROOT = PROJECT_ROOT / "projects"
@@ -180,14 +186,14 @@ class RunContext:
         return path
 
     def write_plan(self, plan: dict) -> Path:
+        plan = dict(plan)
         plan.setdefault("project_id", self.run_id)
         plan.setdefault("project_name", self.run_id)
         plan["run_id"] = self.run_id
         plan["plan_id"] = self.run_id
         plan["run_dir"] = self.root.as_posix()
         plan["project_dir"] = self.root.as_posix()
-        self.plan_path.write_text(yaml.safe_dump(plan, sort_keys=False, allow_unicode=True), encoding="utf-8")
-        return self.plan_path
+        return atomic_write_yaml(self.plan_path, plan, validator=validate_plan)
 
     def write_step_result(self, step_id: str, result: dict) -> Path:
         path = self.step_dir(step_id) / "step_result.yaml"
@@ -195,9 +201,7 @@ class RunContext:
         return path
 
     def write_check_report(self, report: dict) -> Path:
-        self.check_report_path.write_text(yaml.safe_dump(report, sort_keys=False, allow_unicode=True), encoding="utf-8")
-        return self.check_report_path
+        return atomic_write_yaml(self.check_report_path, report, validator=validate_check_report)
 
     def write_project_log(self, project_log: dict) -> Path:
-        self.project_log_path.write_text(yaml.safe_dump(project_log, sort_keys=False, allow_unicode=True), encoding="utf-8")
-        return self.project_log_path
+        return atomic_write_yaml(self.project_log_path, project_log, validator=validate_project_log)

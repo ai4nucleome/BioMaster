@@ -6,40 +6,41 @@
   <p><strong>A knowledge-guided multi-agent system for automated bioinformatics workflow analysis</strong></p>
 
   <p>
-    <a href="https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract">
-      <img src="https://img.shields.io/badge/bioRxiv-10.1101%2F2025.01.23.634608-brightgreen.svg" alt="bioRxiv DOI" />
+    <a href="https://doi.org/10.1016/j.patter.2026.101611">
+      <img src="https://img.shields.io/badge/Patterns-10.1016%2Fj.patter.2026.101611-blue.svg" alt="Patterns DOI" />
     </a>
-    <a href="#citation">
-      <img src="https://img.shields.io/badge/Patterns-accepted-blue.svg" alt="Patterns accepted" />
+    <a href="https://github.com/ai4nucleome/biomaster2/tree/2.0-alpha1">
+      <img src="https://img.shields.io/badge/release-2.0--alpha1-informational.svg" alt="BioMaster 2.0-alpha1" />
     </a>
     <a href="#quick-start">
-      <img src="https://img.shields.io/badge/release-internal%20candidate-informational.svg" alt="BioMaster internal release candidate" />
+      <img src="https://img.shields.io/badge/interface-OpenCode-6f42c1.svg" alt="OpenCode interface" />
     </a>
   </p>
 </div>
 
 ## Overview
 
-BioMaster is a multi-agent framework designed to translate natural-language biological analysis goals into executable, monitored, and validated bioinformatics workflows. It separates workflow design, command generation, runtime debugging, and output verification into distinct agent roles, and grounds these roles in curated workflow-level and tool-level knowledge.
+BioMaster is a knowledge-guided multi-agent system that translates natural-language biological analysis goals into executable, monitored, and validated bioinformatics workflows. Dedicated Plan, Execute, Debug, and Check agents coordinate through a deterministic workflow, with role-isolated BioSkills and SQLite-backed retrieval.
 
-This repository is an **internal deployment-oriented release candidate**. It builds on the OpenCode-integrated BioMaster implementation and includes a GitHub Pages-ready static site under `docs/` plus an organized `source/` directory for publication, website, and deployment assets.
+This repository contains the OpenCode-integrated **2.0-alpha1 release branch**, including the BioMaster runtime, web interface, curated BioSkills library, automated validation, and GitHub Pages assets.
 
-The BioMaster manuscript, **"BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow"**, has been accepted by *Patterns*. A preprint is available on bioRxiv.
+The peer-reviewed BioMaster article is published in *Patterns*: [BioMaster: Multi-agent system for automated bioinformatics analysis workflow](https://doi.org/10.1016/j.patter.2026.101611).
 
-## Release Candidate at a Glance
+## At a Glance
 
 | Area | Content |
 | --- | --- |
-| Paper context | README, citation, documentation pages, and manuscript figures aligned with the accepted *Patterns* manuscript |
+| Paper | *Patterns* (2026), article 101611, DOI [`10.1016/j.patter.2026.101611`](https://doi.org/10.1016/j.patter.2026.101611) |
 | User interface | Modified OpenCode frontend with BioMaster and BioSkills management pages |
 | Agent runtime | Plan, Execute, Debug, and Check agents following a deterministic workflow skeleton |
 | Knowledge layer | File-backed BioSkills library with SQLite cache generated from `.opencode/bioskills/` |
 | Deployment assets | GitHub Pages-ready static site in `docs/` and curated figures in `source/` |
 | Validation | BioSkills validation, SQLite sync, smoke tests, and pytest workflow coverage |
 
-## Manuscript and Figures
+## Publication and Figures
 
-- Preprint: <https://www.biorxiv.org/content/10.1101/2025.01.23.634608v1.abstract>
+- Published article: <https://doi.org/10.1016/j.patter.2026.101611>
+- Preprint: <https://doi.org/10.1101/2025.01.23.634608>
 - Static website: `docs/index.html`
 - Figure and deployment assets: `source/`
 - Static site figures: `source/figures/`
@@ -86,7 +87,6 @@ The current deployment keeps this agent skeleton stable while using the newer Bi
 │       ├── opencode/             # backend API, including BioSkills routes
 │       └── app/                  # web frontend and BioSkills Library UI
 ├── examples/                     # smoke tests and example requests
-├── tests/                        # pytest coverage
 └── .opencode/                    # BioMaster OpenCode project configuration
     ├── agents/                   # plan, execute, debug, check, skiller, author, creator
     ├── commands/                 # biomaster-* command templates
@@ -105,7 +105,7 @@ Tracked release assets:
 - `.opencode/`: BioMaster agents, commands, skill, BioSkills library, runtime bridge, and plugin package manifest.
 - `BioMaster/`: the modified OpenCode backend/frontend source.
 - `docs/` and `source/`: public site and manuscript-facing assets.
-- `examples/` and `tests/`: lightweight fixtures and release validation.
+- `examples/`: lightweight smoke tests and usage fixtures.
 
 Untracked/generated assets:
 
@@ -118,24 +118,34 @@ Untracked/generated assets:
 
 ## Quick Start
 
-The commands below assume that you are running them from the repository root after cloning the selected release branch.
+### Requirements
+
+- Linux or macOS
+- Git and `curl`
+- Python 3.10+
+- Node.js 22+ and Bun 1.x (the installer can provision compatible versions)
+- Bioinformatics tools and reference data required by the analysis you request
+
+The commands below install the `2.0-alpha1` branch:
 
 ```bash
-git clone git@github.com:ai4nucleome/biomaster2.git BioMaster
+git clone --branch 2.0-alpha1 https://github.com/ai4nucleome/biomaster2.git BioMaster
 cd BioMaster
+./install.sh
 ```
 
-If the repository has already been cloned, switch to the release branch first:
+If the repository is already cloned:
 
 ```bash
 git fetch origin
-git checkout <release-branch>
-git pull --ff-only origin <release-branch>
+git checkout 2.0-alpha1
+git pull --ff-only origin 2.0-alpha1
+./install.sh
 ```
 
 ### 1. Install and configure BioMaster
 
-Use `install.sh` for the first deployment on a new machine. It installs or selects Bun, Node.js 22, a modern `node-gyp`, Python dependencies, OpenCode dependencies, BioMaster plugin dependencies, builds the BioMaster Web UI, and then validates the BioSkills index.
+`install.sh` installs or selects Bun and Node.js 22, installs Python and OpenCode dependencies, builds the Web UI, and validates the BioSkills index. Re-running it is safe when updating the checkout.
 
 ```bash
 ./install.sh
@@ -183,16 +193,59 @@ http://127.0.0.1:4096
 
 `./run.sh` starts one OpenCode server process. The same port serves the Web UI, API, SSE, WebSocket, and BioSkills routes, so there is no separate frontend/backend deployment to manage.
 
-### 3. What appears in OpenCode
+### 3. Run your first workflow
+
+1. Open `http://127.0.0.1:4096`.
+2. Select the cloned repository root as the project.
+3. Start with one of:
+
+   ```text
+   /biomaster-start
+   /biomaster-start Analyze tumor heterogeneity in my scRNA-seq dataset
+   /biomaster Analyze tumor heterogeneity in my scRNA-seq dataset
+   ```
+
+4. Choose **Test mode**, **Formal analysis**, or **Custom objective** when prompted.
+5. For formal analysis, provide the objective first, then the input paths, sample metadata, groups, and required phenotype or clinical tables.
+6. Review the generated `projects/<project_slug>/PLAN.yaml`.
+7. Approve execution and run `/biomaster-run`. BioMaster executes one step at a time through Execute → Debug → Check.
+8. Use `/biomaster-resume` to continue an existing project, `/biomaster-check` to re-check outputs, or `/biomaster-debug` after a failed step.
+
+Outputs are written under `projects/<project_slug>/`:
+
+```text
+PLAN.yaml           structured analysis plan
+PROJECT_LOG.yaml    audited step history and evidence
+CHECK_REPORT.yaml   per-step verification results
+REPORT.md           final human-readable report
+OPENCODE_VIEW.md    compact project view for the UI
+scripts/            generated step scripts
+steps/              execution logs and step results
+artifacts/          analysis artifacts
+```
+
+BioMaster will not enter reporting while a required check is failing or incomplete. Generated commands and biological conclusions should still be reviewed by a qualified analyst before clinical or production use.
+
+### 4. Available commands
 
 When the BioMaster project root is selected, OpenCode automatically loads:
 
 - the public skill `/biomaster` from `.opencode/skills/biomaster/SKILL.md`;
 - workflow commands such as `/biomaster-start`, `/biomaster-run`, `/biomaster-plan`, `/biomaster-check`, `/biomaster-debug`, and `/biomaster-resume` from `.opencode/commands/`.
 
-These entries are expected on every correctly deployed device. They are project-local BioMaster controls, not browser cache artifacts.
+| Command | Purpose |
+| --- | --- |
+| `/biomaster <goal>` | Load BioMaster and describe an analysis goal conversationally |
+| `/biomaster-start [goal]` | Start mode selection and create or select a project |
+| `/biomaster-plan <goal>` | Build a SQLite-grounded `PLAN.yaml` after routing |
+| `/biomaster-run` | Execute the next eligible plan step |
+| `/biomaster-check` | Verify step outputs and refresh reports |
+| `/biomaster-debug` | Diagnose a failed step and prepare a bounded retry |
+| `/biomaster-resume` | Continue or review an existing project |
 
-### 4. Start BioMaster on a remote server
+These commands are project-local controls and appear only when the repository root is selected.
+
+### 5. Start BioMaster on a remote server
 
 For direct remote access, bind the web entrypoint to all interfaces and set a password. Do not reuse the example password below; generate a deployment-specific value:
 
@@ -237,7 +290,7 @@ http://<server-ip>:18080/?auth_token=<generated-token>
 
 Use the same port in the browser. In the example above, `18080` serves both the Web UI and the OpenCode API.
 
-### 5. Verify the running service
+### 6. Verify the running service
 
 To verify that the running services come from this repository and not from another user's stale process:
 
@@ -270,7 +323,7 @@ curl "http://127.0.0.1:18080/bioskills?directory=$(pwd)"
 
 The command endpoint should include `biomaster-start`, `biomaster-run`, and `biomaster-check`. The BioSkills endpoint should return the curated skills stored under `.opencode/bioskills/`.
 
-### 6. Use an SSH tunnel when ports are blocked
+### 7. Use an SSH tunnel when ports are blocked
 
 On HPC or institutional servers, external ports may be blocked even when `./run.sh status` reports `http=200`. In that case, keep the service bound to localhost and forward only the BioMaster server port from your local machine:
 
@@ -284,7 +337,7 @@ ssh -L 4096:127.0.0.1:4096 <user>@<server-ip>
 
 Then open `http://127.0.0.1:4096` locally.
 
-### 7. Logs and process control
+### 8. Logs and process control
 
 Logs are written under `.logs/` by default and include the current username in the filename. This avoids permission conflicts on shared systems where temporary log files may belong to another user. Override the path only when needed:
 
@@ -386,20 +439,17 @@ When the UI asks for a project directory, open:
 
 The repository root now contains `.opencode/`, so BioMaster commands and skills are available without selecting a nested project directory.
 
-### BioMaster workflow interface
+### Agent and Skill isolation
 
-1. Start OpenCode with `./run.sh local`.
-2. Open BioMaster at `http://127.0.0.1:4096` or `http://<server-ip>:4096`.
-3. Select the BioMaster project directory when prompted:
+The Plan Agent remains the visible conversation owner. Worker agents are invoked for individual workflow stages, and Skill bodies are isolated by role:
 
-   ```text
-   <repository-root>
-   ```
+| Skill class | Authorized agents |
+| --- | --- |
+| Workflow / `plan-*` | `biomaster-plan` only |
+| Execution / `exec-*` | `biomaster-execute`, `biomaster-debug`, `biomaster-check` |
+| Skill-management catalog | `biomaster-skiller`, `biomaster-skill-author`, `biomaster-skill-creator` receive metadata only |
 
-4. Use the BioMaster commands and agents through OpenCode:
-   - `biomaster-plan` remains the primary workflow agent.
-   - `biomaster-execute`, `biomaster-debug`, and `biomaster-check` handle step execution, error recovery, and output validation.
-   - `biomaster-skiller`, `biomaster-skill-author`, and `biomaster-skill-creator` are available for BioSkills management but are not part of the normal execution loop.
+Unknown agents are denied by default. Agent identity, phase, SQLite `allowed_agents`, and the Skill-level `enabled` state are checked before Skill content is inserted into a prompt.
 
 ### BioSkills Library
 
@@ -416,23 +466,24 @@ Each curated skill contains:
 - `micro.md`: execution-level notes, commands, or tool guidance
 - `steps.json`: structured step metadata
 
-The SQLite database under `.opencode/knowledge/` is a generated cache. If it is missing, it is rebuilt by the runtime sync scripts and tests.
+The SQLite database under `.opencode/knowledge/` is a generated cache. If it is missing or stale, it is rebuilt from the file-backed library. Turning a Skill off in the BioSkills page immediately marks it unavailable to Agent and SQLite retrieval while keeping the disabled card visible. Click the same toggle to activate it again.
 
 ### Adding or updating skills
 
-OpenCode skills are loaded from the current project configuration. If a new skill is created under `.opencode/skills/`, restart OpenCode or reopen the BioMaster project before expecting the skill to auto-trigger:
+Use the BioSkills page for interactive creation and editing, or use the scaffold command:
 
 ```bash
-./run.sh local
+make skill-add ARGS='my-tool --target execute --description "Run my analysis tool" --metadata-value my-tool'
+make knowledge-seed
 ```
 
-For example, a skill created at:
+Internal BioSkills belong under:
 
 ```text
-.opencode/skills/tcga_luad_deg_enrichment/SKILL.md
+.opencode/bioskills/<skill-name>/
 ```
 
-will be available in sessions whose project directory is `<repository-root>`.
+Do not add internal workflow or execution knowledge under `.opencode/skills/`; that directory intentionally exposes only the public `/biomaster` entry point. New `plan-*` Skills are restricted to Plan, while new `exec-*` Skills are restricted to Execute, Debug, and Check.
 
 ### Troubleshooting BioMaster loading
 
@@ -460,7 +511,7 @@ The test suite checks:
 - SQLite synchronization from BioSkills
 - smoke tests for BioMaster runtime behavior
 - knowledge-control tests for the SQLite cache
-- pytest coverage for agent prompts, workflow gates, runtime bridge behavior, and project context
+- runtime smoke tests, knowledge-control tests, and compliance checks
 
 Generated files should remain untracked:
 
@@ -492,15 +543,17 @@ Large local datasets are not shipped in the release repository. Keep reproducibl
 | `source/figures/reliability.svg` | vector reliability figure |
 | `source/figures/open-source-llms.svg` | vector open-source LLM figure |
 
-Keep figure claims consistent with the accepted manuscript and verified benchmark records. Prefer PNG/SVG for website deployment and preserve PDF/SVG originals when available.
+Keep figure claims consistent with the published article and verified benchmark records. Prefer PNG/SVG for website deployment and preserve PDF/SVG originals when available.
 
 ## Version Notes
 
-This branch is intended as an internal deployment and presentation candidate:
+The `2.0-alpha1` branch is the OpenCode-integrated alpha release accompanying the published project:
 
 - uses a flattened single-root BioMaster project structure with `BioMaster/` retained as the embedded engine;
 - adds the GitHub Pages-ready static site and manuscript-facing assets;
-- keeps the Plan -> Execute -> Debug -> Check workflow discipline;
+- enforces the Plan → Execute → Debug → Check workflow with runtime gates;
+- isolates workflow and execution Skill bodies by Agent role;
+- synchronizes Skill activation state across the UI, file library, and SQLite cache;
 - organizes source assets for paper, documentation, and website reuse.
 
 ## Citation
@@ -508,16 +561,18 @@ This branch is intended as an internal deployment and presentation candidate:
 Please cite the BioMaster manuscript when using this system:
 
 ```bibtex
-@article{su2025biomaster,
-  title   = {BioMaster: Multi-agent System for Automated Bioinformatics Analysis Workflow},
-  author  = {Su, Houcheng and Feng, Junning and Lu, Yawen and Xu, Yucheng and Yang, Jinming and Lu, Haojie and Yang, Jixin and Yang, Xu and Xie, Sirui and Long, Weicai and Wang, Chengrui and Hou, Yusen and Zhu, Tingyu and Zhang, Yanlin},
-  journal = {bioRxiv},
-  year    = {2025},
-  doi     = {10.1101/2025.01.23.634608}
+@article{su2026biomaster,
+  title     = {BioMaster: Multi-agent system for automated bioinformatics analysis workflow},
+  author    = {Su, Houcheng and Feng, Junning and Lu, Yawen and Xu, Yucheng and Yang, Jinming and Lu, Haojie and Yang, Jixin and Yang, Xu and Xie, Sirui and Long, Weicai and Wang, Chengrui and Hou, Yusen and Zhu, Tingyu and Zhang, Yanlin},
+  journal   = {Patterns},
+  year      = {2026},
+  pages     = {101611},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.patter.2026.101611}
 }
 ```
 
-The citation entry will be updated when the final *Patterns* publication metadata is available.
+GitHub also exposes this metadata through [`CITATION.cff`](CITATION.cff).
 
 ## Maintainer Checklist
 

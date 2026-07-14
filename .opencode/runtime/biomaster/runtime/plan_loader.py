@@ -1,18 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
-import yaml
 
 from biomaster.runtime.run_context import RunContext
+from biomaster.runtime.yaml_io import load_yaml_mapping, validate_plan
 
 
 def load_plan(plan_path: Path) -> dict:
-    data = yaml.safe_load(plan_path.read_text(encoding="utf-8"))
-    if not isinstance(data, dict):
-        raise ValueError(f"PLAN.yaml must be a mapping: {plan_path}")
-    if "steps" not in data or not isinstance(data["steps"], list):
-        raise ValueError("PLAN.yaml must contain a steps list")
-    return data
+    return load_yaml_mapping(plan_path, document_name="PLAN.yaml", validator=validate_plan)
 
 
 def get_step(plan: dict, step_id: str) -> dict:

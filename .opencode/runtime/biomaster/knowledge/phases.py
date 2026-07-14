@@ -10,7 +10,7 @@ PHASE_ALLOWED_LAYERS: dict[str, set[str]] = {
     "planning": {"registry", "domain-guide", "discipline", "pipeline", "plan", "report", "bioskill"},
     "preflight": {"execute", "env", "verify", "bioskill"},
     "execution": {"execute", "env", "verify", "bioskill"},
-    "checking": {"verify", "bioskill"},
+    "checking": {"execute", "verify", "bioskill"},
     "debugging": {"debug", "env", "execute", "verify", "bioskill"},
     "reporting": {"report", "verify", "bioskill"},
     "done": set(),
