@@ -163,6 +163,11 @@ Start BioMaster, open the provider settings in the web interface, and configure 
 
 Credentials should be configured through OpenCode's provider settings or environment integration. Do not commit API keys to this repository.
 
+For the current BioMaster interface, the following settings are recommended:
+
+- Turn **New layout and designs** off for the most stable BioMaster page layout.
+- Turn **Auto-accept permissions** on to avoid repeated approval prompts while BioMaster loads Skills and runs its multi-agent workflow. Enable this only in a trusted project and environment, because tool requests will be approved automatically.
+
 ## Running BioMaster
 
 ### Local workstation
@@ -182,6 +187,14 @@ Bind to all interfaces only with authentication:
 export OPENCODE_SERVER_PASSWORD="$(openssl rand -base64 24)"
 ./run.sh remote --password "$OPENCODE_SERVER_PASSWORD"
 ```
+
+For temporary use in an isolated and trusted network, BioMaster can also be started without authentication:
+
+```bash
+./run.sh remote --unsafe
+```
+
+> **Security warning:** `--unsafe` exposes BioMaster without password protection to hosts that can reach the listening port. Do not use it on a public IP, shared network, or internet-facing server. Prefer password authentication or an SSH tunnel.
 
 For HPC or institutional servers, keeping BioMaster on localhost and using an SSH tunnel is usually safer:
 
