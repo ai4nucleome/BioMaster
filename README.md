@@ -21,6 +21,7 @@
 ## News
 
 - **July 2026** — The BioMaster article, [*BioMaster: Multi-agent system for automated bioinformatics analysis workflow*](https://doi.org/10.1016/j.patter.2026.101611), was published in **Patterns**.
+- **Project website** — Explore the BioMaster system, benchmark, team, and documentation at <https://ai4nucleome.github.io/BioMaster/>.
 - **BioMaster v2.0-alpha1** — BioMaster has been upgraded on top of [OpenCode](https://github.com/anomalyco/opencode) with an interactive workspace, role-isolated BioSkills, SQLite-backed retrieval, and stricter workflow validation.
 
 If you use BioMaster in academic work, please cite our *Patterns* article. See [Citation](#citation) or use GitHub's **Cite this repository** button.
