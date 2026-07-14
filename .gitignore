@@ -38,6 +38,9 @@ test_output.h5ad
 *.db-shm
 *.db-wal
 
+# Local task bundles / conversation test exports
+task*.zip
+
 # Logs / runtime
 .logs/
 *.log

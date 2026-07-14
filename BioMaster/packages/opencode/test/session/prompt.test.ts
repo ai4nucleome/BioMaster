@@ -2400,3 +2400,96 @@ noLLMServer.instance(
     }),
   30_000,
 )
+
+it.instance(
+  "biomaster command keeps invocation visible and hides the command template",
+  () =>
+    Effect.gen(function* () {
+      const { llm } = yield* useServerConfig((url) => ({
+        ...providerCfg(url),
+        command: {
+          "biomaster-start": {
+            template: "# biomaster-start\n\nHidden biomaster-start template body.",
+          },
+        },
+      }))
+      const prompt = yield* SessionPrompt.Service
+      const sessions = yield* Session.Service
+      const session = yield* sessions.create({})
+
+      yield* llm.text("ok")
+
+      yield* prompt.command({
+        sessionID: session.id,
+        command: "biomaster-start",
+        arguments: "analyze RNA-seq",
+        agent: "build",
+      })
+
+      const msgs = yield* sessions.messages({ sessionID: session.id })
+      const user = msgs.find((msg) => msg.info.role === "user")
+      expect(user).toBeDefined()
+      const textParts = user!.parts.filter((part): part is SessionV1.TextPart => part.type === "text")
+      expect(textParts.some((part) => !part.synthetic && part.text === "/biomaster-start analyze RNA-seq")).toBe(true)
+      expect(
+        textParts.some((part) => part.synthetic && part.text.includes("Hidden biomaster-start template body")),
+      ).toBe(true)
+      expect(
+        textParts.some((part) => !part.synthetic && part.text.includes("Hidden biomaster-start template body")),
+      ).toBe(false)
+
+      const inputs = yield* llm.inputs
+      expect(JSON.stringify(inputs.at(-1)?.messages)).toContain("Hidden biomaster-start template body")
+    }),
+  30_000,
+)
+
+it.instance(
+  "skill slash command keeps invocation visible and hides the skill template",
+  () =>
+    Effect.gen(function* () {
+      const { llm } = yield* useServerConfig(providerCfg)
+      const prompt = yield* SessionPrompt.Service
+      const sessions = yield* Session.Service
+      const session = yield* sessions.create({})
+
+      yield* llm.text("ok")
+
+      yield* prompt.command({
+        sessionID: session.id,
+        command: "visible-skill",
+        arguments: "hello",
+        agent: "build",
+      })
+
+      const msgs = yield* sessions.messages({ sessionID: session.id })
+      const user = msgs.find((msg) => msg.info.role === "user")
+      expect(user).toBeDefined()
+      const textParts = user!.parts.filter((part): part is SessionV1.TextPart => part.type === "text")
+      expect(textParts.some((part) => !part.synthetic && part.text === "/visible-skill hello")).toBe(true)
+      expect(textParts.some((part) => part.synthetic && part.text.includes("Hidden template body"))).toBe(true)
+      expect(textParts.some((part) => !part.synthetic && part.text.includes("Hidden template body"))).toBe(false)
+
+      const inputs = yield* llm.inputs
+      expect(JSON.stringify(inputs.at(-1)?.messages)).toContain("Hidden template body")
+    }),
+  {
+    init: (directory) =>
+      Effect.promise(async () => {
+        const skillDir = path.join(directory, ".opencode", "skills", "visible-skill")
+        await Bun.write(
+          path.join(skillDir, "SKILL.md"),
+          `---
+name: visible-skill
+description: Skill visibility test.
+---
+
+# Visible Skill
+
+Hidden template body.
+`,
+        )
+      }),
+  },
+  30_000,
+)

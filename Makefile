@@ -13,6 +13,9 @@ clean:
 	rm -rf runs/
 	rm -rf projects/
 	rm -f .opencode/knowledge/biomaster_skills.db
+	rm -f .opencode/bioskills/.index.db
+	rm -rf .logs/*
+	rm -f task*.zip
 	rm -rf .opencode/node_modules
 	rm -f .opencode/package-lock.json .opencode/bun.lock
 	rm -f test_output.h5ad

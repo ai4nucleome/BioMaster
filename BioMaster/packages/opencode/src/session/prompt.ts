@@ -1435,6 +1435,15 @@ const layer = Layer.effect(
       const uniqueTemplateParts = templateParts.filter(
         (part) => part.type !== "file" || !inputFiles.has(fileURLToPath(part.url)),
       )
+      const slashLine = `/${input.command}${input.arguments.trim() ? ` ${input.arguments.trim()}` : ""}`
+      const promptParts = hideSlashTemplate(input.command, cmd.source)
+        ? [
+            { type: "text" as const, text: slashLine },
+            { type: "text" as const, text: template, synthetic: true },
+            ...uniqueTemplateParts.filter((part) => part.type !== "text"),
+            ...(input.parts ?? []),
+          ]
+        : [...uniqueTemplateParts, ...(input.parts ?? [])]
       const isSubtask = (agent.mode === "subagent" && cmd.subtask !== false) || cmd.subtask === true
       const parts = isSubtask
         ? [
@@ -1447,7 +1456,7 @@ const layer = Layer.effect(
               prompt: templateParts.find((y) => y.type === "text")?.text ?? "",
             },
           ]
-        : [...uniqueTemplateParts, ...(input.parts ?? [])]
+        : promptParts
 
       const userAgent = isSubtask ? (input.agent ?? (yield* agents.defaultInfo()).name) : agent.name
       const userModel = isSubtask
@@ -1588,6 +1597,10 @@ export function createStructuredOutputTool(input: {
     },
   })
 }
+const biomasterSlashCommand = /^(?:biomaster|biomaster-)/
+const hideSlashTemplate = (command: string, source?: "command" | "mcp" | "skill") =>
+  source === "skill" || biomasterSlashCommand.test(command)
+
 const bashRegex = /!`([^`]+)`/g
 // Match [Image N] as single token, quoted strings, or non-space sequences
 const argsRegex = /(?:\[Image\s+\d+\]|"[^"]*"|'[^']*'|[^\s"']+)/gi
