@@ -3,7 +3,7 @@ message: "If you use BioMaster, please cite the published Patterns article."
 title: "BioMaster"
 type: software
 version: "2.0-alpha1"
-repository-code: "https://github.com/ai4nucleome/biomaster2"
+repository-code: "https://github.com/ai4nucleome/BioMaster"
 authors:
   - family-names: Su
     given-names: Houcheng

@@ -1,6 +1,6 @@
 # Version Notes
 
-This repository contains the BioMaster 2.0-alpha1 OpenCode-integrated alpha release.
+This repository contains the BioMaster v2.0-alpha1 OpenCode-integrated alpha release.
 
 The associated peer-reviewed article is published in *Patterns*:
 <https://doi.org/10.1016/j.patter.2026.101611>.
